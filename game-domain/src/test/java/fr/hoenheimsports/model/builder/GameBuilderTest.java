@@ -65,29 +65,29 @@ class GameBuilderTest {
 
         // Build a Game object using GameBuilder
         Game game = new GameBuilder()
-                .withCode(gameExcepted.code())
-                .withCompetition(gameExcepted.competition())
-                .withDay(gameExcepted.day())
-                .withHalle(gameExcepted.halle())
-                .withReferees(gameExcepted.referees())
-                .withHomeTeam(gameExcepted.homeTeam())
-                .withVisitingTeam(gameExcepted.visitingTeam())
-                .withScore(gameExcepted.score())
-                .withFDME(gameExcepted.fdme())
-                .withDateTime(gameExcepted.dateTime())
+                .withCode(gameExcepted.getCode())
+                .withCompetition(gameExcepted.getCompetition())
+                .withDay(gameExcepted.getDay())
+                .withHalle(gameExcepted.getHalle())
+                .withReferees(gameExcepted.getReferees())
+                .withHomeTeam(gameExcepted.getHomeTeam())
+                .withVisitingTeam(gameExcepted.getVisitingTeam())
+                .withScore(gameExcepted.getScore())
+                .withFDME(gameExcepted.getFdme())
+                .withDateTime(gameExcepted.getDateTime())
                 .build();
 
         // Assertions to validate the game object
-        assertEquals(gameExcepted.code(), game.code());
-        assertEquals(gameExcepted.competition(), game.competition());
-        assertEquals(gameExcepted.day(), game.day());
-        assertEquals(gameExcepted.halle(), game.halle());
-        assertEquals(gameExcepted.referees(), game.referees());
-        assertEquals(gameExcepted.homeTeam(), game.homeTeam());
-        assertEquals(gameExcepted.visitingTeam(), game.visitingTeam());
-        assertEquals(gameExcepted.score(), game.score());
-        assertEquals(gameExcepted.fdme(), game.fdme());
-        assertEquals(gameExcepted.dateTime(), game.dateTime());
+        assertEquals(gameExcepted.getCode(), game.getCode());
+        assertEquals(gameExcepted.getCompetition(), game.getCompetition());
+        assertEquals(gameExcepted.getDay(), game.getDay());
+        assertEquals(gameExcepted.getHalle(), game.getHalle());
+        assertEquals(gameExcepted.getReferees(), game.getReferees());
+        assertEquals(gameExcepted.getHomeTeam(), game.getHomeTeam());
+        assertEquals(gameExcepted.getVisitingTeam(), game.getVisitingTeam());
+        assertEquals(gameExcepted.getScore(), game.getScore());
+        assertEquals(gameExcepted.getFdme(), game.getFdme());
+        assertEquals(gameExcepted.getDateTime(), game.getDateTime());
     }
 
     @Test
@@ -243,58 +243,58 @@ class GameBuilderTest {
                 .build();
 
         // Assertions to validate the game object
-        assertEquals("game123", game.code());
-        assertEquals(competitionName, game.competition().name());
-        assertEquals(poolNumber, game.competition().pools().get(0).number());
-        assertEquals(poolName, game.competition().pools().get(0).name());
-        assertEquals(dayNumber, game.day().number());
-        assertEquals(halleId, game.halle().id());
-        assertEquals(halleName, game.halle().name());
-        assertEquals(addressStreet, game.halle().address().street());
-        assertEquals(addressPostalCode, game.halle().address().postalCode());
-        assertEquals(addressCity, game.halle().address().city());
-        assertEquals(glueAuthorization, game.halle().glueAuthorization());
-        assertEquals(referee1Id, game.referees().designatedReferee1().id());
-        assertEquals(referee1Name, game.referees().designatedReferee1().name());
-        assertEquals(referee1PhoneNumber, game.referees().designatedReferee1().phoneNumber().phoneNumber());
-        assertEquals(referee2Id, game.referees().designatedReferee2().id());
-        assertEquals(referee2Name, game.referees().designatedReferee2().name());
-        assertEquals(referee2PhoneNumber, game.referees().designatedReferee2().phoneNumber().phoneNumber());
-        assertEquals(referee3Id, game.referees().officiatingReferee1().id());
-        assertEquals(referee3Name, game.referees().officiatingReferee1().name());
-        assertEquals(referee3PhoneNumber, game.referees().officiatingReferee1().phoneNumber().phoneNumber());
-        assertEquals(referee4Id, game.referees().officiatingReferee2().id());
-        assertEquals(referee4Name, game.referees().officiatingReferee2().name());
-        assertEquals(referee4PhoneNumber, game.referees().officiatingReferee2().phoneNumber().phoneNumber());
-        assertEquals(homeTeamId, game.homeTeam().id());
-        assertEquals(homeCategoryName, game.homeTeam().category().name());
-        assertEquals(homeGender, game.homeTeam().gender());
-        assertEquals(homeNumber, game.homeTeam().number());
-        assertEquals(homeClubCode, game.homeTeam().club().code());
-        assertEquals(homeClubName, game.homeTeam().club().name());
-        assertEquals(homeShirtColor1, game.homeTeam().teamsColor().shirtColor1());
-        assertEquals(homeShirtColor2, game.homeTeam().teamsColor().shirtColor2());
-        assertEquals(homeGoalkeeperColor1, game.homeTeam().teamsColor().goalkeeperColor1());
-        assertEquals(homeGoalkeeperColor2, game.homeTeam().teamsColor().goalkeeperColor2());
-        assertEquals(homeCoachId, game.homeTeam().coach().id());
-        assertEquals(homeCoachName, game.homeTeam().coach().name());
-        assertEquals(homeCoachPhoneNumber, game.homeTeam().coach().phoneNumber().phoneNumber());
-        assertEquals(visitingTeamId, game.visitingTeam().id());
-        assertEquals(visitingCategoryName, game.visitingTeam().category().name());
-        assertEquals(visitingGender, game.visitingTeam().gender());
-        assertEquals(visitingNumber, game.visitingTeam().number());
-        assertEquals(visitingClubCode, game.visitingTeam().club().code());
-        assertEquals(visitingClubName, game.visitingTeam().club().name());
-        assertEquals(visitingShirtColor1, game.visitingTeam().teamsColor().shirtColor1());
-        assertEquals(visitingShirtColor2, game.visitingTeam().teamsColor().shirtColor2());
-        assertEquals(visitingGoalkeeperColor1, game.visitingTeam().teamsColor().goalkeeperColor1());
-        assertEquals(visitingGoalkeeperColor2, game.visitingTeam().teamsColor().goalkeeperColor2());
-        assertEquals(visitingCoachId, game.visitingTeam().coach().id());
-        assertEquals(visitingCoachName, game.visitingTeam().coach().name());
-        assertEquals(visitingCoachPhoneNumber, game.visitingTeam().coach().phoneNumber().phoneNumber());
-        assertEquals(Score.DEFAULT, game.score());
-        assertEquals(fdmeUrl, game.fdme().url());
-        assertNotNull(game.dateTime());
+        assertEquals("game123", game.getCode());
+        assertEquals(competitionName, game.getCompetition().name());
+        assertEquals(poolNumber, game.getCompetition().pools().get(0).number());
+        assertEquals(poolName, game.getCompetition().pools().get(0).name());
+        assertEquals(dayNumber, game.getDay().number());
+        assertEquals(halleId, game.getHalle().id());
+        assertEquals(halleName, game.getHalle().name());
+        assertEquals(addressStreet, game.getHalle().address().street());
+        assertEquals(addressPostalCode, game.getHalle().address().postalCode());
+        assertEquals(addressCity, game.getHalle().address().city());
+        assertEquals(glueAuthorization, game.getHalle().glueAuthorization());
+        assertEquals(referee1Id, game.getReferees().designatedReferee1().id());
+        assertEquals(referee1Name, game.getReferees().designatedReferee1().name());
+        assertEquals(referee1PhoneNumber, game.getReferees().designatedReferee1().phoneNumber().phoneNumber());
+        assertEquals(referee2Id, game.getReferees().designatedReferee2().id());
+        assertEquals(referee2Name, game.getReferees().designatedReferee2().name());
+        assertEquals(referee2PhoneNumber, game.getReferees().designatedReferee2().phoneNumber().phoneNumber());
+        assertEquals(referee3Id, game.getReferees().officiatingReferee1().id());
+        assertEquals(referee3Name, game.getReferees().officiatingReferee1().name());
+        assertEquals(referee3PhoneNumber, game.getReferees().officiatingReferee1().phoneNumber().phoneNumber());
+        assertEquals(referee4Id, game.getReferees().officiatingReferee2().id());
+        assertEquals(referee4Name, game.getReferees().officiatingReferee2().name());
+        assertEquals(referee4PhoneNumber, game.getReferees().officiatingReferee2().phoneNumber().phoneNumber());
+        assertEquals(homeTeamId, game.getHomeTeam().getId());
+        assertEquals(homeCategoryName, game.getHomeTeam().getCategory().name());
+        assertEquals(homeGender, game.getHomeTeam().getGender());
+        assertEquals(homeNumber, game.getHomeTeam().getNumber());
+        assertEquals(homeClubCode, game.getHomeTeam().getClub().code());
+        assertEquals(homeClubName, game.getHomeTeam().getClub().name());
+        assertEquals(homeShirtColor1, game.getHomeTeam().getTeamsColor().shirtColor1());
+        assertEquals(homeShirtColor2, game.getHomeTeam().getTeamsColor().shirtColor2());
+        assertEquals(homeGoalkeeperColor1, game.getHomeTeam().getTeamsColor().goalkeeperColor1());
+        assertEquals(homeGoalkeeperColor2, game.getHomeTeam().getTeamsColor().goalkeeperColor2());
+        assertEquals(homeCoachId, game.getHomeTeam().getCoach().id());
+        assertEquals(homeCoachName, game.getHomeTeam().getCoach().name());
+        assertEquals(homeCoachPhoneNumber, game.getHomeTeam().getCoach().phoneNumber().phoneNumber());
+        assertEquals(visitingTeamId, game.getVisitingTeam().getId());
+        assertEquals(visitingCategoryName, game.getVisitingTeam().getCategory().name());
+        assertEquals(visitingGender, game.getVisitingTeam().getGender());
+        assertEquals(visitingNumber, game.getVisitingTeam().getNumber());
+        assertEquals(visitingClubCode, game.getVisitingTeam().getClub().code());
+        assertEquals(visitingClubName, game.getVisitingTeam().getClub().name());
+        assertEquals(visitingShirtColor1, game.getVisitingTeam().getTeamsColor().shirtColor1());
+        assertEquals(visitingShirtColor2, game.getVisitingTeam().getTeamsColor().shirtColor2());
+        assertEquals(visitingGoalkeeperColor1, game.getVisitingTeam().getTeamsColor().goalkeeperColor1());
+        assertEquals(visitingGoalkeeperColor2, game.getVisitingTeam().getTeamsColor().goalkeeperColor2());
+        assertEquals(visitingCoachId, game.getVisitingTeam().getCoach().id());
+        assertEquals(visitingCoachName, game.getVisitingTeam().getCoach().name());
+        assertEquals(visitingCoachPhoneNumber, game.getVisitingTeam().getCoach().phoneNumber().phoneNumber());
+        assertEquals(Score.DEFAULT, game.getScore());
+        assertEquals(fdmeUrl, game.getFdme().url());
+        assertNotNull(game.getDateTime());
     }
 }
 

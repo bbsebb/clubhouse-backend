@@ -23,7 +23,7 @@ class TeamTest {
         Team team = new Team(UUID.randomUUID(), Category.UNKNOWN, Gender.MALE, 1, Club.UNKNOWN, TeamsColor.UNKNOWN, Coach.UNKNOWN);
 
         team.setTeamsColor(TeamsColor.UNKNOWN);
-        assertEquals(TeamsColor.UNKNOWN, team.teamsColor());
+        assertEquals(TeamsColor.UNKNOWN, team.getTeamsColor());
 
         assertThrows(NullPointerException.class, () -> team.setTeamsColor(null));
     }
@@ -34,7 +34,7 @@ class TeamTest {
 
         Coach coach = Coach.UNKNOWN;
         team.setCoach(coach);
-        assertEquals(coach, team.coach());
+        assertEquals(coach, team.getCoach());
 
         assertThrows(NullPointerException.class, () -> team.setCoach(null));
     }

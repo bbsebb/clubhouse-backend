@@ -32,27 +32,27 @@ public final class Team {
         this.coach = coach;
     }
 
-    public UUID id() {
+    public UUID getId() {
         return id;
     }
 
-    public Category category() {
+    public Category getCategory() {
         return category;
     }
 
-    public Gender gender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public int number() {
+    public int getNumber() {
         return number;
     }
 
-    public Club club() {
+    public Club getClub() {
         return club;
     }
 
-    public TeamsColor teamsColor() {
+    public TeamsColor getTeamsColor() {
         return teamsColor;
     }
 
@@ -61,7 +61,7 @@ public final class Team {
         this.teamsColor = teamsColor;
     }
 
-    public Coach coach() {
+    public Coach getCoach() {
         return coach;
     }
 

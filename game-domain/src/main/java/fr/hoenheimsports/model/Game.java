@@ -24,7 +24,6 @@ public final class Game {
         Objects.requireNonNull(referees, "referees should not be null");
         Objects.requireNonNull(homeTeam, "homeTeam should not be null");
         Objects.requireNonNull(visitingTeam, "visitingTeam should not be null");
-        Objects.requireNonNullElse(score, Score.DEFAULT);
         Objects.requireNonNull(fdme, "fdme should not be null");
         Objects.requireNonNull(dateTime, "dateTime should not be null");
         this.code = code;
@@ -34,48 +33,48 @@ public final class Game {
         this.referees = referees;
         this.homeTeam = homeTeam;
         this.visitingTeam = visitingTeam;
-        this.score = score;
+        this.score = Objects.requireNonNullElse(score, Score.DEFAULT);;
         this.fdme = fdme;
         this.dateTime = dateTime;
     }
 
-    public String code() {
+    public String getCode() {
         return code;
     }
 
-    public Competition competition() {
+    public Competition getCompetition() {
         return competition;
     }
 
-    public Day day() {
+    public Day getDay() {
         return day;
     }
 
-    public Halle halle() {
+    public Halle getHalle() {
         return halle;
     }
 
-    public Referees referees() {
+    public Referees getReferees() {
         return referees;
     }
 
-    public Team homeTeam() {
+    public Team getHomeTeam() {
         return homeTeam;
     }
 
-    public Team visitingTeam() {
+    public Team getVisitingTeam() {
         return visitingTeam;
     }
 
-    public Score score() {
+    public Score getScore() {
         return score;
     }
 
-    public FDME fdme() {
+    public FDME getFdme() {
         return fdme;
     }
 
-    public LocalDateTime dateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 

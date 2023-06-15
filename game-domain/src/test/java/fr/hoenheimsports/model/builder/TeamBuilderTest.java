@@ -48,13 +48,13 @@ class TeamBuilderTest {
                 )
                 .build();
 
-        assertEquals(id, team.id());
-        assertEquals(category, team.category());
-        assertEquals(gender, team.gender());
-        assertEquals(number, team.number());
-        assertEquals(club, team.club());
-        assertEquals(teamsColor, team.teamsColor());
-        assertEquals(coach, team.coach());
+        assertEquals(id, team.getId());
+        assertEquals(category, team.getCategory());
+        assertEquals(gender, team.getGender());
+        assertEquals(number, team.getNumber());
+        assertEquals(club, team.getClub());
+        assertEquals(teamsColor, team.getTeamsColor());
+        assertEquals(coach, team.getCoach());
     }
 
     @Test
@@ -82,13 +82,13 @@ class TeamBuilderTest {
                 .withCoach(coach)
                 .build();
 
-        assertEquals(id, team.id());
-        assertEquals(category, team.category());
-        assertEquals(gender, team.gender());
-        assertEquals(number, team.number());
-        assertEquals(club, team.club());
-        assertEquals(teamsColor, team.teamsColor());
-        assertEquals(coach, team.coach());
+        assertEquals(id, team.getId());
+        assertEquals(category, team.getCategory());
+        assertEquals(gender, team.getGender());
+        assertEquals(number, team.getNumber());
+        assertEquals(club, team.getClub());
+        assertEquals(teamsColor, team.getTeamsColor());
+        assertEquals(coach, team.getCoach());
     }
 
     @Test
@@ -114,12 +114,12 @@ class TeamBuilderTest {
                 .withCoach(coach)
                 .build();
 
-        assertNotNull(team.id());
-        assertEquals(category, team.category());
-        assertEquals(gender, team.gender());
-        assertEquals(number, team.number());
-        assertEquals(club, team.club());
-        assertEquals(teamsColor, team.teamsColor());
-        assertEquals(coach, team.coach());
+        assertNotNull(team.getId());
+        assertEquals(category, team.getCategory());
+        assertEquals(gender, team.getGender());
+        assertEquals(number, team.getNumber());
+        assertEquals(club, team.getClub());
+        assertEquals(teamsColor, team.getTeamsColor());
+        assertEquals(coach, team.getCoach());
     }
 }

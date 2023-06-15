@@ -15,7 +15,6 @@ class GameTest {
         assertThrows(NullPointerException.class, () -> new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, null, Team.UNKNOWN, Team.UNKNOWN, Score.DEFAULT, FDME.UNKNOWN, LocalDateTime.now()));
         assertThrows(NullPointerException.class, () -> new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, Referees.UNKNOWN, null, Team.UNKNOWN, Score.DEFAULT, FDME.UNKNOWN, LocalDateTime.now()));
         assertThrows(NullPointerException.class, () -> new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, Referees.UNKNOWN, Team.UNKNOWN, null, Score.DEFAULT, FDME.UNKNOWN, LocalDateTime.now()));
-
         assertThrows(NullPointerException.class, () -> new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, Referees.UNKNOWN, Team.UNKNOWN, Team.UNKNOWN, Score.DEFAULT, null, LocalDateTime.now()));
         assertThrows(NullPointerException.class, () -> new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, Referees.UNKNOWN, Team.UNKNOWN, Team.UNKNOWN, Score.DEFAULT, FDME.UNKNOWN, null));
     }
@@ -27,6 +26,12 @@ class GameTest {
     }
 
     @Test
+    public void testScoreNotNull() {
+        Game game = new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, Referees.UNKNOWN, Team.UNKNOWN, Team.UNKNOWN, null, FDME.UNKNOWN, LocalDateTime.now());
+        assertNotNull(game.getScore());
+    }
+
+    @Test
     public void testSetHalle() {
         Halle halle1 = Halle.UNKNOWN;
         Halle halle2 = Halle.UNKNOWN;
@@ -35,7 +40,7 @@ class GameTest {
 
         game.setHalle(halle2);
 
-        assertEquals(halle2, game.halle());
+        assertEquals(halle2, game.getHalle());
     }
 
     @Test
@@ -47,7 +52,7 @@ class GameTest {
 
         game.setReferees(referees2);
 
-        assertEquals(referees2, game.referees());
+        assertEquals(referees2, game.getReferees());
     }
 
     @Test
@@ -59,7 +64,7 @@ class GameTest {
 
         game.setScore(score2);
 
-        assertEquals(score2, game.score());
+        assertEquals(score2, game.getScore());
     }
 
     @Test
@@ -71,7 +76,7 @@ class GameTest {
 
         game.setFdme(fdme2);
 
-        assertEquals(fdme2, game.fdme());
+        assertEquals(fdme2, game.getFdme());
     }
 
     @Test
@@ -83,7 +88,7 @@ class GameTest {
 
         game.setDateTime(dateTime2);
 
-        assertEquals(dateTime2, game.dateTime());
+        assertEquals(dateTime2, game.getDateTime());
     }
 
     @Test

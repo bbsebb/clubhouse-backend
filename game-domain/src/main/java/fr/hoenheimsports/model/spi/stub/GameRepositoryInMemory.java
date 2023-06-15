@@ -13,7 +13,7 @@ public class GameRepositoryInMemory implements GameRepository {
 
     @Override
     public Game save(Game game) {
-        this.games.put(game.code(),game);
+        this.games.put(game.getCode(),game);
         return game;
     }
 
@@ -29,7 +29,7 @@ public class GameRepositoryInMemory implements GameRepository {
 
     @Override
     public void update(Game game) {
-        this.games.put(game.code(),game);
+        this.games.put(game.getCode(),game);
     }
 
     @Override
