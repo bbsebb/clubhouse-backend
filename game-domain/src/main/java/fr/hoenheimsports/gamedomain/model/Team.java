@@ -18,7 +18,7 @@ public final class Team {
         Objects.requireNonNull(category, "category should not be null");
         Objects.requireNonNull(gender, "gender should not be null");
         if (number < 1) {
-            throw new IllegalArgumentException("Team number should be greater than 0");
+            throw new IllegalArgumentException("Team code should be greater than 0");
         }
         Objects.requireNonNull(club, "club should not be null");
         Objects.requireNonNull(teamsColor, "teamsColor should not be null");
@@ -95,7 +95,7 @@ public final class Team {
                 "id=" + id + ", " +
                 "category=" + category + ", " +
                 "gender=" + gender + ", " +
-                "number=" + number + ", " +
+                "code=" + number + ", " +
                 "club=" + club + ", " +
                 "teamsColor=" + teamsColor + ", " +
                 "coach=" + coach + ']';

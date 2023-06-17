@@ -3,6 +3,7 @@ package fr.hoenheimsports.service;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.ImportFileGame;
 import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,6 +125,26 @@ public class ImportCSVGame implements ImportFileGame {
             throw new FileDataException();
         }
 
+    }
+
+    public Game mapCSVLineToGame(CSVLine csvLine){
+    Game game = GameBuilder.builder()
+                .withCode("test")
+                .withDateTime(LocalDateTime.now())
+                .withDay(dayBuilder -> dayBuilder.withNumber(1).build())
+                .withCompetition(competitionBuilder -> competitionBuilder
+                        .withName()
+                        .withPool(poolBuilder -> poolBuilder
+                                .withName()
+                                .withNumber()))
+                .withHalle()
+                .withHomeTeam()
+                .withVisitingTeam()
+                .withScore()
+                .withReferees()
+                .withFDME()
+                .build():
+        return null;
     }
 
     private class CSVLine {

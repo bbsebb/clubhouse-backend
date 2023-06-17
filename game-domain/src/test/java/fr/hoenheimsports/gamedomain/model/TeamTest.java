@@ -102,7 +102,7 @@ class TeamTest {
         Team team = new Team(id, category, gender, number, club, teamsColor, coach);
 
         String expected = "Team[id=" + id + ", category=" + category + ", gender=" + gender +
-                ", number=" + number + ", club=" + club + ", teamsColor=" + teamsColor + ", coach=" + coach + ']';
+                ", code=" + number + ", club=" + club + ", teamsColor=" + teamsColor + ", coach=" + coach + ']';
 
         assertEquals(expected, team.toString());
     }

@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
 public class GameBuilder {
+    public static GameBuilder builder() {
+        return new GameBuilder();
+    }
     private String code;
     private Competition competition;
     private Day day;

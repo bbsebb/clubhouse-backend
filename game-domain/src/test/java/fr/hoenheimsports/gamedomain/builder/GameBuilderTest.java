@@ -245,7 +245,7 @@ class GameBuilderTest {
         // Assertions to validate the game object
         assertEquals("game123", game.getCode());
         assertEquals(competitionName, game.getCompetition().name());
-        assertEquals(poolNumber, game.getCompetition().pools().get(0).number());
+        assertEquals(poolNumber, game.getCompetition().pools().get(0).code());
         assertEquals(poolName, game.getCompetition().pools().get(0).name());
         assertEquals(dayNumber, game.getDay().number());
         assertEquals(halleId, game.getHalle().id());

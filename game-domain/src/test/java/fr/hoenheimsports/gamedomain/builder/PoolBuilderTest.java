@@ -17,7 +17,7 @@ class PoolBuilderTest {
                 .withName(expectedName)
                 .build();
 
-        assertEquals(expectedNumber, pool.number());
+        assertEquals(expectedNumber, pool.code());
         assertEquals(expectedName, pool.name());
     }
 }

@@ -24,7 +24,7 @@ class CompetitionBuilderTest {
                 .build();
 
         Assertions.assertEquals(name, competition.name());
-        Assertions.assertEquals(poolNumber, competition.pools().get(0).number());
+        Assertions.assertEquals(poolNumber, competition.pools().get(0).code());
         Assertions.assertEquals(poolName, competition.pools().get(0).name());
     }
 }

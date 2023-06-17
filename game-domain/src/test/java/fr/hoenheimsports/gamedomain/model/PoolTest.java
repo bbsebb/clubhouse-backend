@@ -1,6 +1,5 @@
 package fr.hoenheimsports.gamedomain.model;
 
-import fr.hoenheimsports.gamedomain.model.Pool;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +14,7 @@ class PoolTest {
     @Test
     public void testConstructorWithUnknownValues() {
         Pool pool = Pool.UNKNOWN;
-        assertEquals("unknown", pool.number());
+        assertEquals("unknown", pool.code());
         assertEquals("unknown", pool.name());
     }
 
