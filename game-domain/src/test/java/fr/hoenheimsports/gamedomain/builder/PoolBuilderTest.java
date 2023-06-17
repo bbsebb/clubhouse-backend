@@ -13,7 +13,7 @@ class PoolBuilderTest {
         String expectedName = "Pool A";
 
         Pool pool = poolBuilder
-                .withNumber(expectedNumber)
+                .withCode(expectedNumber)
                 .withName(expectedName)
                 .build();
 

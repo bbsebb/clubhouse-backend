@@ -151,7 +151,7 @@ class GameBuilderTest {
                 .withCompetition(competitionBuilder -> {
                     competitionBuilder.withName(competitionName);
                     competitionBuilder.withPool(poolBuilder -> {
-                        poolBuilder.withNumber(poolNumber);
+                        poolBuilder.withCode(poolNumber);
                         poolBuilder.withName(poolName);
                     });
                 })

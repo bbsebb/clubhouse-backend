@@ -5,6 +5,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.model.Game;
+import fr.hoenheimsports.gamedomain.model.GlueAuthorization;
 import fr.hoenheimsports.gamedomain.spi.ImportFileGame;
 import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.spi.exception.FileException;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class ImportCSVGame implements ImportFileGame {
@@ -133,12 +134,26 @@ public class ImportCSVGame implements ImportFileGame {
                 .withDateTime(LocalDateTime.now())
                 .withDay(dayBuilder -> dayBuilder.withNumber(1).build())
                 .withCompetition(competitionBuilder -> competitionBuilder
-                        .withName()
+                        .withName("Competition 1")
                         .withPool(poolBuilder -> poolBuilder
-                                .withName()
-                                .withNumber()))
-                .withHalle()
-                .withHomeTeam()
+                                .withName("Pool1")
+                                .withCode("code Pool 1")))
+                .withHalle(halleBuilder -> halleBuilder
+                        .withId(UUID.randomUUID())
+                        .withName("Halle 1")
+                        .withAddress(addressBuilder -> addressBuilder
+                                .withStreet("rue 1")
+                                .withPostalCode(67000)
+                                .withCity("ville 1"))
+                        .withGlueAuthorization(GlueAuthorization.AUTHORIZED))
+                .withHomeTeam(teamBuilder -> teamBuilder
+                        .withId(UUID.randomUUID())
+                        .withClub(clubBuilder -> clubBuilder.)
+                        .withCategory()
+                        .withGender()
+                        .withNumber()
+                        .withTeamsColor()
+                        .withCoach())
                 .withVisitingTeam()
                 .withScore()
                 .withReferees()

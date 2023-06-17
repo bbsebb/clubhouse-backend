@@ -3,11 +3,11 @@ package fr.hoenheimsports.gamedomain.builder;
 import fr.hoenheimsports.gamedomain.model.Pool;
 
 public class PoolBuilder {
-    private String number;
+    private String code;
     private String name;
 
-    public PoolBuilder withNumber(String number) {
-        this.number = number;
+    public PoolBuilder withCode(String code) {
+        this.code = code;
         return this;
     }
 
@@ -17,6 +17,6 @@ public class PoolBuilder {
     }
 
     public Pool build() {
-        return new Pool(number, name);
+        return new Pool(code, name);
     }
 }

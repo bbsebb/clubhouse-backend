@@ -19,7 +19,7 @@ class CompetitionBuilderTest {
         Competition competition = new CompetitionBuilder()
                 .withName(name)
                 .withPool(poolBuilder -> poolBuilder
-                        .withNumber(poolNumber)
+                        .withCode(poolNumber)
                         .withName(poolName))
                 .build();
 
