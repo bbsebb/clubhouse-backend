@@ -190,7 +190,7 @@ public class ImportCSVGame implements ImportFileGame {
                         .withDesignatedReferee2(mapToReferee(csvLine.getArb2Designe()))
                         .withOfficiatingReferee1(mapToReferee(csvLine.getArb1Sifle()))
                         .withOfficiatingReferee2(mapToReferee(csvLine.getArb2Sifle())))
-                .withFDME(mapToFDME(csvLine.getFdmeRec()))
+                .withFDME(mapToFDME(csvLine.getFDME()))
                 .build();
     }
 
@@ -351,7 +351,7 @@ public class ImportCSVGame implements ImportFileGame {
         private String NumVis;
         private String scRec;
         private String scVis;
-        private String fdmeRec;
+        private String fdme;
         private String arb1Sifle;
         private String arb2Sifle;
         private String EntVis;
@@ -363,6 +363,7 @@ public class ImportCSVGame implements ImportFileGame {
         private String TelCorrespRec;
         private String CorrespVis;
         private String TelCorrespVis;
+        private String fdmeRec;
         private String fdmeVis;
         private String penRec;
         private String penVis;
@@ -469,9 +470,10 @@ public class ImportCSVGame implements ImportFileGame {
                     }
                     this.NumVis = cellValue;
                 }
+                case "FDME" -> this.fdme = cellValue;
                 case "sc rec" -> this.scRec = cellValue;
                 case "sc vis" -> this.scVis = cellValue;
-                case "fdme rec" -> this.fdmeRec = cellValue;
+
                 case "arb1 sifle" -> this.arb1Sifle = cellValue;
                 case "arb2 sifle" -> this.arb2Sifle = cellValue;
 /*
@@ -481,6 +483,7 @@ public class ImportCSVGame implements ImportFileGame {
                     }
                     this.semaine = cellValue;
                 }
+                case "fdme rec" -> this.fdmeRec = cellValue;
                 case "club hote" -> this.clubHote = cellValue;
                 case "observateur" -> this.observateur = cellValue;
                 case "delegue" -> this.delegue = cellValue;
@@ -618,8 +621,8 @@ public class ImportCSVGame implements ImportFileGame {
             return scVis;
         }
 
-        public String getFdmeRec() {
-            return fdmeRec;
+        public String getFDME() {
+            return fdme;
         }
 
 

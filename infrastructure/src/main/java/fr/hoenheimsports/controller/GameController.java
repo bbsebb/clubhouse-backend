@@ -64,7 +64,7 @@ public class GameController {
 
     @GetMapping("/test")
     public List<Game> test() throws IOException, FileException, FileDataException {
-        Resource resource = new ClassPathResource("static/test.csv");
+        Resource resource = new ClassPathResource("static/test2.csv");
         return this.importFileGame.importFileGame(resource.getInputStream());
     }
 }
