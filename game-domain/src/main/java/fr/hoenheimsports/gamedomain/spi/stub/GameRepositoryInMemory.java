@@ -1,12 +1,13 @@
 package fr.hoenheimsports.gamedomain.spi.stub;
 
+import fr.hoenheimsports.gamedomain.annotation.Stub;
 import fr.hoenheimsports.gamedomain.builder.AddressBuilder;
 import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.*;
 
 import java.util.*;
 import java.util.stream.Stream;
-
+@Stub
 public class GameRepositoryInMemory implements GameRepository, CoachRepository, HalleRepository, RefereeRepository, TeamRepository {
     private final Map<String,Game> games = new HashMap<>();
 

@@ -118,7 +118,6 @@ public class CSVToGames implements FileToGames {
             games.add(mapCSVLineToGame(csvLine));
         }
         return games;
-
     }
 
     private List<List<String>> parseToList(InputStream fileStream) throws FileDataException, FileException {

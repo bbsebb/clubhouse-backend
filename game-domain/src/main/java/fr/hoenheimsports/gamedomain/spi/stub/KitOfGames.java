@@ -1,5 +1,6 @@
 package fr.hoenheimsports.gamedomain.spi.stub;
 
+import fr.hoenheimsports.gamedomain.annotation.Stub;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.model.Gender;
@@ -11,7 +12,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
+@Stub
 public class KitOfGames {
     public static List<Game> getKitOfGames() {
         List<Game> games = new ArrayList<>();

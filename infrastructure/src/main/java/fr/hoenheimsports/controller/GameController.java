@@ -1,23 +1,23 @@
 package fr.hoenheimsports.controller;
 
-import fr.hoenheimsports.gamedomain.CreateGameImpl;
-import fr.hoenheimsports.gamedomain.ImportFileGameImpl;
+import fr.hoenheimsports.gamedomain.api.DisplayGame;
 import fr.hoenheimsports.gamedomain.api.ImportFileGame;
 import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.spi.exception.FileException;
 import fr.hoenheimsports.gamedomain.api.CreateGame;
-import fr.hoenheimsports.gamedomain.spi.FileToGames;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.model.*;
-import fr.hoenheimsports.gamedomain.spi.GameRepository;
-import fr.hoenheimsports.gamedomain.spi.stub.GameRepositoryInMemory;
-import fr.hoenheimsports.service.CSVToGames;
+import fr.hoenheimsports.service.GameServiceApplication;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -28,19 +28,11 @@ import java.util.UUID;
 @RequestMapping("/api/games")
 public class GameController {
 
-    private final CreateGame gameService;
-    private final FileToGames csvToGame;
-    private final GameRepository gameRepository;
-    private final FileToGames fileToGames;
-    private final ImportFileGame importFileGame;
 
-    public GameController(FileToGames fileToGames) {
-        this.fileToGames = fileToGames;
-        this.gameRepository = new GameRepositoryInMemory();
-        this.csvToGame = new CSVToGames();
+    private final GameServiceApplication gameService;
 
-        this.gameService = new CreateGameImpl(this.gameRepository);
-        this.importFileGame = new ImportFileGameImpl(fileToGames,this.gameRepository);
+    public GameController(GameServiceApplication gameService) {
+        this.gameService = gameService;
     }
 
     @GetMapping("/create")
@@ -63,12 +55,17 @@ public class GameController {
 
     @GetMapping("")
     public List<Game> allGame() {
-        return null;
+        return this.gameService.displayGame();
     }
 
-    @GetMapping("/test")
-    public List<Game> test() throws IOException, FileException, FileDataException {
-        Resource resource = new ClassPathResource("static/test2.csv");
-        return this.importFileGame.importFileGame(resource.getInputStream());
+    @GetMapping("/import")
+    public ResponseEntity<List<Game>> importFile(@RequestParam("csv") MultipartFile csvFile)  {
+        try {
+            return ResponseEntity.ok(this.gameService.importFile(csvFile));
+        } catch (FileException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (FileDataException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

@@ -17,7 +17,6 @@ public final class Game {
     private Score score;
     private FDME fdme;
     private LocalDate date;
-
     private LocalTime time;
 
     public Game(String code, Competition competition, Day day, Halle halle, Referees referees, Team homeTeam, Team visitingTeam, Score score, FDME fdme, LocalDate date,LocalTime time) {

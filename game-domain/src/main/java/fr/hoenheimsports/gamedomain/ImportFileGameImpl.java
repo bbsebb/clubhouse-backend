@@ -1,5 +1,6 @@
 package fr.hoenheimsports.gamedomain;
 
+import fr.hoenheimsports.gamedomain.annotation.DomainService;
 import fr.hoenheimsports.gamedomain.api.ImportFileGame;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.FileToGames;
@@ -10,6 +11,7 @@ import fr.hoenheimsports.gamedomain.spi.exception.FileException;
 import java.io.InputStream;
 import java.util.List;
 
+@DomainService
 public class ImportFileGameImpl implements ImportFileGame {
 
     final private  FileToGames fileToGames;

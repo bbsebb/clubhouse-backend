@@ -1,9 +1,10 @@
 package fr.hoenheimsports.gamedomain;
 
+import fr.hoenheimsports.gamedomain.annotation.DomainService;
 import fr.hoenheimsports.gamedomain.api.UpdateGame;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.GameRepository;
-
+@DomainService
 public class UpdateGameImpl implements UpdateGame {
 
     private GameRepository gameRepository;
