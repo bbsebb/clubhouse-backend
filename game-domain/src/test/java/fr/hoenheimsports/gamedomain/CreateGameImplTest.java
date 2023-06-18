@@ -13,7 +13,6 @@ class CreateGameImplTest {
     public void testCreateGame() {
         // Créez une instance de GameRepositoryInMemory ou utilisez une autre implémentation du GameRepository
         GameRepositoryInMemory gameRepository = new GameRepositoryInMemory();
-        gameRepository.clear();
         // Créez une instance de CreateGameImpl en utilisant le GameRepository créé
         CreateGame createGame = new CreateGameImpl(gameRepository);
 

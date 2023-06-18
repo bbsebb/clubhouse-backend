@@ -26,7 +26,6 @@ class GameRepositoryInMemoryTest {
     @BeforeEach
     void setup() {
         gameRepository = new GameRepositoryInMemory();
-        gameRepository.clear();
         // Create coach
         coach = CoachBuilder.builder()
                 .withId(UUID.randomUUID())

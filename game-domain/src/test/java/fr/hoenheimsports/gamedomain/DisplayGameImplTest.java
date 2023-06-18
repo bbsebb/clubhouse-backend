@@ -14,7 +14,6 @@ class DisplayGameImplTest {
     @Test
     public void testFindAllGame() {
         GameRepositoryInMemory gameRepository = new GameRepositoryInMemory();
-        gameRepository.clear();
 
         Game game1 = GameBuilder.builder()
                 .withCode("test1")
