@@ -2,6 +2,7 @@ package fr.hoenheimsports.gamedomain.builder;
 
 import fr.hoenheimsports.gamedomain.model.Coach;
 import fr.hoenheimsports.gamedomain.model.PhoneNumber;
+import fr.hoenheimsports.gamedomain.spi.CoachRepository;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -13,6 +14,13 @@ public class CoachBuilder {
     private UUID id;
     private String name;
     private PhoneNumber phoneNumber;
+
+    private CoachRepository coachRepository;
+
+    public CoachBuilder addIdGeneratorFromRepository(CoachRepository coachRepository) {
+        this.coachRepository = coachRepository;
+        return this;
+    }
 
     public CoachBuilder withId(UUID id) {
         this.id = id;
@@ -37,9 +45,15 @@ public class CoachBuilder {
     }
 
     public Coach build() {
-        if (id == null) {
-            id = UUID.randomUUID();
+        if(this.coachRepository != null) {
+            var optionalCoach = this.coachRepository.findCoachByKeys(name);
+            if (optionalCoach.isPresent()) {
+                this.id = optionalCoach.get().id();
+            }
         }
-        return new Coach(id, name, phoneNumber);
+        if(this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+        return new Coach(this.id, this.name, this.phoneNumber);
     }
 }

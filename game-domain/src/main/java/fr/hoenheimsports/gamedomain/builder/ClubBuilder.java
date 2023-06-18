@@ -3,6 +3,9 @@ package fr.hoenheimsports.gamedomain.builder;
 import fr.hoenheimsports.gamedomain.model.Club;
 
 public class ClubBuilder {
+    public static ClubBuilder builder() {
+        return new ClubBuilder();
+    }
     private String code;
     private String name;
 

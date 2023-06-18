@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PoolBuilderTest {
     @Test
+    public void testBuilderMethod() {
+        PoolBuilder poolBuilder = PoolBuilder.builder();
+        assertNotNull(poolBuilder);
+    }
+    @Test
     public void testPoolBuilder() {
         PoolBuilder poolBuilder = new PoolBuilder();
         String expectedNumber = "A";

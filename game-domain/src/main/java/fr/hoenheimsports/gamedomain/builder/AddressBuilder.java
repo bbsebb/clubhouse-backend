@@ -3,6 +3,9 @@ package fr.hoenheimsports.gamedomain.builder;
 import fr.hoenheimsports.gamedomain.model.Address;
 
 public class AddressBuilder {
+    public static AddressBuilder builder() {
+        return new AddressBuilder();
+    }
     private String street;
     private int postalCode;
     private String city;

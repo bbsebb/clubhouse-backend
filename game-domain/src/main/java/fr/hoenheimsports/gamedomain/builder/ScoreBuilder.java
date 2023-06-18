@@ -3,6 +3,9 @@ package fr.hoenheimsports.gamedomain.builder;
 import fr.hoenheimsports.gamedomain.model.Score;
 
 public class ScoreBuilder {
+    public static ScoreBuilder builder() {
+        return new ScoreBuilder();
+    }
     private int homeScore;
     private int visitingScore;
 

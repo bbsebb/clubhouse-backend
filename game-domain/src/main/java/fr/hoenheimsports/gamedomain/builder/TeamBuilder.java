@@ -1,11 +1,14 @@
 package fr.hoenheimsports.gamedomain.builder;
 
 import fr.hoenheimsports.gamedomain.model.*;
+import fr.hoenheimsports.gamedomain.spi.TeamRepository;
 
 import java.util.UUID;
 import java.util.function.Consumer;
 
 public class TeamBuilder {
+    private TeamRepository teamRepository;
+
     public static TeamBuilder builder() {
         return new TeamBuilder();
     }
@@ -16,6 +19,11 @@ public class TeamBuilder {
     private Club club;
     private TeamsColor teamsColor;
     private Coach coach;
+
+    public TeamBuilder addIdGeneratorFromRepository(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
+        return this;
+    }
 
     public TeamBuilder withId(UUID id) {
         this.id = id;
@@ -69,7 +77,7 @@ public class TeamBuilder {
     }
 
     public TeamBuilder withCoach(Consumer<CoachBuilder> coachBuilderFunction) {
-        CoachBuilder coachBuilder = new CoachBuilder();
+        CoachBuilder coachBuilder = CoachBuilder.builder();
         coachBuilderFunction.accept(coachBuilder);
         this.coach = coachBuilder.build();
         return this;
@@ -81,6 +89,12 @@ public class TeamBuilder {
     }
 
     public Team build() {
+        if(this.teamRepository != null) {
+            var optionalTeam = this.teamRepository.findTeamByKeys(club,gender,category,number);
+            if (optionalTeam.isPresent()) {
+                this.id = optionalTeam.get().getId();
+            }
+        }
         if (id == null) {
             id = UUID.randomUUID();
         }

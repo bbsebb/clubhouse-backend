@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PhoneNumberBuilderTest {
     @Test
+    public void testBuilderMethod() {
+        PhoneNumberBuilder phoneNumberBuilder = PhoneNumberBuilder.builder();
+        assertNotNull(phoneNumberBuilder);
+    }
+    @Test
     public void testPhoneNumberBuilder() {
         PhoneNumberBuilder phoneNumberBuilder = new PhoneNumberBuilder();
         String expectedPhoneNumber = "1234567890";

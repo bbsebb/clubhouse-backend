@@ -3,6 +3,7 @@ package fr.hoenheimsports.gamedomain.builder;
 import fr.hoenheimsports.gamedomain.model.Address;
 import fr.hoenheimsports.gamedomain.model.GlueAuthorization;
 import fr.hoenheimsports.gamedomain.model.Halle;
+import fr.hoenheimsports.gamedomain.spi.HalleRepository;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -15,6 +16,11 @@ public class HalleBuilder {
     private String name;
     private Address address;
     private GlueAuthorization glueAuthorization;
+    private HalleRepository halleRepository;
+    public HalleBuilder addIdGeneratorFromRepository(HalleRepository coachRepository) {
+        this.halleRepository = coachRepository;
+        return this;
+    }
 
     public HalleBuilder withId(UUID id) {
         this.id = id;
@@ -44,6 +50,12 @@ public class HalleBuilder {
     }
 
     public Halle build() {
+        if(this.halleRepository != null) {
+            var optionalHall = this.halleRepository.findHallByKeys(name,address.street(),address.postalCode(),address.city());
+            if (optionalHall.isPresent()) {
+                this.id = optionalHall.get().id();
+            }
+        }
         if (id == null) {
             id = UUID.randomUUID();
         }

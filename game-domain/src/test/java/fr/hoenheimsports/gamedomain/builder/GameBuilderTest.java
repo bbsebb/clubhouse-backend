@@ -16,6 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class GameBuilderTest {
     @Test
+    public void testBuilderMethod() {
+        GameBuilder gameBuilder = GameBuilder.builder();
+        assertNotNull(gameBuilder);
+    }
+    @Test
     void testGameBuilderWithObject() throws MalformedURLException {
         // Create necessary objects using builders
         Game gameExcepted = new Game(

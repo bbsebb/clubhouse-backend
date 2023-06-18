@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class CompetitionBuilder {
-
+    public static CompetitionBuilder builder() {
+        return new CompetitionBuilder();
+    }
     private String name;
     private List<Pool> pools = new ArrayList<>();
 

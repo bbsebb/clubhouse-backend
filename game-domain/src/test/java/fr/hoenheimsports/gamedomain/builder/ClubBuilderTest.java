@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClubBuilderTest {
     @Test
+    public void testBuilderMethod() {
+        ClubBuilder clubBuilder = ClubBuilder.builder();
+        assertNotNull(clubBuilder);
+    }
+    @Test
     public void testClubBuilder() {
         ClubBuilder clubBuilder = new ClubBuilder();
         String expectedCode = "0167028";

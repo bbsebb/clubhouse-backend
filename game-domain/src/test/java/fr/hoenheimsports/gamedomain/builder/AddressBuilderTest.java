@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AddressBuilderTest {
-
+    @Test
+    public void testBuilderMethod() {
+        AddressBuilder addressBuilder = AddressBuilder.builder();
+        assertNotNull(addressBuilder);
+    }
     @Test
     public void testAddressBuilder() {
         AddressBuilder addressBuilder = new AddressBuilder();

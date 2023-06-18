@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TeamColorBuilderTest {
     @Test
+    public void testBuilderMethod() {
+        TeamColorBuilder teamColorBuilder = TeamColorBuilder.builder();
+        assertNotNull(teamColorBuilder);
+    }
+    @Test
     public void testTeamColorBuilder() {
         TeamColorBuilder teamColorBuilder = new TeamColorBuilder();
         String expectedFrenchName = "BLEU";

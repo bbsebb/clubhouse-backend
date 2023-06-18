@@ -3,6 +3,9 @@ package fr.hoenheimsports.gamedomain.builder;
 import fr.hoenheimsports.gamedomain.model.Pool;
 
 public class PoolBuilder {
+    public static PoolBuilder builder() {
+        return new PoolBuilder();
+    }
     private String code;
     private String name;
 

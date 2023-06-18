@@ -6,6 +6,9 @@ import fr.hoenheimsports.gamedomain.model.TeamsColor;
 import java.util.function.Consumer;
 
 public class TeamsColorBuilder {
+    public static TeamsColorBuilder builder() {
+        return new TeamsColorBuilder();
+    }
     private TeamColor shirtColor1;
     private TeamColor shirtColor2;
     private TeamColor goalkeeperColor1;

@@ -6,6 +6,9 @@ import fr.hoenheimsports.gamedomain.model.Referees;
 import java.util.function.Consumer;
 
 public class RefereesBuilder {
+    public static RefereesBuilder builder() {
+        return new RefereesBuilder();
+    }
     private Referee designatedReferee1;
     private Referee designatedReferee2;
     private Referee officiatingReferee1;

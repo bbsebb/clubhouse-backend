@@ -8,6 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TeamsColorBuilderTest {
     @Test
+    public void testBuilderMethod() {
+        TeamsColorBuilder teamsColorBuilder = TeamsColorBuilder.builder();
+        assertNotNull(teamsColorBuilder);
+    }
+    @Test
     public void testTeamsColorBuilderWithObject() {
         TeamsColorBuilder teamsColorBuilder = new TeamsColorBuilder();
         TeamColor expectedShirtColor1 = TeamColor.BLUE;

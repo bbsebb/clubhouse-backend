@@ -9,6 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryBuilderTest {
     @Test
+    public void testBuilderMethod() {
+        CategoryBuilder categoryBuilder = CategoryBuilder.builder();
+        assertNotNull(categoryBuilder);
+    }
+    @Test
     public void testCategoryBuilder() {
         CategoryBuilder categoryBuilder = new CategoryBuilder();
         UUID expectedId = UUID.randomUUID();
@@ -20,5 +25,6 @@ class CategoryBuilderTest {
 
         assertEquals(expectedName, category.name());
     }
+
 
 }

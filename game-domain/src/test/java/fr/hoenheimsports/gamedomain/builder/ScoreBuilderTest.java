@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ScoreBuilderTest {
     @Test
+    public void testBuilderMethod() {
+        ScoreBuilder scoreBuilder = ScoreBuilder.builder();
+        assertNotNull(scoreBuilder);
+    }
+    @Test
     public void testScoreBuilder() {
         ScoreBuilder scoreBuilder = new ScoreBuilder();
         int expectedHomeScore = 5;

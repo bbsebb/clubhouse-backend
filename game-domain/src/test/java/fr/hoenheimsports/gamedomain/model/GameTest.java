@@ -82,15 +82,26 @@ class GameTest {
     }
 
     @Test
-    public void testSetDateTime() {
-        LocalDate dateTime1 = LocalDate.now();
-        LocalDate dateTime2 = LocalDate.now();
+    public void testSetDate() {
+        LocalDate date1 = LocalDate.now();
+        LocalDate date2 = LocalDate.now();
 
-        Game game = new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, Referees.UNKNOWN, Team.UNKNOWN, Team.UNKNOWN, Score.DEFAULT, FDME.UNKNOWN, dateTime1, LocalTime.now());
+        Game game = new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, Referees.UNKNOWN, Team.UNKNOWN, Team.UNKNOWN, Score.DEFAULT, FDME.UNKNOWN, date1, LocalTime.now());
 
-        game.setDate(dateTime2);
+        game.setDate(date2);
 
-        assertEquals(dateTime2, game.getDate());
+        assertEquals(date2, game.getDate());
+    }
+    @Test
+    public void testSetTime() {
+        LocalTime time1 = LocalTime.now();
+        LocalTime time2 = LocalTime.now();
+
+        Game game = new Game("code", Competition.UNKNOWN, Day.SINGLE_DAY_GAME, Halle.UNKNOWN, Referees.UNKNOWN, Team.UNKNOWN, Team.UNKNOWN, Score.DEFAULT, FDME.UNKNOWN, null, time1);
+
+        game.setTime(time2);
+
+        assertEquals(time2, game.getTime());
     }
 
     @Test
