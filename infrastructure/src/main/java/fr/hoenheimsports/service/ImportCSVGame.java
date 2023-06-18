@@ -3,9 +3,8 @@ package fr.hoenheimsports.service;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import fr.hoenheimsports.gamedomain.builder.GameBuilder;
-import fr.hoenheimsports.gamedomain.model.Game;
-import fr.hoenheimsports.gamedomain.model.GlueAuthorization;
+import fr.hoenheimsports.gamedomain.builder.*;
+import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.ImportFileGame;
 import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.spi.exception.FileException;
@@ -15,11 +14,14 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ImportCSVGame implements ImportFileGame {
@@ -105,12 +107,17 @@ public class ImportCSVGame implements ImportFileGame {
         if (csvData.isEmpty()) {
             throw new FileDataException();
         }
-        List<String> csvDataHeader = csvData.remove(0);
+
+        List<String> header = csvData.remove(0).equals(headerPlayed) ? headerPlayed : headerNoPlayed;
         List<CSVLine> csvDataWithHeader = new ArrayList<>();
         for (List<String> csvDataLine : csvData) {
-            csvDataWithHeader.add(new CSVLine(headerPlayed, csvDataLine));
+            csvDataWithHeader.add(new CSVLine(header, csvDataLine));
         }
-        return null;
+        List<Game> games = new ArrayList<>();
+        for (CSVLine csvLine : csvDataWithHeader) {
+            games.add(mapCSVLineToGame(csvLine));
+        }
+        return games;
 
     }
 
@@ -118,53 +125,204 @@ public class ImportCSVGame implements ImportFileGame {
 
         try (InputStreamReader reader = new InputStreamReader(new BOMInputStream(fileStream))) {
             try (CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
-                return new ArrayList<>(csvReader.readAll().stream().map(line -> Arrays.asList(line)).toList());
+                return new ArrayList<>(csvReader.readAll().stream().map(Arrays::asList).toList());
             }
         } catch (IOException ioe) {
             throw new FileException();
         } catch (com.opencsv.exceptions.CsvException e) {
             throw new FileDataException();
         }
-
     }
 
-    public Game mapCSVLineToGame(CSVLine csvLine){
-    Game game = GameBuilder.builder()
-                .withCode("test")
-                .withDateTime(LocalDateTime.now())
-                .withDay(dayBuilder -> dayBuilder.withNumber(1).build())
+
+    private static Game mapCSVLineToGame(CSVLine csvLine) throws FileDataException {
+
+        int day = mapToDay(csvLine.getJ());
+
+        Gender gender = mapToGender(csvLine.getNumPoule());
+
+        int numberHomeTeam = ParserInfoTeam.mapToTeamNumber(csvLine.getClubRec());
+        String nameHomeTeam = ParserInfoTeam.mapToClubName(csvLine.getClubRec());
+        String categoryHomeTeam = ParserInfoTeam.mapToCategoryName(csvLine.getClubRec());
+
+        int numberVisitingTeam = ParserInfoTeam.mapToTeamNumber(csvLine.getClubVis());
+        String nameVisitingTeam = ParserInfoTeam.mapToClubName(csvLine.getClubVis());
+        String categoryVisitingTeam = ParserInfoTeam.mapToCategoryName(csvLine.getClubVis());
+
+        Score score = mapToScore(csvLine.getScRec(), csvLine.getScVis());
+
+
+        Halle halle = mapToHall(csvLine.getNomSalle(), csvLine.getAdresseSalle(), csvLine.getCP(), csvLine.getVille(), csvLine.getColle());
+        return GameBuilder.builder()
+                .withCode(csvLine.getCodeRenc())
+                .withDate(mapToLocalDate(csvLine.getLe()))
+                .withTime(mapToLocalTime(csvLine.getHoraire()))
+                .withDay(dayBuilder -> dayBuilder.withNumber(day).build())
                 .withCompetition(competitionBuilder -> competitionBuilder
-                        .withName("Competition 1")
+                        .withName(csvLine.getCompetition())
                         .withPool(poolBuilder -> poolBuilder
-                                .withName("Pool1")
-                                .withCode("code Pool 1")))
-                .withHalle(halleBuilder -> halleBuilder
-                        .withId(UUID.randomUUID())
-                        .withName("Halle 1")
-                        .withAddress(addressBuilder -> addressBuilder
-                                .withStreet("rue 1")
-                                .withPostalCode(67000)
-                                .withCity("ville 1"))
-                        .withGlueAuthorization(GlueAuthorization.AUTHORIZED))
+                                .withName(csvLine.getPoule())
+                                .withCode(csvLine.getNumPoule())))
+                .withHalle(halle)
                 .withHomeTeam(teamBuilder -> teamBuilder
-                        .withId(UUID.randomUUID())
-                        .withClub(clubBuilder -> clubBuilder.)
-                        .withCategory()
-                        .withGender()
-                        .withNumber()
-                        .withTeamsColor()
-                        .withCoach())
-                .withVisitingTeam()
-                .withScore()
-                .withReferees()
-                .withFDME()
-                .build():
-        return null;
+                        .withClub(clubBuilder -> clubBuilder
+                                .withCode(csvLine.getNumRec())
+                                .withName(nameHomeTeam))
+                        .withCategory(categoryBuilder -> categoryBuilder
+                                .withName(categoryHomeTeam))
+                        .withGender(gender)
+                        .withNumber(numberHomeTeam)
+                        .withTeamsColor(ParserTeamColor.mapToTeamsColor(csvLine.getCoulRec(), csvLine.getCoulGardRec()))
+                        .withCoach(mapToCoach(csvLine.getEntRec(), csvLine.getTelEntRec())))
+                .withVisitingTeam(teamBuilder -> teamBuilder
+                        .withClub(clubBuilder -> clubBuilder
+                                .withCode(csvLine.getNumVis())
+                                .withName(nameVisitingTeam))
+                        .withCategory(categoryBuilder -> categoryBuilder
+                                .withName(categoryVisitingTeam))
+                        .withGender(gender)
+                        .withNumber(numberVisitingTeam)
+                        .withTeamsColor(ParserTeamColor.mapToTeamsColor(csvLine.getCoulVis(), csvLine.getCoulGardVis()))
+                        .withCoach(mapToCoach(csvLine.getEntVis(), csvLine.getTelEntVis())))
+                .withScore(score)
+                .withReferees(refereesBuilder -> refereesBuilder
+                        .withDesignatedReferee1(mapToReferee(csvLine.getArb1Designe()))
+                        .withDesignatedReferee2(mapToReferee(csvLine.getArb2Designe()))
+                        .withOfficiatingReferee1(mapToReferee(csvLine.getArb1Sifle()))
+                        .withOfficiatingReferee2(mapToReferee(csvLine.getArb2Sifle())))
+                .withFDME(mapToFDME(csvLine.getFdmeRec()))
+                .build();
     }
 
-    private class CSVLine {
+    private static FDME mapToFDME(String url) {
+        if (url == null) {
+            return FDME.UNKNOWN;
+        } else {
+            return FDMEBuilder.builder().withUrl(url).build();
+        }
+    }
 
-        private String semaine;
+    private static Referee mapToReferee(String name) {
+        if (name == null) {
+            return Referee.UNKNOWN;
+        } else {
+            return RefereeBuilder.builder().withName(name).build();
+        }
+    }
+
+    private static Coach mapToCoach(String name, String phoneNumber) {
+        if (name == null) {
+            return Coach.UNKNOWN;
+        } else {
+            return CoachBuilder.builder().withName(name).withPhoneNumber(mapToPhoneNumber(phoneNumber)).build();
+        }
+    }
+
+    private static PhoneNumber mapToPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null) {
+            return PhoneNumber.UNKNOWN;
+        } else {
+            return new PhoneNumber(phoneNumber);
+        }
+    }
+
+    private static LocalDate mapToLocalDate(String dateStr) {
+        LocalDate date = null;
+        if (dateStr != null) {
+            {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                date = LocalDate.parse(dateStr, formatter);
+            }
+        }
+        return date;
+    }
+
+    private static LocalTime mapToLocalTime(String timeStr) {
+        LocalTime time = null;
+        if (timeStr != null) {
+            {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                time = LocalTime.parse(timeStr, formatter);
+            }
+        }
+        return time;
+    }
+
+    private static int mapToDay(String dayStr) throws FileDataException {
+        try {
+            return Integer.parseInt(dayStr);
+        } catch (NumberFormatException nfe) {
+            throw new FileDataException();
+        }
+    }
+
+    private static Halle mapToHall(String name, String address, String cpStr, String city, String glue) throws FileDataException {
+        if (name == null) {
+            return Halle.UNKNOWN;
+        } else if (address == null || cpStr == null || city == null) {
+            return HalleBuilder.builder().withAddress(Address.UNKNOWN).build();
+        } else {
+            try {
+                GlueAuthorization glueAuthorization;
+                if (glue == null) {
+                    glueAuthorization = GlueAuthorization.UNKNOWN;
+                } else if (glue.equals("Toutes colles interdites")) {
+                    glueAuthorization = GlueAuthorization.UNAUTHORIZED;
+                } else if (glue.equals("Colle lavable à l'eau uniquement") || glue.equals("Colle fournie par le club recevant")) {
+                    glueAuthorization = GlueAuthorization.AUTHORIZED;
+                } else {
+                    glueAuthorization = GlueAuthorization.UNKNOWN;
+                }
+                int cp = Integer.parseInt(cpStr);
+                return HalleBuilder.builder()
+                        .withName(name)
+                        .withAddress(addressBuilder -> addressBuilder
+                                .withStreet(address)
+                                .withPostalCode(cp)
+                                .withCity(city))
+                        .withGlueAuthorization(glueAuthorization)
+                        .build();
+            } catch (NumberFormatException nfe) {
+                throw new FileDataException();
+            }
+        }
+    }
+
+    private static Gender mapToGender(String numPool) throws FileDataException {
+        char genderStr;
+        try {
+            genderStr = numPool.charAt(0);
+        } catch (IndexOutOfBoundsException iobe) {
+            throw new FileDataException();
+        }
+        //Z est considéré comme mixte, mais en réalité, les équipes sont nommées M à chaque fois.
+        return switch (genderStr) {
+            case 'Z' -> Gender.MIXED;
+            case 'F' -> Gender.FEMALE;
+            case 'M' -> Gender.MALE;
+            default -> Gender.UNKNOWN;
+        };
+    }
+
+    private static Score mapToScore(String scoreStrRec, String scoreStrVis) throws FileDataException {
+        if (scoreStrRec == null || scoreStrVis == null) {
+            return Score.DEFAULT;
+        } else {
+
+            try {
+                int scoreRec = Integer.parseInt(scoreStrRec);
+                int scoreVis = Integer.parseInt(scoreStrVis);
+                return new Score(scoreRec, scoreVis);
+            } catch (IllegalArgumentException iae) {
+                throw new FileDataException();
+            }
+        }
+    }
+
+
+    private static class CSVLine {
+
+
         private String numPoule;
         private String competition;
         private String poule;
@@ -173,11 +331,10 @@ public class ImportCSVGame implements ImportFileGame {
         private String horaire;
         private String clubRec;
         private String clubVis;
-        private String clubHote;
+
         private String arb1Designe;
         private String arb2Designe;
-        private String observateur;
-        private String delegue;
+
         private String codeRenc;
         private String nomSalle;
         private String adresseSalle;
@@ -190,30 +347,38 @@ public class ImportCSVGame implements ImportFileGame {
         private String CoulGardVis;
         private String EntRec;
         private String TelEntRec;
-        private String CorrespRec;
-        private String TelCorrespRec;
-        private String EntVis;
-        private String TelEntVis;
-        private String CorrespVis;
-        private String TelCorrespVis;
         private String NumRec;
         private String NumVis;
         private String scRec;
         private String scVis;
         private String fdmeRec;
+        private String arb1Sifle;
+        private String arb2Sifle;
+        private String EntVis;
+        private String TelEntVis;
+/*
+        variable doesn't use :
+        private String semaine;
+        private String CorrespRec;
+        private String TelCorrespRec;
+        private String CorrespVis;
+        private String TelCorrespVis;
         private String fdmeVis;
         private String penRec;
         private String penVis;
         private String forfRec;
         private String forfVis;
-        private String arb1Sifle;
-        private String arb2Sifle;
         private String secretaire;
         private String chronometreur;
         private String respSalle;
         private String tuteurTable;
         private String Etat;
         private String DateArrivee;
+        private String observateur;
+        private String delegue;
+        private String clubHote;
+
+       */
 
         public CSVLine(List<String> headers, List<String> csvLine) throws FileDataException {
             if (headers.size() != csvLine.size()) {
@@ -221,468 +386,347 @@ public class ImportCSVGame implements ImportFileGame {
             }
             int colonne = 0;
             for (String header : headers) {
-                this.assignValueToVariable(header, csvLine.get(colonne));
+                this.assignHeaderNameToCellValue(header, csvLine.get(colonne));
                 colonne++;
             }
         }
 
 
-        private void assignValueToVariable(String var, String value) throws FileDataException {
-            switch (var) {
-                case "semaine" -> this.semaine = value;
-                case "num poule" -> this.numPoule = value;
-                case "competition" -> this.competition = value;
-                case "poule" -> this.poule = value;
-                case "J" -> this.J = value;
-                case "le" -> this.le = value;
-                case "horaire" -> this.horaire = value;
-                case "club rec" -> this.clubRec = value;
-                case "club vis" -> this.clubVis = value;
-                case "club hote" -> this.clubHote = value;
-                case "arb1 designe" -> this.arb1Designe = value;
-                case "arb2 designe" -> this.arb2Designe = value;
-                case "observateur" -> this.observateur = value;
-                case "delegue" -> this.delegue = value;
-                case "code renc" -> this.codeRenc = value;
-                case "nom salle" -> this.nomSalle = value;
-                case "adresse salle" -> this.adresseSalle = value;
-                case "CP" -> this.CP = value;
-                case "Ville" -> this.Ville = value;
-                case "colle" -> this.colle = value;
-                case "Coul. Rec" -> this.CoulRec = value;
-                case "Coul. Gard. Rec" -> this.CoulGardRec = value;
-                case "Coul. Vis" -> this.CoulVis = value;
-                case "Coul. Gard. Vis" -> this.CoulGardVis = value;
-                case "Ent. Rec" -> this.EntRec = value;
-                case "Tel Ent. Rec" -> this.TelEntRec = value;
-                case "Corresp. Rec" -> this.CorrespRec = value;
-                case "Tel Corresp. Rec" -> this.TelCorrespRec = value;
-                case "Ent. Vis" -> this.EntVis = value;
-                case "Tel Ent. Vis" -> this.TelEntVis = value;
-                case "Corresp. Vis" -> this.CorrespVis = value;
-                case "Tel Corresp. Vis" -> this.TelCorrespVis = value;
-                case "Num rec" -> this.NumRec = value;
-                case "Num vis" -> this.NumVis = value;
-                case "sc rec" -> this.scRec = value;
-                case "sc vis" -> this.scVis = value;
-                case "fdme rec" -> this.fdmeRec = value;
-                case "fdme vis" -> this.fdmeVis = value;
-                case "pen. rec" -> this.penRec = value;
-                case "pen. vis" -> this.penVis = value;
-                case "forf. rec" -> this.forfRec = value;
-                case "forf. vis" -> this.forfVis = value;
-                case "arb1 sifle" -> this.arb1Sifle = value;
-                case "arb2 sifle" -> this.arb2Sifle = value;
-                case "secretaire" -> this.secretaire = value;
-                case "chronometreur" -> this.chronometreur = value;
-                case "resp salle" -> this.respSalle = value;
-                case "tuteur table" -> this.tuteurTable = value;
-                case "Etat" -> this.Etat = value;
-                case "Date Arrivee" -> this.DateArrivee = value;
-                default -> {
-                    throw new FileDataException();
+        private void assignHeaderNameToCellValue(String headerName, String cellValue) throws FileDataException {
+            cellValue = cellValue.trim().isEmpty() ? null : cellValue;
+            switch (headerName) {
+
+                case "num poule" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.numPoule = cellValue;
                 }
+                case "competition" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.competition = cellValue;
+                }
+                case "poule" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.poule = cellValue;
+                }
+                case "J" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.J = cellValue;
+                }
+                case "le" -> this.le = cellValue;
+                case "horaire" -> this.horaire = cellValue;
+                case "club rec" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.clubRec = cellValue;
+                }
+                case "club vis" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.clubVis = cellValue;
+                }
+
+                case "arb1 designe" -> this.arb1Designe = cellValue;
+                case "arb2 designe" -> this.arb2Designe = cellValue;
+
+                case "code renc" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.codeRenc = cellValue;
+                }
+                case "nom salle" -> this.nomSalle = cellValue;
+                case "adresse salle" -> this.adresseSalle = cellValue;
+                case "CP" -> this.CP = cellValue;
+                case "Ville" -> this.Ville = cellValue;
+                case "colle" -> this.colle = cellValue;
+                case "Coul. Rec" -> this.CoulRec = cellValue;
+                case "Coul. Gard. Rec" -> this.CoulGardRec = cellValue;
+                case "Coul. Vis" -> this.CoulVis = cellValue;
+                case "Coul. Gard. Vis" -> this.CoulGardVis = cellValue;
+                case "Ent. Rec" -> this.EntRec = cellValue;
+                case "Tel Ent. Rec" -> this.TelEntRec = cellValue;
+                case "Ent. Vis" -> this.EntVis = cellValue;
+                case "Tel Ent. Vis" -> this.TelEntVis = cellValue;
+                case "Num rec" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.NumRec = cellValue;
+                }
+                case "Num vis" -> {
+                    if (cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.NumVis = cellValue;
+                }
+                case "sc rec" -> this.scRec = cellValue;
+                case "sc vis" -> this.scVis = cellValue;
+                case "fdme rec" -> this.fdmeRec = cellValue;
+                case "arb1 sifle" -> this.arb1Sifle = cellValue;
+                case "arb2 sifle" -> this.arb2Sifle = cellValue;
+/*
+                case "semaine" -> {
+                    if(cellValue == null) {
+                        throw new FileDataException();
+                    }
+                    this.semaine = cellValue;
+                }
+                case "club hote" -> this.clubHote = cellValue;
+                case "observateur" -> this.observateur = cellValue;
+                case "delegue" -> this.delegue = cellValue;
+                case "Corresp. Rec" -> this.CorrespRec = cellValue;
+                case "Tel Corresp. Rec" -> this.TelCorrespRec = cellValue;
+                case "fdme vis" -> this.fdmeVis = cellValue;
+                case "pen. rec" -> this.penRec = cellValue;
+                case "pen. vis" -> this.penVis = cellValue;
+                case "forf. rec" -> this.forfRec = cellValue;
+                case "forf. vis" -> this.forfVis = cellValue;
+                case "Corresp. Vis" -> this.CorrespVis = cellValue;
+                case "Tel Corresp. Vis" -> this.TelCorrespVis = cellValue;
+                case "secretaire" -> this.secretaire = cellValue;
+                case "chronometreur" -> this.chronometreur = cellValue;
+                case "resp salle" -> this.respSalle = cellValue;
+                case "tuteur table" -> this.tuteurTable = cellValue;
+                case "Etat" -> this.Etat = cellValue;
+                case "Date Arrivee" -> this.DateArrivee = cellValue;*/
             }
         }
 
-        public String getSemaine() {
-            return semaine;
-        }
-
-        public void setSemaine(String semaine) {
-            this.semaine = semaine;
-        }
 
         public String getNumPoule() {
             return numPoule;
-        }
-
-        public void setNumPoule(String numPoule) {
-            this.numPoule = numPoule;
         }
 
         public String getCompetition() {
             return competition;
         }
 
-        public void setCompetition(String competition) {
-            this.competition = competition;
-        }
-
         public String getPoule() {
             return poule;
-        }
-
-        public void setPoule(String poule) {
-            this.poule = poule;
         }
 
         public String getJ() {
             return J;
         }
 
-        public void setJ(String j) {
-            J = j;
-        }
-
         public String getLe() {
             return le;
-        }
-
-        public void setLe(String le) {
-            this.le = le;
         }
 
         public String getHoraire() {
             return horaire;
         }
 
-        public void setHoraire(String horaire) {
-            this.horaire = horaire;
-        }
-
         public String getClubRec() {
             return clubRec;
-        }
-
-        public void setClubRec(String clubRec) {
-            this.clubRec = clubRec;
         }
 
         public String getClubVis() {
             return clubVis;
         }
 
-        public void setClubVis(String clubVis) {
-            this.clubVis = clubVis;
-        }
-
-        public String getClubHote() {
-            return clubHote;
-        }
-
-        public void setClubHote(String clubHote) {
-            this.clubHote = clubHote;
-        }
 
         public String getArb1Designe() {
             return arb1Designe;
-        }
-
-        public void setArb1Designe(String arb1Designe) {
-            this.arb1Designe = arb1Designe;
         }
 
         public String getArb2Designe() {
             return arb2Designe;
         }
 
-        public void setArb2Designe(String arb2Designe) {
-            this.arb2Designe = arb2Designe;
-        }
-
-        public String getObservateur() {
-            return observateur;
-        }
-
-        public void setObservateur(String observateur) {
-            this.observateur = observateur;
-        }
-
-        public String getDelegue() {
-            return delegue;
-        }
-
-        public void setDelegue(String delegue) {
-            this.delegue = delegue;
-        }
-
         public String getCodeRenc() {
             return codeRenc;
-        }
-
-        public void setCodeRenc(String codeRenc) {
-            this.codeRenc = codeRenc;
         }
 
         public String getNomSalle() {
             return nomSalle;
         }
 
-        public void setNomSalle(String nomSalle) {
-            this.nomSalle = nomSalle;
-        }
-
         public String getAdresseSalle() {
             return adresseSalle;
-        }
-
-        public void setAdresseSalle(String adresseSalle) {
-            this.adresseSalle = adresseSalle;
         }
 
         public String getCP() {
             return CP;
         }
 
-        public void setCP(String CP) {
-            this.CP = CP;
-        }
-
         public String getVille() {
             return Ville;
-        }
-
-        public void setVille(String ville) {
-            Ville = ville;
         }
 
         public String getColle() {
             return colle;
         }
 
-        public void setColle(String colle) {
-            this.colle = colle;
-        }
-
         public String getCoulRec() {
             return CoulRec;
-        }
-
-        public void setCoulRec(String coulRec) {
-            CoulRec = coulRec;
         }
 
         public String getCoulGardRec() {
             return CoulGardRec;
         }
 
-        public void setCoulGardRec(String coulGardRec) {
-            CoulGardRec = coulGardRec;
-        }
-
         public String getCoulVis() {
             return CoulVis;
-        }
-
-        public void setCoulVis(String coulVis) {
-            CoulVis = coulVis;
         }
 
         public String getCoulGardVis() {
             return CoulGardVis;
         }
 
-        public void setCoulGardVis(String coulGardVis) {
-            CoulGardVis = coulGardVis;
-        }
-
         public String getEntRec() {
             return EntRec;
-        }
-
-        public void setEntRec(String entRec) {
-            EntRec = entRec;
         }
 
         public String getTelEntRec() {
             return TelEntRec;
         }
 
-        public void setTelEntRec(String telEntRec) {
-            TelEntRec = telEntRec;
-        }
-
-        public String getCorrespRec() {
-            return CorrespRec;
-        }
-
-        public void setCorrespRec(String correspRec) {
-            CorrespRec = correspRec;
-        }
-
-        public String getTelCorrespRec() {
-            return TelCorrespRec;
-        }
-
-        public void setTelCorrespRec(String telCorrespRec) {
-            TelCorrespRec = telCorrespRec;
-        }
 
         public String getEntVis() {
             return EntVis;
-        }
-
-        public void setEntVis(String entVis) {
-            EntVis = entVis;
         }
 
         public String getTelEntVis() {
             return TelEntVis;
         }
 
-        public void setTelEntVis(String telEntVis) {
-            TelEntVis = telEntVis;
-        }
-
-        public String getCorrespVis() {
-            return CorrespVis;
-        }
-
-        public void setCorrespVis(String correspVis) {
-            CorrespVis = correspVis;
-        }
-
-        public String getTelCorrespVis() {
-            return TelCorrespVis;
-        }
-
-        public void setTelCorrespVis(String telCorrespVis) {
-            TelCorrespVis = telCorrespVis;
-        }
 
         public String getNumRec() {
             return NumRec;
-        }
-
-        public void setNumRec(String numRec) {
-            NumRec = numRec;
         }
 
         public String getNumVis() {
             return NumVis;
         }
 
-        public void setNumVis(String numVis) {
-            NumVis = numVis;
-        }
-
         public String getScRec() {
             return scRec;
-        }
-
-        public void setScRec(String scRec) {
-            this.scRec = scRec;
         }
 
         public String getScVis() {
             return scVis;
         }
 
-        public void setScVis(String scVis) {
-            this.scVis = scVis;
-        }
-
         public String getFdmeRec() {
             return fdmeRec;
         }
 
-        public void setFdmeRec(String fdmeRec) {
-            this.fdmeRec = fdmeRec;
-        }
-
-        public String getFdmeVis() {
-            return fdmeVis;
-        }
-
-        public void setFdmeVis(String fdmeVis) {
-            this.fdmeVis = fdmeVis;
-        }
-
-        public String getPenRec() {
-            return penRec;
-        }
-
-        public void setPenRec(String penRec) {
-            this.penRec = penRec;
-        }
-
-        public String getPenVis() {
-            return penVis;
-        }
-
-        public void setPenVis(String penVis) {
-            this.penVis = penVis;
-        }
-
-        public String getForfRec() {
-            return forfRec;
-        }
-
-        public void setForfRec(String forfRec) {
-            this.forfRec = forfRec;
-        }
-
-        public String getForfVis() {
-            return forfVis;
-        }
-
-        public void setForfVis(String forfVis) {
-            this.forfVis = forfVis;
-        }
 
         public String getArb1Sifle() {
             return arb1Sifle;
-        }
-
-        public void setArb1Sifle(String arb1Sifle) {
-            this.arb1Sifle = arb1Sifle;
         }
 
         public String getArb2Sifle() {
             return arb2Sifle;
         }
 
-        public void setArb2Sifle(String arb2Sifle) {
-            this.arb2Sifle = arb2Sifle;
+    }
+
+    private static class ParserInfoTeam {
+        private final static String REGEX = "([-/a-zA-Z ]+)(?: (?:(?:[U\\-](\\d{2})[MF]|(?:SM|SF)|)(\\d?))?|(?>\\(.*\\))?$)";
+        /*
+            *** REGEX ***
+            1 groupe : Le nom de l'équipe,
+            2 groupe : catégorie ou null pour les séniors
+            3 groupe : le numéro d'équipe au null
+
+            Le groupe 1 est eronné si NOM CLUB SM (ou SF), mais il semble qu'il ait tjs un numéro d'équipe pour les séniors.
+
+            Cas particulier, s'il n'y a pas de catégorie, c'est soit SF, soit SM et tjs l'équipe 1.
+
+         */
+        private final static Pattern pattern = Pattern.compile(REGEX);
+
+        static String mapToClubName(String club) throws FileDataException {
+            checkClub(club);
+            return parseInfoTeam(club).group(1);
         }
 
-        public String getSecretaire() {
-            return secretaire;
+        static String mapToCategoryName(String club) throws FileDataException {
+            checkClub(club);
+            String category = parseInfoTeam(club).group(2);
+            String categoryName;
+            if (category != null) {
+                categoryName = "moins de " + category + " ans";
+            } else {
+                categoryName = "senior";
+            }
+            return categoryName;
         }
 
-        public void setSecretaire(String secretaire) {
-            this.secretaire = secretaire;
+        static int mapToTeamNumber(String club) throws FileDataException {
+            checkClub(club);
+            String teamNumberStr = parseInfoTeam(club).group(3);
+            int teamNumber = 1;
+            if (teamNumberStr != null && !teamNumberStr.isBlank()) {
+                try {
+                    teamNumber = Integer.parseInt(teamNumberStr);
+                } catch (NumberFormatException e) {
+                    throw new FileDataException();
+                }
+            }
+            return teamNumber;
         }
 
-        public String getChronometreur() {
-            return chronometreur;
+        private static void checkClub(String club) throws FileDataException {
+            if (club == null || club.isBlank()) {
+                throw new FileDataException();
+            }
         }
 
-        public void setChronometreur(String chronometreur) {
-            this.chronometreur = chronometreur;
+        private static Matcher parseInfoTeam(String club) throws FileDataException {
+            Matcher matcher = pattern.matcher(club.trim());
+            if (!matcher.matches()) {
+                throw new FileDataException();
+            }
+            return matcher;
+        }
+    }
+
+
+    private static class ParserTeamColor {
+        static TeamsColor mapToTeamsColor(String shirtColor, String goalkeeperColor) {
+            try {
+                return new TeamsColor(split(shirtColor)[0], split(shirtColor)[1], split(goalkeeperColor)[0], split(goalkeeperColor)[1]);
+            } catch (FileDataException fde) {
+                return new TeamsColor(TeamColor.UNKNOWN, TeamColor.UNKNOWN, TeamColor.UNKNOWN, TeamColor.UNKNOWN);
+            }
         }
 
-        public String getRespSalle() {
-            return respSalle;
-        }
+        static private TeamColor[] split(String colors) throws FileDataException {
 
-        public void setRespSalle(String respSalle) {
-            this.respSalle = respSalle;
-        }
+            if (colors == null) {
+                throw new FileDataException();
+            }
 
-        public String getTuteurTable() {
-            return tuteurTable;
-        }
+            TeamColor[] teamsColor = new TeamColor[2];
 
-        public void setTuteurTable(String tuteurTable) {
-            this.tuteurTable = tuteurTable;
-        }
+            String[] colorsStr = colors.toUpperCase().split("-");
 
-        public String getEtat() {
-            return Etat;
-        }
+            if (colorsStr.length == 1 && !colorsStr[0].isBlank()) {
 
-        public void setEtat(String etat) {
-            Etat = etat;
-        }
+                teamsColor[0] = TeamColor.getByFrenchName(colorsStr[0]);
+                teamsColor[1] = null;
+            } else if (colorsStr.length == 2 && !colorsStr[0].isBlank() && !colorsStr[1].isBlank()) {
+                teamsColor[0] = TeamColor.getByFrenchName(colorsStr[0]);
+                teamsColor[1] = TeamColor.getByFrenchName(colorsStr[1]);
+            } else {
+                throw new FileDataException();
+            }
 
-        public String getDateArrivee() {
-            return DateArrivee;
-        }
-
-        public void setDateArrivee(String dateArrivee) {
-            DateArrivee = dateArrivee;
+            return teamsColor;
         }
     }
 }
+

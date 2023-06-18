@@ -8,6 +8,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class HalleBuilder {
+    public static HalleBuilder builder() {
+        return new HalleBuilder();
+    }
     private UUID id;
     private String name;
     private Address address;

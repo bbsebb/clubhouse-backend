@@ -6,6 +6,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class TeamBuilder {
+    public static TeamBuilder builder() {
+        return new TeamBuilder();
+    }
     private UUID id;
     private Category category;
     private Gender gender;

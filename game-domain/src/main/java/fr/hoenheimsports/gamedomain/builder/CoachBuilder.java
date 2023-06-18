@@ -7,6 +7,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CoachBuilder {
+    public static CoachBuilder builder() {
+        return new CoachBuilder();
+    }
     private UUID id;
     private String name;
     private PhoneNumber phoneNumber;

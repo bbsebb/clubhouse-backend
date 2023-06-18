@@ -1,6 +1,5 @@
 package fr.hoenheimsports.gamedomain.builder;
 
-import fr.hoenheimsports.gamedomain.model.PhoneNumber;
 import fr.hoenheimsports.gamedomain.model.Referee;
 import fr.hoenheimsports.gamedomain.model.Referees;
 import org.junit.jupiter.api.Test;
@@ -25,38 +24,33 @@ class RefereesBuilderTest {
 
         Referees referees = refereesBuilder
                 .withDesignatedReferee1(refereeBuilder -> refereeBuilder
-                        .withName(expectedReferee1Name)
-                        .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder.withPhoneNumber(expectedReferee1PhoneNumber)))
+                        .withName(expectedReferee1Name))
                 .withDesignatedReferee2(refereeBuilder -> refereeBuilder
-                        .withName(expectedReferee2Name)
-                        .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder.withPhoneNumber(expectedReferee2PhoneNumber)))
+                        .withName(expectedReferee2Name))
                 .withOfficiatingReferee1(refereeBuilder -> refereeBuilder
-                        .withName(expectedReferee3Name)
-                        .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder.withPhoneNumber(expectedReferee3PhoneNumber)))
+                        .withName(expectedReferee3Name))
                 .withOfficiatingReferee2(refereeBuilder -> refereeBuilder
-                        .withName(expectedReferee4Name)
-                        .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder.withPhoneNumber(expectedReferee4PhoneNumber)))
+                        .withName(expectedReferee4Name))
                 .build();
 
         assertNotNull(referees.designatedReferee1());
         assertNotNull(referees.designatedReferee1().id());
         assertEquals(expectedReferee1Name, referees.designatedReferee1().name());
-        assertEquals(expectedReferee1PhoneNumber, referees.designatedReferee1().phoneNumber().phoneNumber());
+
 
         assertNotNull(referees.designatedReferee2());
         assertNotNull(referees.designatedReferee2().id());
         assertEquals(expectedReferee2Name, referees.designatedReferee2().name());
-        assertEquals(expectedReferee2PhoneNumber, referees.designatedReferee2().phoneNumber().phoneNumber());
+
 
         assertNotNull(referees.officiatingReferee1());
         assertNotNull(referees.officiatingReferee1().id());
         assertEquals(expectedReferee3Name, referees.officiatingReferee1().name());
-        assertEquals(expectedReferee3PhoneNumber, referees.officiatingReferee1().phoneNumber().phoneNumber());
 
         assertNotNull(referees.officiatingReferee2());
         assertNotNull(referees.officiatingReferee2().id());
         assertEquals(expectedReferee4Name, referees.officiatingReferee2().name());
-        assertEquals(expectedReferee4PhoneNumber, referees.officiatingReferee2().phoneNumber().phoneNumber());
+
     }
 
     @Test
@@ -64,23 +58,19 @@ class RefereesBuilderTest {
         RefereesBuilder refereesBuilder = new RefereesBuilder();
         Referee expectedReferee1 = new Referee(
                 UUID.randomUUID(),
-                "Referee1",
-                new PhoneNumber("1111111111")
+                "Referee1"
         );
         Referee expectedReferee2 = new Referee(
                 UUID.randomUUID(),
-                "Referee2",
-                new PhoneNumber("2222222222")
+                "Referee2"
         );
         Referee expectedReferee3 = new Referee(
                 UUID.randomUUID(),
-                "Referee3",
-                new PhoneNumber("3333333333")
+                "Referee3"
         );
         Referee expectedReferee4 = new Referee(
                 UUID.randomUUID(),
-                "Referee4",
-                new PhoneNumber("4444444444")
+                "Referee4"
         );
 
         Referees referees = refereesBuilder

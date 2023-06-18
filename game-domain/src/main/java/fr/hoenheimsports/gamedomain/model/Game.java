@@ -1,10 +1,12 @@
 package fr.hoenheimsports.gamedomain.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 
 public final class Game {
+
     private final String code;
     private final Competition competition;
     private final Day day;
@@ -14,9 +16,11 @@ public final class Game {
     private final Team visitingTeam;
     private Score score;
     private FDME fdme;
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
-    public Game(String code, Competition competition, Day day, Halle halle, Referees referees, Team homeTeam, Team visitingTeam, Score score, FDME fdme, LocalDateTime dateTime) {
+    private LocalTime time;
+
+    public Game(String code, Competition competition, Day day, Halle halle, Referees referees, Team homeTeam, Team visitingTeam, Score score, FDME fdme, LocalDate date,LocalTime time) {
         Objects.requireNonNull(code, "code should not be null");
         Objects.requireNonNull(competition, "competition should not be null");
         Objects.requireNonNull(day, "day should not be null");
@@ -25,7 +29,6 @@ public final class Game {
         Objects.requireNonNull(homeTeam, "homeTeam should not be null");
         Objects.requireNonNull(visitingTeam, "visitingTeam should not be null");
         Objects.requireNonNull(fdme, "fdme should not be null");
-        Objects.requireNonNull(dateTime, "dateTime should not be null");
         this.code = code;
         this.competition = competition;
         this.day = day;
@@ -35,7 +38,8 @@ public final class Game {
         this.visitingTeam = visitingTeam;
         this.score = Objects.requireNonNullElse(score, Score.DEFAULT);;
         this.fdme = fdme;
-        this.dateTime = dateTime;
+        this.date = date;
+        this.time = time;
     }
 
     public String getCode() {
@@ -74,8 +78,8 @@ public final class Game {
         return fdme;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
     public void setHalle(Halle halle) {
@@ -94,8 +98,16 @@ public final class Game {
         this.fdme = fdme;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     @Override
@@ -112,12 +124,13 @@ public final class Game {
                 Objects.equals(this.visitingTeam, that.visitingTeam) &&
                 Objects.equals(this.score, that.score) &&
                 Objects.equals(this.fdme, that.fdme) &&
-                Objects.equals(this.dateTime, that.dateTime);
+                Objects.equals(this.date, that.date) &&
+                Objects.equals(this.time, that.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code, competition, day, halle, referees, homeTeam, visitingTeam, score, fdme, dateTime);
+        return Objects.hash(code, competition, day, halle, referees, homeTeam, visitingTeam, score, fdme, date, time);
     }
 
     @Override
@@ -132,7 +145,8 @@ public final class Game {
                 "visitingTeam=" + visitingTeam + ", " +
                 "score=" + score + ", " +
                 "fdme=" + fdme + ", " +
-                "dateTime=" + dateTime + ']';
+                "date=" + date + ", " +
+                "time=" + time + ']';
     }
 
 }

@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,10 +35,10 @@ class GameBuilderTest {
                         GlueAuthorization.UNKNOWN
                 ),
                 new Referees(
-                        new Referee(UUID.randomUUID(), "Referee1", new PhoneNumber("1234567890")),
-                        new Referee(UUID.randomUUID(), "Referee2", new PhoneNumber("0987654321")),
-                        new Referee(UUID.randomUUID(), "Referee3", new PhoneNumber("0987654323")),
-                        new Referee(UUID.randomUUID(), "Referee4", new PhoneNumber("0987654324"))
+                        new Referee(UUID.randomUUID(), "Referee1"),
+                        new Referee(UUID.randomUUID(), "Referee2"),
+                        new Referee(UUID.randomUUID(), "Referee3"),
+                        new Referee(UUID.randomUUID(), "Referee4")
                 ),
                 new Team(
                         UUID.randomUUID(),
@@ -60,7 +61,8 @@ class GameBuilderTest {
                 ),
                 Score.DEFAULT,
                 new FDME(new URL("https://media-ffhb-fdm.ffhandball.fr/fdm/S/A/E/E/")),
-                LocalDateTime.now()
+                LocalDate.now(),
+                LocalTime.now()
         );
 
         // Build a Game object using GameBuilder
@@ -74,7 +76,8 @@ class GameBuilderTest {
                 .withVisitingTeam(gameExcepted.getVisitingTeam())
                 .withScore(gameExcepted.getScore())
                 .withFDME(gameExcepted.getFdme())
-                .withDateTime(gameExcepted.getDateTime())
+                .withDate(gameExcepted.getDate())
+                .withTime(gameExcepted.getTime())
                 .build();
 
         // Assertions to validate the game object
@@ -87,7 +90,8 @@ class GameBuilderTest {
         assertEquals(gameExcepted.getVisitingTeam(), game.getVisitingTeam());
         assertEquals(gameExcepted.getScore(), game.getScore());
         assertEquals(gameExcepted.getFdme(), game.getFdme());
-        assertEquals(gameExcepted.getDateTime(), game.getDateTime());
+        assertEquals(gameExcepted.getDate(), game.getDate());
+        assertEquals(gameExcepted.getTime(), game.getTime());
     }
 
     @Test
@@ -117,7 +121,6 @@ class GameBuilderTest {
         String referee4Name = "Referee4";
         String referee4PhoneNumber = "0987654324";
         UUID homeTeamId = UUID.randomUUID();
-        UUID homeCategoryId = UUID.randomUUID();
         String homeCategoryName = "Category1";
         Gender homeGender = Gender.MALE;
         int homeNumber = 1;
@@ -131,7 +134,6 @@ class GameBuilderTest {
         String homeCoachName = "Coach1";
         String homeCoachPhoneNumber = "1111111111";
         UUID visitingTeamId = UUID.randomUUID();
-        UUID visitingCategoryId = UUID.randomUUID();
         String visitingCategoryName = "Category2";
         Gender visitingGender = Gender.FEMALE;
         int visitingNumber = 5;
@@ -145,6 +147,8 @@ class GameBuilderTest {
         String visitingCoachName = "Coach2";
         String visitingCoachPhoneNumber = "2222222222";
         URL fdmeUrl = new URL("https://media-ffhb-fdm.ffhandball.fr/fdm/S/A/E/E/");
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
 
         Game game = new GameBuilder()
                 .withCode("game123")
@@ -170,22 +174,18 @@ class GameBuilderTest {
                     refereesBuilder.withDesignatedReferee1(refereeBuilder -> {
                         refereeBuilder.withId(referee1Id);
                         refereeBuilder.withName(referee1Name);
-                        refereeBuilder.withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder.withPhoneNumber(referee1PhoneNumber));
                     });
                     refereesBuilder.withDesignatedReferee2(refereeBuilder -> {
                         refereeBuilder.withId(referee2Id);
                         refereeBuilder.withName(referee2Name);
-                        refereeBuilder.withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder.withPhoneNumber(referee2PhoneNumber));
                     });
                     refereesBuilder.withOfficiatingReferee1(refereeBuilder -> {
                         refereeBuilder.withId(referee3Id);
                         refereeBuilder.withName(referee3Name);
-                        refereeBuilder.withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder.withPhoneNumber(referee3PhoneNumber));
                     });
                     refereesBuilder.withOfficiatingReferee2(refereeBuilder -> {
                         refereeBuilder.withId(referee4Id);
                         refereeBuilder.withName(referee4Name);
-                        refereeBuilder.withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder.withPhoneNumber(referee4PhoneNumber));
                     });
                 })
                 .withHomeTeam(teamBuilder -> {
@@ -239,7 +239,8 @@ class GameBuilderTest {
                     scoreBuilder.withVisitingScore(0);
                 })
                 .withFDME(fdmeBuilder -> fdmeBuilder.withUrl(fdmeUrl))
-                .withDateTime(LocalDateTime.now())
+                .withDate(date)
+                .withTime(time)
                 .build();
 
         // Assertions to validate the game object
@@ -256,16 +257,12 @@ class GameBuilderTest {
         assertEquals(glueAuthorization, game.getHalle().glueAuthorization());
         assertEquals(referee1Id, game.getReferees().designatedReferee1().id());
         assertEquals(referee1Name, game.getReferees().designatedReferee1().name());
-        assertEquals(referee1PhoneNumber, game.getReferees().designatedReferee1().phoneNumber().phoneNumber());
         assertEquals(referee2Id, game.getReferees().designatedReferee2().id());
         assertEquals(referee2Name, game.getReferees().designatedReferee2().name());
-        assertEquals(referee2PhoneNumber, game.getReferees().designatedReferee2().phoneNumber().phoneNumber());
         assertEquals(referee3Id, game.getReferees().officiatingReferee1().id());
         assertEquals(referee3Name, game.getReferees().officiatingReferee1().name());
-        assertEquals(referee3PhoneNumber, game.getReferees().officiatingReferee1().phoneNumber().phoneNumber());
         assertEquals(referee4Id, game.getReferees().officiatingReferee2().id());
         assertEquals(referee4Name, game.getReferees().officiatingReferee2().name());
-        assertEquals(referee4PhoneNumber, game.getReferees().officiatingReferee2().phoneNumber().phoneNumber());
         assertEquals(homeTeamId, game.getHomeTeam().getId());
         assertEquals(homeCategoryName, game.getHomeTeam().getCategory().name());
         assertEquals(homeGender, game.getHomeTeam().getGender());
@@ -294,7 +291,8 @@ class GameBuilderTest {
         assertEquals(visitingCoachPhoneNumber, game.getVisitingTeam().getCoach().phoneNumber().phoneNumber());
         assertEquals(Score.DEFAULT, game.getScore());
         assertEquals(fdmeUrl, game.getFdme().url());
-        assertNotNull(game.getDateTime());
+        assertEquals(date, game.getDate());
+        assertEquals(time, game.getTime());
     }
 }
 

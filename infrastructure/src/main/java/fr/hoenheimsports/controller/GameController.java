@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,7 +51,7 @@ public class GameController {
                 .withHomeTeam(Team.UNKNOWN)
                 .withVisitingTeam(Team.UNKNOWN)
                 .withHalle(Halle.UNKNOWN)
-                .withDateTime(LocalDateTime.now())
+                .withDate(LocalDate.now())
                 .build();
 
         return ResponseEntity.ok(this.gameService.createGame(game));
@@ -63,10 +63,8 @@ public class GameController {
     }
 
     @GetMapping("/test")
-    public String test() throws IOException, FileException, FileDataException {
+    public List<Game> test() throws IOException, FileException, FileDataException {
         Resource resource = new ClassPathResource("static/test.csv");
-        this.importFileGame.importFileGame(resource.getInputStream());
-
-        return "Hello World";
+        return this.importFileGame.importFileGame(resource.getInputStream());
     }
 }
