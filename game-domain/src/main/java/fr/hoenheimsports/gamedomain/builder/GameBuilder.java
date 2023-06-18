@@ -137,81 +137,95 @@ public class GameBuilder {
 }
 
 /*
-    Exemple avec GameBuilder
-    Game game = GameBuilder.builder()
-            .withCode("test")
-            .withDate(LocalDate.now())
-            .withTime(LocalTime.now())
-            .withDay(dayBuilder -> dayBuilder.withNumber(1).build())
-            .withCompetition(competitionBuilder -> competitionBuilder
-                    .withName("Competition 1")
-                    .withPool(poolBuilder -> poolBuilder
-                            .withName("Pool1")
-                            .withCode("code Pool 1")))
-            .withHalle(halleBuilder -> halleBuilder
-                    .withId(UUID.randomUUID())
-                    .withName("Halle 1")
-                    .withAddress(addressBuilder -> addressBuilder
-                            .withStreet("rue 1")
-                            .withPostalCode(67000)
-                            .withCity("ville 1"))
-                    .withGlueAuthorization(GlueAuthorization.AUTHORIZED))
-            .withHomeTeam(teamBuilder -> teamBuilder
-                    .withId(UUID.randomUUID())
-                    .withClub(clubBuilder -> clubBuilder
-                            .withCode("Code club 1")
-                            .withName("Club 1"))
-                    .withCategory(categoryBuilder -> categoryBuilder
-                            .withName("categorie 1"))
-                    .withGender(Gender.MALE)
-                    .withNumber(1)
-                    .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
-                            .withGoalkeeperColor1(TeamColor.BEIGE)
-                            .withGoalkeeperColor2(TeamColor.BLACK)
-                            .withShirtColor1(TeamColor.BLUE)
-                            .withShirtColor2(TeamColor.GARNET))
-                    .withCoach(coachBuilder -> coachBuilder
-                            .withId(UUID.randomUUID())
-                            .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder
-                                    .withPhoneNumber("0000000000"))))
-            .withVisitingTeam(teamBuilder -> teamBuilder
-                    .withId(UUID.randomUUID())
-                    .withClub(clubBuilder -> clubBuilder
-                            .withCode("Code club 2")
-                            .withName("Club 2"))
-                    .withCategory(categoryBuilder -> categoryBuilder
-                            .withName("categorie 2"))
-                    .withGender(Gender.FEMALE)
-                    .withNumber(1)
-                    .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
-                            .withGoalkeeperColor1(TeamColor.BURGUNDY)
-                            .withGoalkeeperColor2(TeamColor.NAVY_BLUE)
-                            .withShirtColor1(TeamColor.ORANGE)
-                            .withShirtColor2(TeamColor.RED))
-                    .withCoach(coachBuilder -> coachBuilder
-                            .withId(UUID.randomUUID())
-                            .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder
-                                    .withPhoneNumber("0000000000"))))
-            .withScore(scoreBuilder -> scoreBuilder
-                    .withHomeScore(5)
-                    .withVisitingScore(10))
-            .withReferees(refereesBuilder -> refereesBuilder
-                    .withDesignatedReferee1(refereeBuilder -> refereeBuilder
-                            .withId(UUID.randomUUID())
-                            .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder
-                                    .withPhoneNumber("1111111111")))
-                    .withDesignatedReferee2(refereeBuilder -> refereeBuilder
-                            .withId(UUID.randomUUID())
-                            .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder
-                                    .withPhoneNumber("22222222222")))
-                    .withOfficiatingReferee1(refereeBuilder -> refereeBuilder
-                            .withId(UUID.randomUUID())
-                            .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder
-                                    .withPhoneNumber("33333333333")))
-                    .withOfficiatingReferee2(refereeBuilder -> refereeBuilder
-                            .withId(UUID.randomUUID())
-                            .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder
-                                    .withPhoneNumber("4444444444444"))))
-            .withFDME(fdmeBuilder -> fdmeBuilder.withUrl("http://hoenheimsports.fr"))
-            .build();
+    Exemple minimum avec GameBuilder :
+
+            Game game1 = GameBuilder.builder()
+                .withCode("test1")
+                .withCompetition(Competition.UNKNOWN)
+                .withDay(Day.SINGLE_DAY_GAME)
+                .withFDME(FDME.UNKNOWN)
+                .withHalle(Halle.UNKNOWN)
+                .withHomeTeam(Team.UNKNOWN)
+                .withVisitingTeam(Team.UNKNOWN)
+                .withReferees(Referees.UNKNOWN)
+                .withScore(Score.DEFAULT)
+                .build();
+
+
+    Exemple avec complet GameBuilder :
+
+     Game game1 = GameBuilder.builder()
+                .withCode("code game 1")
+                .withDate(LocalDate.now())
+                .withTime(LocalTime.now())
+                .withDay(dayBuilder -> dayBuilder.withNumber(1).build())
+                .withCompetition(competitionBuilder -> competitionBuilder
+                        .withName("Competition 1")
+                        .withPool(poolBuilder -> poolBuilder
+                                .withName("Pool1")
+                                .withCode("code Pool 1")))
+                .withHalle(halleBuilder -> halleBuilder
+                        .withId(UUID.randomUUID())
+                        .withName("Halle 1")
+                        .withAddress(addressBuilder -> addressBuilder
+                                .withStreet("rue 1")
+                                .withPostalCode(67000)
+                                .withCity("ville 1"))
+                        .withGlueAuthorization(GlueAuthorization.AUTHORIZED))
+                .withHomeTeam(teamBuilder -> teamBuilder
+                        .withId(UUID.randomUUID())
+                        .withClub(clubBuilder -> clubBuilder
+                                .withCode("Code club 1")
+                                .withName("Club 1"))
+                        .withCategory(categoryBuilder -> categoryBuilder
+                                .withName("categorie 1"))
+                        .withGender(Gender.MALE)
+                        .withNumber(1)
+                        .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
+                                .withGoalkeeperColor1(TeamColor.BEIGE)
+                                .withGoalkeeperColor2(TeamColor.BLACK)
+                                .withShirtColor1(TeamColor.BLUE)
+                                .withShirtColor2(TeamColor.GARNET))
+                        .withCoach(coachBuilder -> coachBuilder
+                                .withId(UUID.randomUUID())
+                                .withName("Name 1")
+                                .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder
+                                        .withPhoneNumber("0000000000"))))
+                .withVisitingTeam(teamBuilder -> teamBuilder
+                        .withId(UUID.randomUUID())
+                        .withClub(clubBuilder -> clubBuilder
+                                .withCode("Code club 2")
+                                .withName("Club 2"))
+                        .withCategory(categoryBuilder -> categoryBuilder
+                                .withName("categorie 2"))
+                        .withGender(Gender.FEMALE)
+                        .withNumber(1)
+                        .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
+                                .withGoalkeeperColor1(TeamColor.BURGUNDY)
+                                .withGoalkeeperColor2(TeamColor.NAVY_BLUE)
+                                .withShirtColor1(TeamColor.ORANGE)
+                                .withShirtColor2(TeamColor.RED))
+                        .withCoach(coachBuilder -> coachBuilder
+                                .withId(UUID.randomUUID())
+                                .withName("coach 2")
+                                .withPhoneNumber(phoneNumberBuilder -> phoneNumberBuilder
+                                        .withPhoneNumber("0000000000"))))
+                .withScore(scoreBuilder -> scoreBuilder
+                        .withHomeScore(5)
+                        .withVisitingScore(10))
+                .withReferees(refereesBuilder -> refereesBuilder
+                        .withDesignatedReferee1(refereeBuilder -> refereeBuilder
+                                .withId(UUID.randomUUID())
+                                .withName("designated referee 1"))
+                        .withDesignatedReferee2(refereeBuilder -> refereeBuilder
+                                .withId(UUID.randomUUID())
+                                .withName("designated referee 2"))
+                        .withOfficiatingReferee1(refereeBuilder -> refereeBuilder
+                                .withId(UUID.randomUUID())
+                                .withName("officiating referee 1"))
+                        .withOfficiatingReferee2(refereeBuilder -> refereeBuilder
+                                .withId(UUID.randomUUID())
+                                .withName("officiating referee 2")))
+                .withFDME(fdmeBuilder -> fdmeBuilder.withUrl("https://hoenheimsports.fr"))
+                .build();
             */

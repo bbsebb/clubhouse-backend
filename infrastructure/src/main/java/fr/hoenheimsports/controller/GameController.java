@@ -1,15 +1,17 @@
 package fr.hoenheimsports.controller;
 
 import fr.hoenheimsports.gamedomain.CreateGameImpl;
+import fr.hoenheimsports.gamedomain.ImportFileGameImpl;
+import fr.hoenheimsports.gamedomain.api.ImportFileGame;
 import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.spi.exception.FileException;
-import fr.hoenheimsports.gamedomain.spi.stub.ImportCSVGameStub;
 import fr.hoenheimsports.gamedomain.api.CreateGame;
-import fr.hoenheimsports.gamedomain.spi.ImportFileGame;
+import fr.hoenheimsports.gamedomain.spi.FileToGames;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.GameRepository;
 import fr.hoenheimsports.gamedomain.spi.stub.GameRepositoryInMemory;
+import fr.hoenheimsports.service.CSVToGames;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +29,18 @@ import java.util.UUID;
 public class GameController {
 
     private final CreateGame gameService;
-    private final ImportFileGame importCSVGame;
+    private final FileToGames csvToGame;
     private final GameRepository gameRepository;
+    private final FileToGames fileToGames;
     private final ImportFileGame importFileGame;
 
-    public GameController(ImportFileGame importFileGame) {
-        this.importFileGame = importFileGame;
+    public GameController(FileToGames fileToGames) {
+        this.fileToGames = fileToGames;
         this.gameRepository = new GameRepositoryInMemory();
-        this.importCSVGame = new ImportCSVGameStub(this.gameRepository);
+        this.csvToGame = new CSVToGames();
 
         this.gameService = new CreateGameImpl(this.gameRepository);
+        this.importFileGame = new ImportFileGameImpl(fileToGames,this.gameRepository);
     }
 
     @GetMapping("/create")

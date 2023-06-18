@@ -5,7 +5,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import fr.hoenheimsports.gamedomain.builder.*;
 import fr.hoenheimsports.gamedomain.model.*;
-import fr.hoenheimsports.gamedomain.spi.ImportFileGame;
+import fr.hoenheimsports.gamedomain.spi.FileToGames;
 import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.spi.exception.FileException;
 import org.apache.commons.io.input.BOMInputStream;
@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class ImportCSVGame implements ImportFileGame {
+public class CSVToGames implements FileToGames {
     private static final List<String> headerNoPlayed = Arrays.asList(
             "semaine",
             "num poule",
@@ -101,7 +101,7 @@ public class ImportCSVGame implements ImportFileGame {
     );
 
     @Override
-    public List<Game> importFileGame(InputStream fileStream) throws FileDataException, FileException {
+    public List<Game> fileToGames(InputStream fileStream) throws FileDataException, FileException {
 
         List<List<String>> csvData = this.parseToList(fileStream);
         if (csvData.isEmpty()) {
