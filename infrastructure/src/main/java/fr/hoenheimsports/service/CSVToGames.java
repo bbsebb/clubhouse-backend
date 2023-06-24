@@ -105,7 +105,7 @@ public class CSVToGames implements FileToGames {
 
         List<List<String>> csvData = this.parseToList(fileStream);
         if (csvData.isEmpty()) {
-            throw new FileDataException();
+            throw new FileDataException("csv file is empty");
         }
 
         List<String> header = csvData.remove(0).equals(headerPlayed) ? headerPlayed : headerNoPlayed;

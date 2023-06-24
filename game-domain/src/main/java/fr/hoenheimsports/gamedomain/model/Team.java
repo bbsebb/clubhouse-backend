@@ -22,7 +22,7 @@ public final class Team {
         }
         Objects.requireNonNull(club, "club should not be null");
         Objects.requireNonNull(teamsColor, "teamsColor should not be null");
-        Objects.requireNonNull(coach, "name should not be null");
+        Objects.requireNonNull(coach, "coach should not be null");
         this.id = id;
         this.category = category;
         this.gender = gender;
