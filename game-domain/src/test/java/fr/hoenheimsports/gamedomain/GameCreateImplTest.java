@@ -1,6 +1,6 @@
 package fr.hoenheimsports.gamedomain;
 
-import fr.hoenheimsports.gamedomain.api.CreateGame;
+import fr.hoenheimsports.gamedomain.api.GameCreate;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.stub.GameRepositoryInMemory;
@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CreateGameImplTest {
+class GameCreateImplTest {
     @Test
     public void testCreateGame() {
         // Créez une instance de GameRepositoryInMemory ou utilisez une autre implémentation du GameRepository
         GameRepositoryInMemory gameRepository = new GameRepositoryInMemory();
         // Créez une instance de CreateGameImpl en utilisant le GameRepository créé
-        CreateGame createGame = new CreateGameImpl(gameRepository);
+        GameCreate gameCreate = new GameCreateImpl(gameRepository);
 
 
         // Créez un jeu pour le test
@@ -28,10 +28,10 @@ class CreateGameImplTest {
                 .withVisitingTeam(Team.UNKNOWN)
                 .withReferees(Referees.UNKNOWN)
                 .withScore(Score.DEFAULT)
-                .build();;
+                .build();
 
         // Appelez la méthode createGame() pour créer le jeu
-        Game createdGame =createGame.createGame(game);
+        Game createdGame = gameCreate.createGame(game);
 
         // Vérifiez que le jeu a été créé avec succès
         assertNotNull(createdGame);

@@ -2,7 +2,7 @@ package fr.hoenheimsports.gamedomain.api;
 
 import fr.hoenheimsports.gamedomain.model.Game;
 
-public interface CreateGame {
+public interface GameCreate {
 
-    public Game createGame(Game game);
+    Game createGame(Game game);
 }

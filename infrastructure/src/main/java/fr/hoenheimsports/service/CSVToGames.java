@@ -6,8 +6,8 @@ import com.opencsv.CSVReaderBuilder;
 import fr.hoenheimsports.gamedomain.builder.*;
 import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.FileToGames;
-import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
-import fr.hoenheimsports.gamedomain.spi.exception.FileException;
+import fr.hoenheimsports.gamedomain.exception.FileDataException;
+import fr.hoenheimsports.gamedomain.exception.FileException;
 import org.apache.commons.io.input.BOMInputStream;
 import org.springframework.stereotype.Service;
 
@@ -127,9 +127,9 @@ public class CSVToGames implements FileToGames {
                 return new ArrayList<>(csvReader.readAll().stream().map(Arrays::asList).toList());
             }
         } catch (IOException ioe) {
-            throw new FileException();
+            throw new FileException("file isn't readable ");
         } catch (com.opencsv.exceptions.CsvException e) {
-            throw new FileDataException();
+            throw new FileDataException("file isn't in a CSV's format");
         }
     }
 
@@ -251,7 +251,7 @@ public class CSVToGames implements FileToGames {
         try {
             return Integer.parseInt(dayStr);
         } catch (NumberFormatException nfe) {
-            throw new FileDataException();
+            throw new FileDataException("csv column day should be a integer");
         }
     }
 
@@ -282,7 +282,7 @@ public class CSVToGames implements FileToGames {
                         .withGlueAuthorization(glueAuthorization)
                         .build();
             } catch (NumberFormatException nfe) {
-                throw new FileDataException();
+                throw new FileDataException("csv column cp should be a integer");
             }
         }
     }
@@ -292,7 +292,7 @@ public class CSVToGames implements FileToGames {
         try {
             genderStr = numPool.charAt(0);
         } catch (IndexOutOfBoundsException iobe) {
-            throw new FileDataException();
+            throw new FileDataException("csv column should contain 1 character minimum  ");
         }
         //Z est considéré comme mixte, mais en réalité, les équipes sont nommées M à chaque fois.
         return switch (genderStr) {
@@ -312,8 +312,10 @@ public class CSVToGames implements FileToGames {
                 int scoreRec = Integer.parseInt(scoreStrRec);
                 int scoreVis = Integer.parseInt(scoreStrVis);
                 return new Score(scoreRec, scoreVis);
+            }catch (NumberFormatException nfe) {
+                throw new FileDataException("csv columns score should be a integer");
             } catch (IllegalArgumentException iae) {
-                throw new FileDataException();
+                throw new FileDataException(iae.getMessage());
             }
         }
     }
@@ -398,25 +400,25 @@ public class CSVToGames implements FileToGames {
 
                 case "num poule" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'num poule' column is empty and should be required");
                     }
                     this.numPoule = cellValue;
                 }
                 case "competition" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'competition' column is empty and should be required");
                     }
                     this.competition = cellValue;
                 }
                 case "poule" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'poule' column is empty and should be required");
                     }
                     this.poule = cellValue;
                 }
                 case "J" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'J' column is empty and should be required");
                     }
                     this.J = cellValue;
                 }
@@ -424,13 +426,13 @@ public class CSVToGames implements FileToGames {
                 case "horaire" -> this.horaire = cellValue;
                 case "club rec" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'club rec' column is empty and should be required");
                     }
                     this.clubRec = cellValue;
                 }
                 case "club vis" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'num poule' column is empty and should be required");
                     }
                     this.clubVis = cellValue;
                 }
@@ -440,7 +442,7 @@ public class CSVToGames implements FileToGames {
 
                 case "code renc" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'code renc' column is empty and should be required");
                     }
                     this.codeRenc = cellValue;
                 }
@@ -459,13 +461,13 @@ public class CSVToGames implements FileToGames {
                 case "Tel Ent. Vis" -> this.TelEntVis = cellValue;
                 case "Num rec" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'Num rec' column is empty and should be required");
                     }
                     this.NumRec = cellValue;
                 }
                 case "Num vis" -> {
                     if (cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'Num vis' column is empty and should be required");
                     }
                     this.NumVis = cellValue;
                 }
@@ -675,7 +677,7 @@ public class CSVToGames implements FileToGames {
                 try {
                     teamNumber = Integer.parseInt(teamNumberStr);
                 } catch (NumberFormatException e) {
-                    throw new FileDataException();
+                    throw new FileDataException("csv columns club should contain a integer");
                 }
             }
             return teamNumber;
@@ -683,14 +685,14 @@ public class CSVToGames implements FileToGames {
 
         private static void checkClub(String club) throws FileDataException {
             if (club == null || club.isBlank()) {
-                throw new FileDataException();
+                throw new FileDataException("csv columns club shouldn't be null or empty ");
             }
         }
 
         private static Matcher parseInfoTeam(String club) throws FileDataException {
             Matcher matcher = pattern.matcher(club.trim());
             if (!matcher.matches()) {
-                throw new FileDataException();
+                throw new FileDataException("csv columns club should have a club's name then a category or null the a number's team or null ");
             }
             return matcher;
         }
@@ -709,7 +711,7 @@ public class CSVToGames implements FileToGames {
         static private TeamColor[] split(String colors) throws FileDataException {
 
             if (colors == null) {
-                throw new FileDataException();
+                throw new FileDataException("csv column Coul. shouldn't be null or empty");
             }
 
             TeamColor[] teamsColor = new TeamColor[2];
@@ -724,7 +726,7 @@ public class CSVToGames implements FileToGames {
                 teamsColor[0] = TeamColor.getByFrenchName(colorsStr[0]);
                 teamsColor[1] = TeamColor.getByFrenchName(colorsStr[1]);
             } else {
-                throw new FileDataException();
+                throw new FileDataException("csv column Coul. shouldn't contain 1 or 2 valid color");
             }
 
             return teamsColor;

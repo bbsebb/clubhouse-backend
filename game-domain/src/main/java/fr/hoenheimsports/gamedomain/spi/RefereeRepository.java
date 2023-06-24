@@ -6,5 +6,5 @@ import fr.hoenheimsports.gamedomain.model.Referee;
 import java.util.Optional;
 
 public interface RefereeRepository {
-    public Optional<Referee> findRefereeByKeys(String name);
+    Optional<Referee> findRefereeByKeys(String name);
 }

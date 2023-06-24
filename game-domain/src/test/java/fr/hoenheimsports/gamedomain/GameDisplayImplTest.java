@@ -1,6 +1,6 @@
 package fr.hoenheimsports.gamedomain;
 
-import fr.hoenheimsports.gamedomain.api.DisplayGame;
+import fr.hoenheimsports.gamedomain.api.GameDisplay;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.stub.GameRepositoryInMemory;
@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DisplayGameImplTest {
+class GameDisplayImplTest {
     @Test
     public void testFindAllGame() {
         GameRepositoryInMemory gameRepository = new GameRepositoryInMemory();
@@ -40,9 +40,9 @@ class DisplayGameImplTest {
         gameRepository.save(game1);
         gameRepository.save(game2);
 
-        DisplayGame displayGame = new DisplayGameImpl(gameRepository);
+        GameDisplay gameDisplay = new GameDisplayImpl(gameRepository);
 
-        List<Game> allGames = displayGame.findAllGame();
+        List<Game> allGames = gameDisplay.findAllGame();
 
         assertNotNull(allGames);
         assertEquals(2,allGames.size());

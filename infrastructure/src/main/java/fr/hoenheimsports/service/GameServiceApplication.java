@@ -1,10 +1,10 @@
 package fr.hoenheimsports.service;
 
-import fr.hoenheimsports.gamedomain.api.DisplayGame;
-import fr.hoenheimsports.gamedomain.api.ImportFileGame;
+import fr.hoenheimsports.gamedomain.api.GameDisplay;
+import fr.hoenheimsports.gamedomain.api.GameImportFile;
 import fr.hoenheimsports.gamedomain.model.Game;
-import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
-import fr.hoenheimsports.gamedomain.spi.exception.FileException;
+import fr.hoenheimsports.gamedomain.exception.FileDataException;
+import fr.hoenheimsports.gamedomain.exception.FileException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,12 +14,12 @@ import java.util.List;
 
 @Service
 public class GameServiceApplication {
-    private final ImportFileGame importFileGame;
-    private final DisplayGame displayGame;
+    private final GameImportFile gameImportFile;
+    private final GameDisplay gameDisplay;
 
-    public GameServiceApplication(ImportFileGame importFileGame, DisplayGame displayGame) {
-        this.importFileGame = importFileGame;
-        this.displayGame = displayGame;
+    public GameServiceApplication(GameImportFile gameImportFile, GameDisplay gameDisplay) {
+        this.gameImportFile = gameImportFile;
+        this.gameDisplay = gameDisplay;
     }
 
     public List<Game> importFile(MultipartFile csvFile) throws FileException, FileDataException {
@@ -29,7 +29,7 @@ public class GameServiceApplication {
         } catch (IOException ioe) {
             throw new FileException();
         }
-        return this.importFileGame.importFileGame(inputStream);
+        return this.gameImportFile.importFileGame(inputStream);
     }
 
     public Game createGame(Game game) {
@@ -37,6 +37,6 @@ public class GameServiceApplication {
     }
 
     public List<Game> displayGame() {
-        return this.displayGame.findAllGame();
+        return this.gameDisplay.findAllGame();
     }
 }

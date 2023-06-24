@@ -25,7 +25,7 @@ public enum TeamColor {
     UNKNOWN("INCONNUE");
 
     private final String frenchName;
-    private TeamColor(String frenchName) {
+    TeamColor(String frenchName) {
         this.frenchName = frenchName;
     }
 

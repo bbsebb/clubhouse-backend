@@ -12,7 +12,7 @@ public class CompetitionBuilder {
         return new CompetitionBuilder();
     }
     private String name;
-    private List<Pool> pools = new ArrayList<>();
+    private final List<Pool> pools = new ArrayList<>();
 
 
     public CompetitionBuilder withName(String name) {

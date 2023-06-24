@@ -59,8 +59,8 @@ class TeamTest {
         Team team2 = new Team(id, category, gender, number, club, teamsColor, coach);
         Team team3 = new Team(UUID.randomUUID(), category, gender, number, club, teamsColor, coach);
 
-        assertTrue(team1.equals(team2));
-        assertFalse(team1.equals(team3));
+        assertEquals(team1, team2);
+        assertNotEquals(team1, team3);
     }
 
     @Test

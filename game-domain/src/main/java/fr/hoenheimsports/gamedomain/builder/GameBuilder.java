@@ -4,6 +4,7 @@ import fr.hoenheimsports.gamedomain.model.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class GameBuilder {
@@ -132,6 +133,9 @@ public class GameBuilder {
     }
 
     public Game build() {
+        if(code == null) {
+            code = UUID.randomUUID().toString();
+        }
         return new Game(code, competition, day, halle, referees, homeTeam, visitingTeam, score, fdme, date,time);
     }
 }

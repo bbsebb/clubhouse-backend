@@ -1,17 +1,10 @@
 package fr.hoenheimsports.controller;
 
-import fr.hoenheimsports.gamedomain.api.DisplayGame;
-import fr.hoenheimsports.gamedomain.api.ImportFileGame;
-import fr.hoenheimsports.gamedomain.spi.exception.FileDataException;
-import fr.hoenheimsports.gamedomain.spi.exception.FileException;
-import fr.hoenheimsports.gamedomain.api.CreateGame;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.model.*;
+import fr.hoenheimsports.gamedomain.exception.FileDataException;
+import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.service.GameServiceApplication;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -54,7 +46,7 @@ public class GameController {
     }
 
     @GetMapping("")
-    public List<Game> allGame() {
+    public List<Game> displayGames() {
         return this.gameService.displayGame();
     }
 

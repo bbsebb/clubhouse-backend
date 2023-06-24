@@ -5,5 +5,5 @@ import fr.hoenheimsports.gamedomain.model.Coach;
 import java.util.Optional;
 
 public interface CoachRepository {
-    public Optional<Coach> findCoachByKeys(String name);
+    Optional<Coach> findCoachByKeys(String name);
 }

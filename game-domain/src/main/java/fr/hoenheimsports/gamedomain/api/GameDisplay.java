@@ -2,6 +2,8 @@ package fr.hoenheimsports.gamedomain.api;
 
 import fr.hoenheimsports.gamedomain.model.Game;
 
-public interface UpdateGame {
-    public Game updateGame(Game game);
+import java.util.List;
+
+public interface GameDisplay {
+    List<Game> findAllGame();
 }

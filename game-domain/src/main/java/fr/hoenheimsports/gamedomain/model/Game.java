@@ -35,7 +35,7 @@ public final class Game {
         this.referees = referees;
         this.homeTeam = homeTeam;
         this.visitingTeam = visitingTeam;
-        this.score = Objects.requireNonNullElse(score, Score.DEFAULT);;
+        this.score = Objects.requireNonNullElse(score, Score.DEFAULT);
         this.fdme = fdme;
         this.date = date;
         this.time = time;

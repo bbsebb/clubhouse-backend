@@ -1,17 +1,17 @@
 package fr.hoenheimsports.gamedomain;
 
 import fr.hoenheimsports.gamedomain.annotation.DomainService;
-import fr.hoenheimsports.gamedomain.api.DisplayGame;
+import fr.hoenheimsports.gamedomain.api.GameDisplay;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.GameRepository;
 
 import java.util.List;
 @DomainService
-public class DisplayGameImpl implements DisplayGame {
+public class GameDisplayImpl implements GameDisplay {
 
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
-    public DisplayGameImpl(GameRepository gameRepository) {
+    public GameDisplayImpl(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 
