@@ -27,10 +27,10 @@ class GameBuilderTest {
                 "game123",
                 new Competition(
                         "Competition1",
-                        List.of(new Pool(
+                        new Pool(
                                 "Pool1",
                                 "Pool1"
-                        ))
+                        )
                 ),
                 new Day(1),
                 new Halle(
@@ -251,8 +251,8 @@ class GameBuilderTest {
         // Assertions to validate the game object
         assertEquals("game123", game.getCode());
         assertEquals(competitionName, game.getCompetition().name());
-        assertEquals(poolNumber, game.getCompetition().pools().get(0).code());
-        assertEquals(poolName, game.getCompetition().pools().get(0).name());
+        assertEquals(poolNumber, game.getCompetition().pool().code());
+        assertEquals(poolName, game.getCompetition().pool().name());
         assertEquals(dayNumber, game.getDay().number());
         assertEquals(halleId, game.getHalle().id());
         assertEquals(halleName, game.getHalle().name());

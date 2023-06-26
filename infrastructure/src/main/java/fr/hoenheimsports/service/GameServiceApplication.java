@@ -5,6 +5,7 @@ import fr.hoenheimsports.gamedomain.api.GameImportFile;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
+import fr.hoenheimsports.gamedomain.spi.GameRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +18,12 @@ public class GameServiceApplication {
     private final GameImportFile gameImportFile;
     private final GameDisplay gameDisplay;
 
-    public GameServiceApplication(GameImportFile gameImportFile, GameDisplay gameDisplay) {
+    private final GameRepository gameRepository;
+
+    public GameServiceApplication(GameImportFile gameImportFile, GameDisplay gameDisplay, GameRepository gameRepository) {
         this.gameImportFile = gameImportFile;
         this.gameDisplay = gameDisplay;
+        this.gameRepository = gameRepository;
     }
 
     public List<Game> importFile(MultipartFile csvFile) throws FileException, FileDataException {
@@ -29,6 +33,7 @@ public class GameServiceApplication {
         } catch (IOException ioe) {
             throw new FileException();
         }
+
         return this.gameImportFile.importFileGame(inputStream);
     }
 

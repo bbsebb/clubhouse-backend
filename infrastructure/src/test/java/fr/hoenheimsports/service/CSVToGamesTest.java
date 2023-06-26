@@ -3,9 +3,17 @@ package fr.hoenheimsports.service;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.gamedomain.model.*;
-import fr.hoenheimsports.gamedomain.spi.FileToGames;
+import fr.hoenheimsports.gamedomain.spi.CoachRepository;
+import fr.hoenheimsports.gamedomain.spi.HalleRepository;
+import fr.hoenheimsports.gamedomain.spi.RefereeRepository;
+import fr.hoenheimsports.gamedomain.spi.TeamRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -14,12 +22,24 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
+@ExtendWith(MockitoExtension.class)
 class CSVToGamesTest {
-
+    @Mock
+    private CoachRepository coachRepository;
+    @Mock
+    private HalleRepository halleRepository;
+    @Mock
+    private RefereeRepository refereeRepository;
+    @Mock
+    private TeamRepository teamRepository;
+    @InjectMocks
+    private CSVToGames fileToGames;
     private static final String csvFile1 = """
     semaine;"num poule";competition;poule;J;le;horaire;"club rec";"club vis";"club hote";"arb1 designe";"arb2 designe";observateur;delegue;"code renc";"nom salle";"adresse salle";CP;Ville;colle;"Coul. Rec";"Coul. Gard. Rec";"Coul. Vis";"Coul. Gard. Vis";"Ent. Rec";"Tel Ent. Rec";"Corresp. Rec";"Tel Corresp. Rec";"Ent. Vis";"Tel Ent. Vis";"Corresp. Vis";"Tel Corresp. Vis";"Num rec";"Num vis"
     2022-42;M56671000G;"67-21 coupe d'encouragement credit mutuel masc";"1ER TOUR CE CCM MASC";1;22/10/2022;19:30:00;"SOULTZ KUTZENHAUSEN SM2";"HOENHEIM SM2";"SOULTZ KUTZENHAUSEN";;;" ";" ";SAEJPJW;"GYMNASE DU SIVU";" rue du gymnase";67250;"SOULTZ SOUS FORETS";"Toutes colles interdites";Vert;;;;"ROYER JEAN-LUC";+330611324377;"ROYER JEAN-LUC";+330611324377;;;;;5667095;5667028
@@ -47,8 +67,10 @@ class CSVToGamesTest {
     private static InputStream inputStreamCsvFile2;
     private static InputStream inputStreamCsvFile3;
 
-    @BeforeAll
-    public static void setUp() {
+
+
+    @BeforeEach
+    public void setUp() {
         inputStreamCsvFile1 = new ByteArrayInputStream(csvFile1.getBytes());
         inputStreamCsvFile2 = new ByteArrayInputStream(csvFile2.getBytes());
         inputStreamCsvFile3 = new ByteArrayInputStream(csvFile3.getBytes());
@@ -56,20 +78,25 @@ class CSVToGamesTest {
 
     @Test
     void fileToGamesWithHeaderNoPlayed() throws FileException, FileDataException {
-        FileToGames fileToGames = new CSVToGames();
+        when(coachRepository.findCoachByKeys(any(String.class))).thenReturn(Optional.empty());
+        when(halleRepository.findHallByKeys(any(String.class),any(String.class),any(Integer.class),any(String.class))).thenReturn(Optional.empty());
+        when(refereeRepository.findRefereeByKeys(any(String.class))).thenReturn(Optional.empty());
+        when(teamRepository.findTeamByKeys(any(Club.class),any(Gender.class),any(Category.class),any(Integer.class))).thenReturn(Optional.empty());
         List<Game> games = fileToGames.fileToGames(inputStreamCsvFile1);
         assertEquals(3,games.size());
     }
 
     @Test
     void fileToGamesWithHeaderPlayed() throws FileException, FileDataException {
-        FileToGames fileToGames = new CSVToGames();
+    when(refereeRepository.findRefereeByKeys(any(String.class))).thenReturn(Optional.empty());
+        when(teamRepository.findTeamByKeys(any(Club.class),any(Gender.class),any(Category.class),any(Integer.class))).thenReturn(Optional.empty());
+
         List<Game> games = fileToGames.fileToGames(inputStreamCsvFile2);
         assertEquals(4,games.size());
     }
     @Test
     void fileToGamesWithBadHeader() {
-        FileToGames fileToGames = new CSVToGames();
+
         assertThrows(FileDataException.class, () -> fileToGames.fileToGames(inputStreamCsvFile3));
     }
 
@@ -105,14 +132,18 @@ class CSVToGamesTest {
         URL fdmeUrl = new URL("https://media-ffhb-fdm.ffhandball.fr/fdm/S/A/E/E/");
         LocalDate date = LocalDate.of(2022, 10, 22);
         LocalTime time = LocalTime.of(19, 0);
+        when(coachRepository.findCoachByKeys(any(String.class))).thenReturn(Optional.empty());
+        when(halleRepository.findHallByKeys(any(String.class),any(String.class),any(Integer.class),any(String.class))).thenReturn(Optional.empty());
+        when(refereeRepository.findRefereeByKeys(any(String.class))).thenReturn(Optional.empty());
+        when(teamRepository.findTeamByKeys(any(Club.class),any(Gender.class),any(Category.class),any(Integer.class))).thenReturn(Optional.empty());
 
-        FileToGames fileToGames = new CSVToGames();
+
         List<Game> games = fileToGames.fileToGames(inputStreamCsvFile1);
         Game game = games.get(1);
         assertEquals(code, game.getCode());
         assertEquals(competitionName, game.getCompetition().name());
-        assertEquals(poolCode, game.getCompetition().pools().get(0).code());
-        assertEquals(poolName, game.getCompetition().pools().get(0).name());
+        assertEquals(poolCode, game.getCompetition().pool().code());
+        assertEquals(poolName, game.getCompetition().pool().name());
         assertEquals(dayNumber, game.getDay().number());
         assertEquals(halleName, game.getHalle().name());
         assertEquals(street, game.getHalle().address().street());

@@ -6,10 +6,7 @@ import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.service.GameServiceApplication;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -50,7 +47,7 @@ public class GameController {
         return this.gameService.displayGame();
     }
 
-    @GetMapping("/import")
+    @PostMapping("/import")
     public ResponseEntity<List<Game>> importFile(@RequestParam("csv") MultipartFile csvFile)  {
         try {
             return ResponseEntity.ok(this.gameService.importFile(csvFile));

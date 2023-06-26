@@ -5,7 +5,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import fr.hoenheimsports.gamedomain.builder.*;
 import fr.hoenheimsports.gamedomain.model.*;
-import fr.hoenheimsports.gamedomain.spi.FileToGames;
+import fr.hoenheimsports.gamedomain.spi.*;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import org.apache.commons.io.input.BOMInputStream;
@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
 
 @Service
 public class CSVToGames implements FileToGames {
+
+
     private static final List<String> headerNoPlayed = Arrays.asList(
             "semaine",
             "num poule",
@@ -100,6 +102,19 @@ public class CSVToGames implements FileToGames {
             "Date Arrivee"
     );
 
+    private final CoachRepository coachRepository;
+    private final HalleRepository halleRepository;
+    private final RefereeRepository refereeRepository;
+    private final TeamRepository teamRepository;
+
+    public CSVToGames(CoachRepository coachRepository, HalleRepository halleRepository, RefereeRepository refereeRepository, TeamRepository teamRepository) {
+        this.coachRepository = coachRepository;
+        this.halleRepository = halleRepository;
+        this.refereeRepository = refereeRepository;
+        this.teamRepository = teamRepository;
+    }
+
+
     @Override
     public List<Game> fileToGames(InputStream fileStream) throws FileDataException, FileException {
 
@@ -134,7 +149,7 @@ public class CSVToGames implements FileToGames {
     }
 
 
-    private static Game mapCSVLineToGame(CSVLine csvLine) throws FileDataException {
+    private Game mapCSVLineToGame(CSVLine csvLine) throws FileDataException {
 
         int day = mapToDay(csvLine.getJ());
 
@@ -164,6 +179,7 @@ public class CSVToGames implements FileToGames {
                                 .withCode(csvLine.getNumPoule())))
                 .withHalle(halle)
                 .withHomeTeam(teamBuilder -> teamBuilder
+                        .addIdGeneratorFromRepository(this.teamRepository)
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode(csvLine.getNumRec())
                                 .withName(nameHomeTeam))
@@ -174,6 +190,7 @@ public class CSVToGames implements FileToGames {
                         .withTeamsColor(ParserTeamColor.mapToTeamsColor(csvLine.getCoulRec(), csvLine.getCoulGardRec()))
                         .withCoach(mapToCoach(csvLine.getEntRec(), csvLine.getTelEntRec())))
                 .withVisitingTeam(teamBuilder -> teamBuilder
+                        .addIdGeneratorFromRepository(this.teamRepository)
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode(csvLine.getNumVis())
                                 .withName(nameVisitingTeam))
@@ -193,7 +210,7 @@ public class CSVToGames implements FileToGames {
                 .build();
     }
 
-    private static FDME mapToFDME(String url) {
+    private FDME mapToFDME(String url) {
         if (url == null) {
             return FDME.UNKNOWN;
         } else {
@@ -201,23 +218,30 @@ public class CSVToGames implements FileToGames {
         }
     }
 
-    private static Referee mapToReferee(String name) {
+    private Referee mapToReferee(String name) {
         if (name == null) {
             return Referee.UNKNOWN;
         } else {
-            return RefereeBuilder.builder().withName(name).build();
+            return RefereeBuilder.builder()
+                    .addIdGeneratorFromRepository(this.refereeRepository)
+                    .withName(name)
+                    .build();
         }
     }
 
-    private static Coach mapToCoach(String name, String phoneNumber) {
+    private Coach mapToCoach(String name, String phoneNumber) {
         if (name == null) {
             return Coach.UNKNOWN;
         } else {
-            return CoachBuilder.builder().withName(name).withPhoneNumber(mapToPhoneNumber(phoneNumber)).build();
+            return CoachBuilder.builder()
+                    .addIdGeneratorFromRepository(this.coachRepository)
+                    .withName(name)
+                    .withPhoneNumber(mapToPhoneNumber(phoneNumber))
+                    .build();
         }
     }
 
-    private static PhoneNumber mapToPhoneNumber(String phoneNumber) {
+    private PhoneNumber mapToPhoneNumber(String phoneNumber) {
         if (phoneNumber == null) {
             return PhoneNumber.UNKNOWN;
         } else {
@@ -225,7 +249,7 @@ public class CSVToGames implements FileToGames {
         }
     }
 
-    private static LocalDate mapToLocalDate(String dateStr) {
+    private LocalDate mapToLocalDate(String dateStr) {
         LocalDate date = null;
         if (dateStr != null) {
             {
@@ -236,7 +260,7 @@ public class CSVToGames implements FileToGames {
         return date;
     }
 
-    private static LocalTime mapToLocalTime(String timeStr) {
+    private LocalTime mapToLocalTime(String timeStr) {
         LocalTime time = null;
         if (timeStr != null) {
             {
@@ -247,7 +271,7 @@ public class CSVToGames implements FileToGames {
         return time;
     }
 
-    private static int mapToDay(String dayStr) throws FileDataException {
+    private int mapToDay(String dayStr) throws FileDataException {
         try {
             return Integer.parseInt(dayStr);
         } catch (NumberFormatException nfe) {
@@ -255,7 +279,7 @@ public class CSVToGames implements FileToGames {
         }
     }
 
-    private static Halle mapToHall(String name, String address, String cpStr, String city, String glue) throws FileDataException {
+    private Halle mapToHall(String name, String address, String cpStr, String city, String glue) throws FileDataException {
         if (name == null) {
             return Halle.UNKNOWN;
         } else if (address == null || cpStr == null || city == null) {
@@ -274,6 +298,7 @@ public class CSVToGames implements FileToGames {
                 }
                 int cp = Integer.parseInt(cpStr);
                 return HalleBuilder.builder()
+                        .addIdGeneratorFromRepository(this.halleRepository)
                         .withName(name)
                         .withAddress(addressBuilder -> addressBuilder
                                 .withStreet(address)
@@ -287,7 +312,7 @@ public class CSVToGames implements FileToGames {
         }
     }
 
-    private static Gender mapToGender(String numPool) throws FileDataException {
+    private Gender mapToGender(String numPool) throws FileDataException {
         char genderStr;
         try {
             genderStr = numPool.charAt(0);
@@ -303,7 +328,7 @@ public class CSVToGames implements FileToGames {
         };
     }
 
-    private static Score mapToScore(String scoreStrRec, String scoreStrVis) throws FileDataException {
+    private Score mapToScore(String scoreStrRec, String scoreStrVis) throws FileDataException {
         if (scoreStrRec == null || scoreStrVis == null) {
             return Score.DEFAULT;
         } else {

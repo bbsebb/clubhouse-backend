@@ -95,8 +95,8 @@ public class TeamBuilder {
                 this.id = optionalTeam.get().getId();
             }
         }
-        if (id == null) {
-            id = UUID.randomUUID();
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
         }
         return new Team(id, category, gender, number, club, teamsColor, coach);
     }

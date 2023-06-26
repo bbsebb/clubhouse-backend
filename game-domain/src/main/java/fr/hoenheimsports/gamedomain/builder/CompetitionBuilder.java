@@ -12,7 +12,7 @@ public class CompetitionBuilder {
         return new CompetitionBuilder();
     }
     private String name;
-    private final List<Pool> pools = new ArrayList<>();
+    private Pool pool;
 
 
     public CompetitionBuilder withName(String name) {
@@ -23,16 +23,16 @@ public class CompetitionBuilder {
     public CompetitionBuilder withPool(Consumer<PoolBuilder> poolBuilderFunction) {
         PoolBuilder poolBuilder = new PoolBuilder();
         poolBuilderFunction.accept(poolBuilder);
-        this.pools.add(poolBuilder.build());
+        this.pool = poolBuilder.build();
         return this;
     }
 
     public CompetitionBuilder withPool(Pool pool) {
-        this.pools.add(pool);
+        this.pool = pool ;
         return this;
     }
 
     public Competition build() {
-        return new Competition(name, pools);
+        return new Competition(name, pool);
     }
 }

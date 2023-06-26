@@ -30,8 +30,8 @@ class CompetitionBuilderTest {
                 .build();
 
         Assertions.assertEquals(name, competition.name());
-        Assertions.assertEquals(poolNumber, competition.pools().get(0).code());
-        Assertions.assertEquals(poolName, competition.pools().get(0).name());
+        Assertions.assertEquals(poolNumber, competition.pool().code());
+        Assertions.assertEquals(poolName, competition.pool().name());
     }
     @Test
     public void testBuildWithPoolConsumerObject() {
@@ -46,7 +46,7 @@ class CompetitionBuilderTest {
                 .build();
 
         Assertions.assertEquals(exceptedName, competition.name());
-        Assertions.assertEquals(exceptedPoolNumber, competition.pools().get(0).code());
-        Assertions.assertEquals(exceptedPoolName, competition.pools().get(0).name());
+        Assertions.assertEquals(exceptedPoolNumber, competition.pool().code());
+        Assertions.assertEquals(exceptedPoolName, competition.pool().name());
     }
 }
