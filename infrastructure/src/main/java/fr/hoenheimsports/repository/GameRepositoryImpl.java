@@ -45,89 +45,28 @@ public class GameRepositoryImpl implements GameRepository {
         GameEntity gameEntity = this.gameMapper.gameToGameEntity(game);
         gameEntity.getCompetition().setPool(this.poolEntityRepository.save(gameEntity.getCompetition().getPool()));
         gameEntity.setCompetition(this.competitionEntityRepository.save(gameEntity.getCompetition()));
-        gameEntity.setHalle(this.mergeIfExistAlreadyOrSave(gameEntity.getHalle()));
-        gameEntity.setHomeTeam(this.mergeIfExistAlreadyOrSave(gameEntity.getHomeTeam()));
-        gameEntity.setVisitingTeam(this.mergeIfExistAlreadyOrSave(gameEntity.getVisitingTeam()));
-        gameEntity.getReferees().setDesignatedReferee1(this.mergeIfExistAlreadyOrSave(gameEntity.getReferees().getDesignatedReferee1()));
-        gameEntity.getReferees().setDesignatedReferee2(this.mergeIfExistAlreadyOrSave(gameEntity.getReferees().getDesignatedReferee2()));
-        gameEntity.getReferees().setOfficiatingReferee1(this.mergeIfExistAlreadyOrSave(gameEntity.getReferees().getOfficiatingReferee1()));
-        gameEntity.getReferees().setOfficiatingReferee2(this.mergeIfExistAlreadyOrSave(gameEntity.getReferees().getOfficiatingReferee2()));
-
+        gameEntity.setHalle(this.halleEntityRepository.save(gameEntity.getHalle()));
+        gameEntity.setHomeTeam(this.saveTeam(gameEntity.getHomeTeam()));
+        gameEntity.setVisitingTeam(this.saveTeam(gameEntity.getVisitingTeam()));
+        gameEntity.setReferees(this.saveReferees(gameEntity.getReferees()));
         gameEntity = this.gameEntityRepository.save(gameEntity);
         return this.gameMapper.gameEntityToGame(gameEntity);
     }
 
-    private RefereeEntity mergeIfExistAlreadyOrSave(RefereeEntity refereeEntity){
-        this.refereeEntityRepository.findByName(refereeEntity.getName()).ifPresent(refereeEntityInRepository -> refereeEntity.setId(refereeEntityInRepository.getId()));
-
-        var newRefereeEntity = this.refereeEntityRepository.findById(refereeEntity.getId()).map(refereeEntityInRepository -> {
-            refereeEntityInRepository.setName(refereeEntity.getName());
-            return refereeEntityInRepository;
-        }).orElse(refereeEntity);
-
-        return this.refereeEntityRepository.save(newRefereeEntity);
+    private RefereesEntity saveReferees(RefereesEntity refereesEntity){
+        refereesEntity.setDesignatedReferee1(this.refereeEntityRepository.save(refereesEntity.getDesignatedReferee1()));
+        refereesEntity.setDesignatedReferee2(this.refereeEntityRepository.save(refereesEntity.getDesignatedReferee2()));
+        refereesEntity.setOfficiatingReferee1(this.refereeEntityRepository.save(refereesEntity.getOfficiatingReferee1()));
+        refereesEntity.setOfficiatingReferee2(this.refereeEntityRepository.save(refereesEntity.getOfficiatingReferee2()));
+        return refereesEntity;
     }
 
-    private TeamEntity mergeIfExistAlreadyOrSave(TeamEntity teamEntity) {
-        teamEntity.setCategory(this.mergeIfExistAlreadyOrSave(teamEntity.getCategory()));
-        teamEntity.setClub(this.mergeIfExistAlreadyOrSave(teamEntity.getClub()));
-        teamEntity.setCoach(this.mergeIfExistAlreadyOrSave(teamEntity.getCoach()));
-        this.teamEntityRepository.findByClubAndGenderAndCategoryAndNumber(teamEntity.getClub(), teamEntity.getGender(), teamEntity.getCategory(), teamEntity.getNumber())
-                .ifPresent(teamEntityInRepository -> teamEntity.setId(teamEntityInRepository.getId()));
-        var newTeamEntity = this.teamEntityRepository.findById(teamEntity.getId()).map(teamEntityInRepository -> {
-            teamEntityInRepository.setCategory(teamEntity.getCategory());
-            teamEntityInRepository.setClub(teamEntity.getClub());
-            teamEntityInRepository.setCoach(teamEntity.getCoach());
-            teamEntityInRepository.setTeamsColor(teamEntity.getTeamsColor());
-            teamEntityInRepository.setGender(teamEntity.getGender());
-            teamEntityInRepository.setNumber(teamEntity.getNumber());
-            return teamEntityInRepository;
-        }).orElse(teamEntity);
-
-        return this.teamEntityRepository.save(newTeamEntity);
+    private TeamEntity saveTeam(TeamEntity teamEntity) {
+        teamEntity.setCategory(this.categoryEntityRepository.save(teamEntity.getCategory()));
+        teamEntity.setClub(this.clubEntityRepository.save(teamEntity.getClub()));
+        teamEntity.setCoach(this.coachEntityRepository.save(teamEntity.getCoach()));
+        return this.teamEntityRepository.save(teamEntity);
     }
-
-    private HalleEntity mergeIfExistAlreadyOrSave(HalleEntity halleEntity) {
-        this.halleEntityRepository.findByNameAndAddress_StreetAndAddress_PostalCodeAndAddress_City(
-                halleEntity.getName(),
-                halleEntity.getAddress().getStreet(),
-                halleEntity.getAddress().getPostalCode(),
-                halleEntity.getAddress().getCity())
-                .ifPresent(hallEntityInRepository -> halleEntity.setId(hallEntityInRepository.getId()));
-
-        return this.halleEntityRepository.save(halleEntity);
-    }
-
-    private CoachEntity mergeIfExistAlreadyOrSave(CoachEntity coachEntity) {
-        this.coachEntityRepository.findByName(coachEntity.getName())
-                .ifPresent(coachEntityInRepository -> coachEntity.setId(coachEntityInRepository.getId()));
-        var newCoachEntity = this.coachEntityRepository
-                .findById(coachEntity.getId()).map(coachEntityInRepository -> {
-            coachEntityInRepository.setName(coachEntity.getName());
-            coachEntityInRepository.setPhoneNumber(coachEntity.getPhoneNumber());
-            return coachEntityInRepository;
-        }).orElse(coachEntity);
-
-        return this.coachEntityRepository.save(newCoachEntity);
-    }
-
-    private ClubEntity mergeIfExistAlreadyOrSave(ClubEntity clubEntity) {
-        var newClubEntity = this.clubEntityRepository.findById(clubEntity.getCode()).map(clubEntityInRepository -> {
-            clubEntityInRepository.setName(clubEntity.getName());
-            return clubEntityInRepository;
-        }).orElse(clubEntity);
-        return this.clubEntityRepository.save(newClubEntity);
-    }
-
-    private CategoryEntity mergeIfExistAlreadyOrSave(CategoryEntity categoryEntity) {
-        var newCategoryEntity = this.categoryEntityRepository.findById(categoryEntity.getName()).map(categoryEntityInRepository -> {
-            categoryEntityInRepository.setName(categoryEntity.getName());
-            return categoryEntityInRepository;
-        }).orElse(categoryEntity);
-        return this.categoryEntityRepository.save(newCategoryEntity);
-    }
-
-
 
     @Override
     public Game findById(String gameCode) {

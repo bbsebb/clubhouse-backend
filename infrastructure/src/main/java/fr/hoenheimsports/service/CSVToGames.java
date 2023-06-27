@@ -106,12 +106,14 @@ public class CSVToGames implements FileToGames {
     private final HalleRepository halleRepository;
     private final RefereeRepository refereeRepository;
     private final TeamRepository teamRepository;
+    private final GameRepository gameRepository;
 
-    public CSVToGames(CoachRepository coachRepository, HalleRepository halleRepository, RefereeRepository refereeRepository, TeamRepository teamRepository) {
+    public CSVToGames(CoachRepository coachRepository, HalleRepository halleRepository, RefereeRepository refereeRepository, TeamRepository teamRepository, GameRepository gameRepository) {
         this.coachRepository = coachRepository;
         this.halleRepository = halleRepository;
         this.refereeRepository = refereeRepository;
         this.teamRepository = teamRepository;
+        this.gameRepository = gameRepository;
     }
 
 
@@ -130,7 +132,7 @@ public class CSVToGames implements FileToGames {
         }
         List<Game> games = new ArrayList<>();
         for (CSVLine csvLine : csvDataWithHeader) {
-            games.add(mapCSVLineToGame(csvLine));
+            games.add(this.gameRepository.save(mapCSVLineToGame(csvLine)));
         }
         return games;
     }

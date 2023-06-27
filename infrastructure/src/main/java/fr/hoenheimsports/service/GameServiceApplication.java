@@ -33,7 +33,6 @@ public class GameServiceApplication {
         } catch (IOException ioe) {
             throw new FileException();
         }
-
         return this.gameImportFile.importFileGame(inputStream);
     }
 

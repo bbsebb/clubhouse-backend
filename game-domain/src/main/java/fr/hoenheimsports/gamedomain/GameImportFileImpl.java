@@ -25,7 +25,7 @@ public class GameImportFileImpl implements GameImportFile {
     @Override
     public List<Game> importFileGame(InputStream fileInputStream) throws FileDataException, FileException {
 
-        return fileToGames.fileToGames(fileInputStream).stream().map(gameRepository::save).toList();
+        return fileToGames.fileToGames(fileInputStream);
     }
 
 
