@@ -1,11 +1,12 @@
 package fr.hoenheimsports.service;
 
+import fr.hoenheimsports.dto.game.GameDTO;
 import fr.hoenheimsports.gamedomain.api.GameDisplay;
 import fr.hoenheimsports.gamedomain.api.GameImportFile;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
-import fr.hoenheimsports.gamedomain.spi.GameRepository;
+import fr.hoenheimsports.service.mapper.GameMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,30 +18,31 @@ import java.util.List;
 public class GameServiceApplication {
     private final GameImportFile gameImportFile;
     private final GameDisplay gameDisplay;
+    private final GameMapper gameMapper;
 
-    private final GameRepository gameRepository;
 
-    public GameServiceApplication(GameImportFile gameImportFile, GameDisplay gameDisplay, GameRepository gameRepository) {
+
+    public GameServiceApplication(GameImportFile gameImportFile, GameDisplay gameDisplay, GameMapper gameMapper) {
         this.gameImportFile = gameImportFile;
         this.gameDisplay = gameDisplay;
-        this.gameRepository = gameRepository;
+        this.gameMapper = gameMapper;
     }
 
-    public List<Game> importFile(MultipartFile csvFile) throws FileException, FileDataException {
+    public List<GameDTO> importFile(MultipartFile csvFile) throws FileException, FileDataException {
         InputStream inputStream = null;
         try {
             inputStream = csvFile.getInputStream();
         } catch (IOException ioe) {
             throw new FileException();
         }
-        return this.gameImportFile.importFileGame(inputStream);
+        return this.gameImportFile.importFileGame(inputStream).stream().map(this.gameMapper::gameToGameDTO).toList();
     }
 
-    public Game createGame(Game game) {
+    public GameDTO createGame(GameDTO gameDTO) {
         return null;
     }
 
-    public List<Game> displayGame() {
-        return this.gameDisplay.findAllGame();
+    public List<GameDTO> displayGame() {
+        return this.gameDisplay.findAllGame().stream().map(this.gameMapper::gameToGameDTO).toList();
     }
 }

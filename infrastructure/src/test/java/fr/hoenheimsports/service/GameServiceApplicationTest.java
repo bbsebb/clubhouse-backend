@@ -1,11 +1,13 @@
 package fr.hoenheimsports.service;
 
+import fr.hoenheimsports.dto.game.GameDTO;
 import fr.hoenheimsports.gamedomain.api.GameImportFile;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.FileToGames;
+import fr.hoenheimsports.service.mapper.GameMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,6 +30,8 @@ class GameServiceApplicationTest {
 
     @Mock
     private GameImportFile gameImportFile;
+    @Mock
+    private GameMapper gameMapper;
 
     @InjectMocks
     private GameServiceApplication gameServiceApplication;
@@ -43,7 +47,8 @@ class GameServiceApplicationTest {
         List<Game> expectedGames = createExpectedGames();
 
         when(gameImportFile.importFileGame(any(InputStream.class))).thenReturn(expectedGames);
-        List<Game> actualGames = gameServiceApplication.importFile(multipartFile);
+        when(gameMapper.gameToGameDTO(any(Game.class))).thenReturn(new GameDTO(null,null,null,null,null,null,null,null,null,null,null));
+        List<GameDTO> actualGames = gameServiceApplication.importFile(multipartFile);
 
         assertEquals(expectedGames.size(), actualGames.size());
 

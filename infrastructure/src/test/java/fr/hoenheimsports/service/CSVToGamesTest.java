@@ -3,10 +3,7 @@ package fr.hoenheimsports.service;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.gamedomain.model.*;
-import fr.hoenheimsports.gamedomain.spi.CoachRepository;
-import fr.hoenheimsports.gamedomain.spi.HalleRepository;
-import fr.hoenheimsports.gamedomain.spi.RefereeRepository;
-import fr.hoenheimsports.gamedomain.spi.TeamRepository;
+import fr.hoenheimsports.gamedomain.spi.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +35,8 @@ class CSVToGamesTest {
     private RefereeRepository refereeRepository;
     @Mock
     private TeamRepository teamRepository;
+    @Mock
+    private GameRepository gameRepository;
     @InjectMocks
     private CSVToGames fileToGames;
     private static final String csvFile1 = """
@@ -46,6 +45,10 @@ class CSVToGamesTest {
     2022-42;M50001301R;"coupe de france regionale masculine 2022-23";"1° TOUR";1;22/10/2022;19:00:00;MARLENHEIM;HOENHEIM;MARLENHEIM;"NOEL ARTHUR";;;;SAEHOBZ;"SALLE OMNISPORTS DE MARLENHEIM";"2 b, rue de l'usine";67520;MARLENHEIM;"Colle lavable à l'eau uniquement";Vert;Rose;;;"NIOGRET ALEXIS";+330663608784;"HELFFRICH PASCAL";+330620042137;;;;;5667036;5667028
     2022-42;F50000205G;"nationale 2 feminine 2022-23";"POULE 6";6;22/10/2022;19:00:00;HOENHEIM;"DAMBACH LA VILLE";HOENHEIM;"RICO EMILIE";"PICHERY AURORE";;;SAEEHBY;"GYMNASE MUNICIPAL";"16 , rue des vosges";67800;HOENHEIM;"Colle fournie par le club recevant";Noir;Vert;Bordeaux;Jaune;"MALL JEAN-PHILIPPE";+330604650942;"MALL JEAN-PHILIPPE";+330604650942;"SARGENTON-CALLARD JEREMY";+330663815913;"FERLET PHILIPPE";+33618894896;5667028;5667101
             """;
+    private static final String badCsvFile1 = """
+    semaine;"num poule";competition;poule;J;le;horaire;"club rec";"club vis";"club hote";"arb1 designe";"arb2 designe";observateur;delegue;"code renc";"nom salle";"adresse salle";CP;Ville;colle;"Coul. Rec";"Coul. Gard. Rec";"Coul. Vis";"Coul. Gard. Vis";"Ent. Rec";"Tel Ent. Rec";"Corresp. Rec";"Tel Corresp. Rec";"Ent. Vis";"Tel Ent. Vis";"Corresp. Vis";"Tel Corresp. Vis";"Num rec";"Num vis"
+    2022-42;M56671000G;"67-21 coupe d'encouragement credit mutuel masc";"1ER TOUR CE CCM MASC";1;22/10/2022;19:30:00;"SOULTZ KUTZENHAUSEN SM2";"HOENHEIM SM2";"SOULTZ KUTZENHAUSEN";;;" ";" ";SAEJPJW;"GYMNASE DU SIVU";" rue du gymnase";67250;"SOULTZ SOUS FORETS";"Toutes colles interdites";Vert;;;;"ROYER JEAN-LUC";+330611324377;"ROYER JEAN-LUC";+330611324377;;;;;5667095;5667028
+        """;
 
     private static final String csvFile2 = """
     semaine;"num poule";competition;poule;J;le;horaire;"club rec";"club vis";"sc rec";"sc vis";"fdme rec";"fdme vis";"pen. rec";"pen. vis";"forf. rec";"forf. vis";"arb1 designe";"arb2 designe";"arb1 sifle";"arb2 sifle";secretaire;chronometreur;observateur;delegue;"resp salle";"tuteur table";"code renc";"Num rec";"Num vis";Etat;Forfait;Penalite;FDME;"Date Arrivee"
@@ -63,45 +66,42 @@ class CSVToGamesTest {
     2022-37;F56670001G;"67-11 1ere division territoriale feminines";"67-01 DTF";1;16/09/2022;21:00:00;"HOENHEIM SF2";"REICHSTETT SF3";34;23;34;23;0;0;0;0;"PETIT GUILLAUME";;"PETIT GUILLAUME";;;"ELCHINGER THOMAS";;;;;SAEEQIY;5667028;5667045;JOUE;;;http://fdmerv.ff-handball.org/S/A/E/E/SAEEQIY_IJQY2iirvZue3g1vmAOOHA==.pdf;"16/09/2022 22:30"
             """;
 
-    private static InputStream inputStreamCsvFile1;
-    private static InputStream inputStreamCsvFile2;
-    private static InputStream inputStreamCsvFile3;
-
-
-
-    @BeforeEach
-    public void setUp() {
-        inputStreamCsvFile1 = new ByteArrayInputStream(csvFile1.getBytes());
-        inputStreamCsvFile2 = new ByteArrayInputStream(csvFile2.getBytes());
-        inputStreamCsvFile3 = new ByteArrayInputStream(csvFile3.getBytes());
-    }
 
     @Test
     void fileToGamesWithHeaderNoPlayed() throws FileException, FileDataException {
+        InputStream inputStreamCsvFile = new ByteArrayInputStream(csvFile1.getBytes());
         when(coachRepository.findCoachByKeys(any(String.class))).thenReturn(Optional.empty());
         when(halleRepository.findHallByKeys(any(String.class),any(String.class),any(Integer.class),any(String.class))).thenReturn(Optional.empty());
         when(refereeRepository.findRefereeByKeys(any(String.class))).thenReturn(Optional.empty());
         when(teamRepository.findTeamByKeys(any(Club.class),any(Gender.class),any(Category.class),any(Integer.class))).thenReturn(Optional.empty());
-        List<Game> games = fileToGames.fileToGames(inputStreamCsvFile1);
+        List<Game> games = fileToGames.fileToGames(inputStreamCsvFile);
         assertEquals(3,games.size());
     }
 
     @Test
     void fileToGamesWithHeaderPlayed() throws FileException, FileDataException {
+        InputStream inputStreamCsvFile = new ByteArrayInputStream(csvFile2.getBytes());
     when(refereeRepository.findRefereeByKeys(any(String.class))).thenReturn(Optional.empty());
         when(teamRepository.findTeamByKeys(any(Club.class),any(Gender.class),any(Category.class),any(Integer.class))).thenReturn(Optional.empty());
 
-        List<Game> games = fileToGames.fileToGames(inputStreamCsvFile2);
+        List<Game> games = fileToGames.fileToGames(inputStreamCsvFile);
         assertEquals(4,games.size());
     }
     @Test
     void fileToGamesWithBadHeader() {
-
+        InputStream inputStreamCsvFile3 = new ByteArrayInputStream(csvFile3.getBytes());
         assertThrows(FileDataException.class, () -> fileToGames.fileToGames(inputStreamCsvFile3));
     }
 
     @Test
+    void fileToGamesWithEmptyAuthorizedCell() {
+
+    }
+
+    @Test
     void fileToGameWithHeaderPlayedAndTheSecondGame() throws FileException, FileDataException, MalformedURLException {
+        InputStream inputStreamCsvFile = new ByteArrayInputStream(csvFile1.getBytes());
+
         String code = "SAEHOBZ";
         String competitionName = "coupe de france regionale masculine 2022-23";
         String poolCode = "M50001301R";
@@ -136,9 +136,12 @@ class CSVToGamesTest {
         when(halleRepository.findHallByKeys(any(String.class),any(String.class),any(Integer.class),any(String.class))).thenReturn(Optional.empty());
         when(refereeRepository.findRefereeByKeys(any(String.class))).thenReturn(Optional.empty());
         when(teamRepository.findTeamByKeys(any(Club.class),any(Gender.class),any(Category.class),any(Integer.class))).thenReturn(Optional.empty());
+        when(gameRepository.save(any(Game.class))).thenAnswer(invocation -> {
+            Game game = invocation.getArgument(0);
+            return game;
+        });
 
-
-        List<Game> games = fileToGames.fileToGames(inputStreamCsvFile1);
+        List<Game> games = fileToGames.fileToGames(inputStreamCsvFile);
         Game game = games.get(1);
         assertEquals(code, game.getCode());
         assertEquals(competitionName, game.getCompetition().name());

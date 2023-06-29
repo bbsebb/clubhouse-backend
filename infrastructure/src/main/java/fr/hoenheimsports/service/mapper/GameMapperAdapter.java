@@ -1,164 +1,59 @@
-package fr.hoenheimsports.gamedomain.builder;
+package fr.hoenheimsports.service.mapper;
 
-import fr.hoenheimsports.gamedomain.model.*;
+import fr.hoenheimsports.dto.game.GameDTO;
+import fr.hoenheimsports.gamedomain.builder.GameBuilder;
+import fr.hoenheimsports.gamedomain.exception.FileDataException;
+import fr.hoenheimsports.gamedomain.model.Competition;
+import fr.hoenheimsports.gamedomain.model.Day;
+import fr.hoenheimsports.gamedomain.model.Game;
+import fr.hoenheimsports.gamedomain.model.Gender;
+import fr.hoenheimsports.gamedomain.spi.CoachRepository;
+import fr.hoenheimsports.gamedomain.spi.HalleRepository;
+import fr.hoenheimsports.gamedomain.spi.RefereeRepository;
+import fr.hoenheimsports.gamedomain.spi.TeamRepository;
+import fr.hoenheimsports.repository.entity.game.GameEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
-import java.util.function.Consumer;
+@Primary
+@Service
+public class GameMapperAdapter implements GameMapper{
 
-public class GameBuilder {
-    public static GameBuilder builder() {
-        return new GameBuilder();
-    }
-    private String code;
-    private Competition competition;
-    private Day day;
-    private Halle halle;
-    private Referees referees;
-    private Team homeTeam;
-    private Team visitingTeam;
-    private Score score;
-    private FDME fdme;
-    private LocalDate date;
-    private LocalTime time;
+    @Qualifier("GameMapperImpl")
+    private final GameMapper gameMapper;
+    private final HalleRepository halleRepository;
+    private final TeamRepository teamRepository;
+    private final CoachRepository coachRepository;
+    private final RefereeRepository refereeRepository;
 
-    public GameBuilder withCode(String code) {
-        this.code = code;
-        return this;
-    }
 
-    public GameBuilder withCompetition(Consumer<CompetitionBuilder> competitionBuilderFunction) {
-        CompetitionBuilder competitionBuilder = new CompetitionBuilder();
-        competitionBuilderFunction.accept(competitionBuilder);
-        this.competition = competitionBuilder.build();
-        return this;
-    }
-
-    public GameBuilder withCompetition(Competition competition ) {
-        this.competition = competition;
-        return this;
+    public GameMapperAdapter(GameMapper gameMapper, HalleRepository halleRepository, TeamRepository teamRepository, CoachRepository coachRepository, RefereeRepository refereeRepository) {
+        this.gameMapper = gameMapper;
+        this.halleRepository = halleRepository;
+        this.teamRepository = teamRepository;
+        this.coachRepository = coachRepository;
+        this.refereeRepository = refereeRepository;
     }
 
-    public GameBuilder withDay(Consumer<DayBuilder> dayBuilderFunction) {
-        DayBuilder dayBuilder = new DayBuilder();
-        dayBuilderFunction.accept(dayBuilder);
-        this.day = dayBuilder.build();
-        return this;
+    @Override
+    public Game gameEntityToGame(GameEntity gameEntity) {
+        return this.gameMapper.gameEntityToGame(gameEntity);
     }
 
-    public GameBuilder withDay(Day day) {
-        this.day = day;
-        return this;
+    @Override
+    public GameEntity gameToGameEntity(Game game) {
+        return this.gameMapper.gameToGameEntity(game);
     }
 
-    public GameBuilder withHalle(Consumer<HalleBuilder> halleBuilderFunction) {
-        HalleBuilder halleBuilder = new HalleBuilder();
-        halleBuilderFunction.accept(halleBuilder);
-        this.halle = halleBuilder.build();
-        return this;
+    @Override
+    public GameDTO gameToGameDTO(Game game) {
+        return this.gameMapper.gameToGameDTO(game);
     }
 
-    public GameBuilder withHalle(Halle halle) {
-        this.halle = halle;
-        return this;
-    }
-
-    public GameBuilder withReferees(Consumer<RefereesBuilder> refereesBuilderFunction) {
-        RefereesBuilder refereesBuilder = new RefereesBuilder();
-        refereesBuilderFunction.accept(refereesBuilder);
-        this.referees = refereesBuilder.build();
-        return this;
-    }
-    public GameBuilder withReferees(Referees referees) {
-        this.referees = referees;
-        return this;
-    }
-
-    public GameBuilder withHomeTeam(Consumer<TeamBuilder> homeTeamBuilderFunction) {
-        TeamBuilder homeTeamBuilder = new TeamBuilder();
-        homeTeamBuilderFunction.accept(homeTeamBuilder);
-        this.homeTeam = homeTeamBuilder.build();
-        return this;
-    }
-
-    public GameBuilder withHomeTeam(Team homeTeam) {
-        this.homeTeam = homeTeam;
-        return this;
-    }
-
-    public GameBuilder withVisitingTeam(Consumer<TeamBuilder> visitingTeamBuilderFunction) {
-        TeamBuilder visitingTeamBuilder = new TeamBuilder();
-        visitingTeamBuilderFunction.accept(visitingTeamBuilder);
-        this.visitingTeam = visitingTeamBuilder.build();
-        return this;
-    }
-
-    public GameBuilder withVisitingTeam(Team visitingTeam) {
-        this.visitingTeam = visitingTeam;
-        return this;
-    }
-
-    public GameBuilder withScore(Consumer<ScoreBuilder> scoreBuilderFunction) {
-        ScoreBuilder scoreBuilder = new ScoreBuilder();
-        scoreBuilderFunction.accept(scoreBuilder);
-        this.score = scoreBuilder.build();
-        return this;
-    }
-
-    public GameBuilder withScore(Score score) {
-        this.score = score;
-        return this;
-    }
-
-    public GameBuilder withFDME(Consumer<FDMEBuilder> fdmeBuilderFunction) {
-        FDMEBuilder fdmeBuilder = new FDMEBuilder();
-        fdmeBuilderFunction.accept(fdmeBuilder);
-        this.fdme = fdmeBuilder.build();
-        return this;
-    }
-
-    public GameBuilder withFDME(FDME fdme) {
-        this.fdme = fdme;
-        return this;
-    }
-
-    public GameBuilder withDate(LocalDate date) {
-        this.date = date;
-        return this;
-    }
-    public GameBuilder withTime(LocalTime time) {
-        this.time = time;
-        return this;
-    }
-
-    public Game build() {
-        if(code == null) {
-            code = UUID.randomUUID().toString();
-        }
-        return new Game(code, competition, day, halle, referees, homeTeam, visitingTeam, score, fdme, date,time);
-    }
-}
-
-/*
-    Exemple minimum avec GameBuilder :
-
-            Game game1 = GameBuilder.builder()
-                .withCode("test1")
-                .withCompetition(Competition.UNKNOWN)
-                .withDay(Day.SINGLE_DAY_GAME)
-                .withFDME(FDME.UNKNOWN)
-                .withHalle(Halle.UNKNOWN)
-                .withHomeTeam(Team.UNKNOWN)
-                .withVisitingTeam(Team.UNKNOWN)
-                .withReferees(Referees.UNKNOWN)
-                .withScore(Score.DEFAULT)
-                .build();
-
-
-    Exemple avec complet GameBuilder :
-
-    GameBuilder.builder()
+    @Override
+    public Game gameDTOToGame(GameDTO gameDTO) {
+        Game game = GameBuilder.builder()
                 .withCode(gameDTO.code())
                 .withDate(gameDTO.date())
                 .withTime(gameDTO.time())
@@ -178,7 +73,7 @@ public class GameBuilder {
                                 .withName(gameDTO.homeTeam().club().name()))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withName(gameDTO.homeTeam().category().name()))
-                        .withGender(gameDTO.homeTeam().gender())
+                        .withGender(this.mapToGender(gameDTO.homeTeam().gender().name()))
                         .withNumber(gameDTO.homeTeam().number())
                         .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
                                 .withShirtColor1(gameDTO.homeTeam().teamsColor().shirtColor1())
@@ -197,7 +92,7 @@ public class GameBuilder {
                                 .withName(gameDTO.visitingTeam().club().name()))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withName(gameDTO.visitingTeam().category().name()))
-                        .withGender(gameDTO.visitingTeam().gender())
+                        .withGender(this.mapToGender(gameDTO.visitingTeam().gender().name()))
                         .withNumber(gameDTO.visitingTeam().number())
                         .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
                                 .withShirtColor1(gameDTO.visitingTeam().teamsColor().shirtColor1())
@@ -228,4 +123,22 @@ public class GameBuilder {
                 .withFDME(fdmeBuilder -> fdmeBuilder
                         .withUrl(gameDTO.fdme().url()))
                 .build();
-            */
+        return game;
+    }
+
+    private Gender mapToGender(String numPool) {
+        char genderStr;
+        try {
+            genderStr = numPool.charAt(0);
+        } catch (IndexOutOfBoundsException iobe) {
+            genderStr = 'U';
+        }
+        //Z est considéré comme mixte, mais en réalité, les équipes sont nommées M à chaque fois.
+        return switch (genderStr) {
+            case 'Z' -> Gender.MIXED;
+            case 'F' -> Gender.FEMALE;
+            case 'M' -> Gender.MALE;
+            default -> Gender.UNKNOWN;
+        };
+    }
+}

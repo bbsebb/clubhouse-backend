@@ -8,6 +8,7 @@ import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.*;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
+import jakarta.transaction.Transactional;
 import org.apache.commons.io.input.BOMInputStream;
 import org.springframework.stereotype.Service;
 
@@ -116,7 +117,7 @@ public class CSVToGames implements FileToGames {
         this.gameRepository = gameRepository;
     }
 
-
+    @Transactional
     @Override
     public List<Game> fileToGames(InputStream fileStream) throws FileDataException, FileException {
 
@@ -124,8 +125,11 @@ public class CSVToGames implements FileToGames {
         if (csvData.isEmpty()) {
             throw new FileDataException("csv file is empty");
         }
+        List<String> header = csvData.remove(0);
+        if(!header.equals(headerPlayed) && !header.equals(headerNoPlayed) ) {
+            throw new FileDataException("csv data header hasn't the required format");
+        }
 
-        List<String> header = csvData.remove(0).equals(headerPlayed) ? headerPlayed : headerNoPlayed;
         List<CSVLine> csvDataWithHeader = new ArrayList<>();
         for (List<String> csvDataLine : csvData) {
             csvDataWithHeader.add(new CSVLine(header, csvDataLine));
@@ -411,7 +415,7 @@ public class CSVToGames implements FileToGames {
 
         public CSVLine(List<String> headers, List<String> csvLine) throws FileDataException {
             if (headers.size() != csvLine.size()) {
-                throw new FileDataException();
+                throw new FileDataException("csv file data hasn't the required format");
             }
             int colonne = 0;
             for (String header : headers) {
