@@ -17,6 +17,8 @@ class GameDisplayImplTest {
 
         Game game1 = GameBuilder.builder()
                 .withCode("test1")
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withCompetition(Competition.UNKNOWN)
                 .withDay(Day.SINGLE_DAY_GAME)
                 .withFDME(FDME.UNKNOWN)
@@ -29,6 +31,8 @@ class GameDisplayImplTest {
         Game game2 = GameBuilder.builder()
                 .withCode("test2")
                 .withCompetition(Competition.UNKNOWN)
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withDay(Day.SINGLE_DAY_GAME)
                 .withFDME(FDME.UNKNOWN)
                 .withHalle(Halle.UNKNOWN)

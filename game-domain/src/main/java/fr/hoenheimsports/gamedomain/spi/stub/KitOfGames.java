@@ -2,10 +2,7 @@ package fr.hoenheimsports.gamedomain.spi.stub;
 
 import fr.hoenheimsports.gamedomain.annotation.Stub;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
-import fr.hoenheimsports.gamedomain.model.Game;
-import fr.hoenheimsports.gamedomain.model.Gender;
-import fr.hoenheimsports.gamedomain.model.GlueAuthorization;
-import fr.hoenheimsports.gamedomain.model.TeamColor;
+import fr.hoenheimsports.gamedomain.model.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,6 +16,8 @@ public class KitOfGames {
         Game game1 = GameBuilder.builder()
                 .withCode("code game 1")
                 .withDate(LocalDate.now())
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withTime(LocalTime.now())
                 .withDay(dayBuilder -> dayBuilder.withNumber(1).build())
                 .withCompetition(competitionBuilder -> competitionBuilder
@@ -93,6 +92,8 @@ public class KitOfGames {
         Game game2 = GameBuilder.builder()
                 .withCode("code game 2")
                 .withDate(LocalDate.of(2023, 6, 30))
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withTime(LocalTime.of(14, 30))
                 .withDay(dayBuilder -> dayBuilder.withNumber(2).build())
                 .withCompetition(competitionBuilder -> competitionBuilder
@@ -169,6 +170,8 @@ public class KitOfGames {
                 .withDate(LocalDate.of(2023, 7, 15))
                 .withTime(LocalTime.of(16, 0))
                 .withDay(dayBuilder -> dayBuilder.withNumber(3).build())
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withCompetition(competitionBuilder -> competitionBuilder
                         .withName("Competition 3")
                         .withPool(poolBuilder -> poolBuilder
@@ -244,6 +247,8 @@ public class KitOfGames {
                 .withDate(LocalDate.of(2023, 7, 20))
                 .withTime(LocalTime.of(18, 30))
                 .withDay(dayBuilder -> dayBuilder.withNumber(4).build())
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withCompetition(competitionBuilder -> competitionBuilder
                         .withName("Competition 4")
                         .withPool(poolBuilder -> poolBuilder

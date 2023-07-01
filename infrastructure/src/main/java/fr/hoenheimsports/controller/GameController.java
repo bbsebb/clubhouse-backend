@@ -29,8 +29,6 @@ public class GameController {
 
     @GetMapping("/create")
     public ResponseEntity<GameDTO> createGame(@RequestBody GameDTO gameDTO) {
-
-
         return ResponseEntity.ok(this.gameService.createGame(gameDTO));
     }
 

@@ -12,6 +12,7 @@ public class CSVToGamesStub implements FileToGames {
     List<Game> games = new ArrayList<>();
     @Override
     public List<Game> fileToGames(InputStream fileStream) {
+
         return this.games;
     }
 

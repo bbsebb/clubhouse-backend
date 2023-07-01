@@ -6,6 +6,8 @@ import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.stub.GameRepositoryInMemory;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameCreateImplTest {
@@ -20,6 +22,8 @@ class GameCreateImplTest {
         // Créez un jeu pour le test
         Game game = GameBuilder.builder()
                 .withCode("test1")
+                .withSeason(Season.SEASON_2022_2023)
+                .withWeek(Week.NOW)
                 .withCompetition(Competition.UNKNOWN)
                 .withDay(Day.SINGLE_DAY_GAME)
                 .withFDME(FDME.UNKNOWN)

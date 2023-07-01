@@ -9,7 +9,10 @@ public final class Game {
 
     private final String code;
     private final Competition competition;
+    private final Season season;
+
     private final Day day;
+    private final Week week;
     private Halle halle;
     private Referees referees;
     private final Team homeTeam;
@@ -19,10 +22,13 @@ public final class Game {
     private LocalDate date;
     private LocalTime time;
 
-    public Game(String code, Competition competition, Day day, Halle halle, Referees referees, Team homeTeam, Team visitingTeam, Score score, FDME fdme, LocalDate date,LocalTime time) {
+    public Game(String code, Competition competition, Season season, Day day, Week week, Halle halle, Referees referees, Team homeTeam, Team visitingTeam, Score score, FDME fdme, LocalDate date, LocalTime time) {
+
         Objects.requireNonNull(code, "code should not be null");
         Objects.requireNonNull(competition, "competition should not be null");
         Objects.requireNonNull(day, "day should not be null");
+        Objects.requireNonNull(week, "week should not be null");
+        Objects.requireNonNull(season, "week should not be null");
         Objects.requireNonNull(halle, "halle should not be null");
         Objects.requireNonNull(referees, "referees should not be null");
         Objects.requireNonNull(homeTeam, "homeTeam should not be null");
@@ -31,6 +37,8 @@ public final class Game {
         this.code = code;
         this.competition = competition;
         this.day = day;
+        this.week = week;
+        this.season = season;
         this.halle = halle;
         this.referees = referees;
         this.homeTeam = homeTeam;
@@ -47,6 +55,14 @@ public final class Game {
 
     public Competition getCompetition() {
         return competition;
+    }
+
+    public Season getSeason() {
+        return season;
+    }
+
+    public Week getWeek() {
+        return week;
     }
 
     public Day getDay() {
@@ -109,43 +125,36 @@ public final class Game {
         this.time = time;
     }
 
+
+
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Game) obj;
-        return Objects.equals(this.code, that.code) &&
-                Objects.equals(this.competition, that.competition) &&
-                Objects.equals(this.day, that.day) &&
-                Objects.equals(this.halle, that.halle) &&
-                Objects.equals(this.referees, that.referees) &&
-                Objects.equals(this.homeTeam, that.homeTeam) &&
-                Objects.equals(this.visitingTeam, that.visitingTeam) &&
-                Objects.equals(this.score, that.score) &&
-                Objects.equals(this.fdme, that.fdme) &&
-                Objects.equals(this.date, that.date) &&
-                Objects.equals(this.time, that.time);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Game game)) return false;
+        return Objects.equals(code, game.code) && Objects.equals(competition, game.competition) && Objects.equals(season, game.season) && Objects.equals(day, game.day) && Objects.equals(week, game.week) && Objects.equals(halle, game.halle) && Objects.equals(referees, game.referees) && Objects.equals(homeTeam, game.homeTeam) && Objects.equals(visitingTeam, game.visitingTeam) && Objects.equals(score, game.score) && Objects.equals(fdme, game.fdme) && Objects.equals(date, game.date) && Objects.equals(time, game.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code, competition, day, halle, referees, homeTeam, visitingTeam, score, fdme, date, time);
+        return Objects.hash(code, competition, season, day, week, halle, referees, homeTeam, visitingTeam, score, fdme, date, time);
     }
 
     @Override
     public String toString() {
-        return "Game[" +
-                "code=" + code + ", " +
-                "competition=" + competition + ", " +
-                "day=" + day + ", " +
-                "halle=" + halle + ", " +
-                "referees=" + referees + ", " +
-                "homeTeam=" + homeTeam + ", " +
-                "visitingTeam=" + visitingTeam + ", " +
-                "score=" + score + ", " +
-                "fdme=" + fdme + ", " +
-                "date=" + date + ", " +
-                "time=" + time + ']';
+        return "Game{" +
+                "code='" + code + '\'' +
+                ", competition=" + competition +
+                ", season=" + season +
+                ", day=" + day +
+                ", week=" + week +
+                ", halle=" + halle +
+                ", referees=" + referees +
+                ", homeTeam=" + homeTeam +
+                ", visitingTeam=" + visitingTeam +
+                ", score=" + score +
+                ", fdme=" + fdme +
+                ", date=" + date +
+                ", time=" + time +
+                '}';
     }
-
 }

@@ -32,6 +32,8 @@ class RefereeBuilderTest {
                         .withCompetition(Competition.UNKNOWN)
                         .withCode("code test")
                         .withDay(Day.SINGLE_DAY_GAME)
+                        .withWeek(Week.NOW)
+                        .withSeason(Season.SEASON_2022_2023)
                         .withFDME(FDME.UNKNOWN)
                         .withHalle(Halle.UNKNOWN)
                         .withHomeTeam(homeTeamBuilder -> homeTeamBuilder

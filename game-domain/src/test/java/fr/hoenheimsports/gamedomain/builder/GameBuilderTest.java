@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,8 +31,8 @@ class GameBuilderTest {
                                 "Pool1"
                         )
                 ),
-                new Day(1),
-                new Halle(
+                Season.SEASON_2022_2023, new Day(1),
+                new Week(LocalDate.now()), new Halle(
                         UUID.randomUUID(),
                         "Halle1",
                         new Address("Street2", 67890, "City2"),
@@ -75,6 +74,8 @@ class GameBuilderTest {
                 .withCode(gameExcepted.getCode())
                 .withCompetition(gameExcepted.getCompetition())
                 .withDay(gameExcepted.getDay())
+                .withWeek(gameExcepted.getWeek())
+                .withSeason(gameExcepted.getSeason())
                 .withHalle(gameExcepted.getHalle())
                 .withReferees(gameExcepted.getReferees())
                 .withHomeTeam(gameExcepted.getHomeTeam())
@@ -88,6 +89,8 @@ class GameBuilderTest {
         // Assertions to validate the game object
         assertEquals(gameExcepted.getCode(), game.getCode());
         assertEquals(gameExcepted.getCompetition(), game.getCompetition());
+        assertEquals(gameExcepted.getWeek(), game.getWeek());
+        assertEquals(gameExcepted.getSeason(), game.getSeason());
         assertEquals(gameExcepted.getDay(), game.getDay());
         assertEquals(gameExcepted.getHalle(), game.getHalle());
         assertEquals(gameExcepted.getReferees(), game.getReferees());
@@ -102,7 +105,13 @@ class GameBuilderTest {
     @Test
     void testGameBuilder() throws MalformedURLException {
         // Create necessary objects using builders
-        UUID competitionId = UUID.randomUUID();
+
+        int year = 2022;
+        int week = 22;
+        String seasonName = "Season 1";
+        LocalDate startDateSeason = LocalDate.of(2022,1,1);
+
+        LocalDate endDateSeason = LocalDate.of(2022,2,1);
         String competitionName = "Competition1";
         String poolNumber = "Pool1";
         String poolName = "Pool1";
@@ -115,16 +124,12 @@ class GameBuilderTest {
         GlueAuthorization glueAuthorization = GlueAuthorization.UNKNOWN;
         UUID referee1Id = UUID.randomUUID();
         String referee1Name = "Referee1";
-        String referee1PhoneNumber = "1234567890";
         UUID referee2Id = UUID.randomUUID();
         String referee2Name = "Referee2";
-        String referee2PhoneNumber = "0987654321";
         UUID referee3Id = UUID.randomUUID();
         String referee3Name = "Referee3";
-        String referee3PhoneNumber = "0987654323";
         UUID referee4Id = UUID.randomUUID();
         String referee4Name = "Referee4";
-        String referee4PhoneNumber = "0987654324";
         UUID homeTeamId = UUID.randomUUID();
         String homeCategoryName = "Category1";
         Gender homeGender = Gender.MALE;
@@ -157,6 +162,13 @@ class GameBuilderTest {
 
         Game game = new GameBuilder()
                 .withCode("game123")
+                .withWeek(weekBuilder -> weekBuilder
+                        .withWeek(week)
+                        .withYear(year))
+                .withSeason(seasonBuilder -> seasonBuilder
+                        .withName(seasonName)
+                        .withStartDate(startDateSeason)
+                        .withEndDate(endDateSeason))
                 .withCompetition(competitionBuilder -> {
                     competitionBuilder.withName(competitionName);
                     competitionBuilder.withPool(poolBuilder -> {
@@ -253,6 +265,12 @@ class GameBuilderTest {
         assertEquals(competitionName, game.getCompetition().name());
         assertEquals(poolNumber, game.getCompetition().pool().code());
         assertEquals(poolName, game.getCompetition().pool().name());
+
+        assertEquals(year, game.getWeek().year());
+        assertEquals(week, game.getWeek().week());
+        assertEquals(seasonName, game.getSeason().name());
+        assertEquals(startDateSeason, game.getSeason().startDate());
+        assertEquals(endDateSeason, game.getSeason().endDate());
         assertEquals(dayNumber, game.getDay().number());
         assertEquals(halleId, game.getHalle().id());
         assertEquals(halleName, game.getHalle().name());

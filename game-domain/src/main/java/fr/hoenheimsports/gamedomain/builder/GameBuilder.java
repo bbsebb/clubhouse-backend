@@ -13,6 +13,8 @@ public class GameBuilder {
     }
     private String code;
     private Competition competition;
+    private Season season;
+    private Week week;
     private Day day;
     private Halle halle;
     private Referees referees;
@@ -40,6 +42,30 @@ public class GameBuilder {
         return this;
     }
 
+    public GameBuilder withSeason(Season season) {
+        this.season = season;
+        return this;
+    }
+
+    public GameBuilder withSeason(Consumer<SeasonBuilder> seasonBuilderFunction) {
+        SeasonBuilder seasonBuilder = new SeasonBuilder();
+        seasonBuilderFunction.accept(seasonBuilder);
+        this.season = seasonBuilder.build();
+        return this;
+    }
+
+    public GameBuilder withWeek(Week week) {
+        this.week = week;
+        return this;
+    }
+
+    public GameBuilder withWeek(Consumer<WeekBuilder> weekBuilderFunction) {
+        WeekBuilder weekBuilder = new WeekBuilder();
+        weekBuilderFunction.accept(weekBuilder);
+        this.week = weekBuilder.build();
+        return this;
+    }
+
     public GameBuilder withDay(Consumer<DayBuilder> dayBuilderFunction) {
         DayBuilder dayBuilder = new DayBuilder();
         dayBuilderFunction.accept(dayBuilder);
@@ -51,6 +77,8 @@ public class GameBuilder {
         this.day = day;
         return this;
     }
+
+
 
     public GameBuilder withHalle(Consumer<HalleBuilder> halleBuilderFunction) {
         HalleBuilder halleBuilder = new HalleBuilder();
@@ -136,7 +164,7 @@ public class GameBuilder {
         if(code == null) {
             code = UUID.randomUUID().toString();
         }
-        return new Game(code, competition, day, halle, referees, homeTeam, visitingTeam, score, fdme, date,time);
+        return new Game(code, competition, season, day, week, halle, referees, homeTeam, visitingTeam, score, fdme, date,time);
     }
 }
 

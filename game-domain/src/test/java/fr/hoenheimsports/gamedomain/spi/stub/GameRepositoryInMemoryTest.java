@@ -92,6 +92,8 @@ class GameRepositoryInMemoryTest {
                 .withDate(LocalDate.now())
                 .withTime(LocalTime.now())
                 .withDay(dayBuilder -> dayBuilder.withNumber(1).build())
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withCompetition(competitionBuilder -> competitionBuilder
                         .withName("Competition 1")
                         .withPool(poolBuilder -> poolBuilder
@@ -117,6 +119,8 @@ class GameRepositoryInMemoryTest {
                 .withDate(LocalDate.now())
                 .withTime(LocalTime.now())
                 .withDay(dayBuilder -> dayBuilder.withNumber(2).build())
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withCompetition(competitionBuilder -> competitionBuilder
                         .withName("Competition 2")
                         .withPool(poolBuilder -> poolBuilder
@@ -167,6 +171,8 @@ class GameRepositoryInMemoryTest {
                 .withCode(game1.getCode())
                 .withCompetition(game1.getCompetition())
                 .withDay(game1.getDay())
+                .withWeek(game1.getWeek())
+                .withSeason(game1.getSeason())
                 .withDate(game1.getDate())
                 .withTime(game1.getTime())
                 .withFDME(game1.getFdme())
