@@ -45,6 +45,7 @@ public class GameRepositoryImpl implements GameRepository {
         GameEntity gameEntity = this.gameMapper.gameToGameEntity(game);
         gameEntity.getCompetition().setPool(this.poolEntityRepository.save(gameEntity.getCompetition().getPool()));
         gameEntity.setCompetition(this.competitionEntityRepository.save(gameEntity.getCompetition()));
+        gameEntity.setSeason(this.seasonEntityRepository.save(gameEntity.getSeason()));
         gameEntity.setHalle(this.halleEntityRepository.save(gameEntity.getHalle()));
         gameEntity.setHomeTeam(this.saveTeam(gameEntity.getHomeTeam()));
         gameEntity.setVisitingTeam(this.saveTeam(gameEntity.getVisitingTeam()));

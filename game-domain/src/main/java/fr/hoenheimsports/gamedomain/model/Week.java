@@ -3,14 +3,17 @@ package fr.hoenheimsports.gamedomain.model;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
-import java.util.UUID;
 
 public record Week(int year, int week) {
     public static final Week NOW = new Week(LocalDate.now());
 
-    public Week(int year, int week) {
-        this.year = year;
-        this.week = week;
+    public Week {
+        if(year<1900) {
+            throw new IllegalArgumentException("year shoud be recent");
+        }
+        if(week<1 || week>52) {
+            throw new IllegalArgumentException("week shoud be between 1 and 52");
+        }
     }
 
     public Week(LocalDate localDate) {

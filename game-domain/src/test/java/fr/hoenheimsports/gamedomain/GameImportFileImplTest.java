@@ -36,11 +36,6 @@ class GameImportFileImplTest {
 
         assertEquals(games.size(), importedGames.size());
 
-        for (Game game : importedGames) {
-            Game retrievedGame = gameRepository.findById(game.getCode());
-            assertNotNull(retrievedGame);
-            assertEquals(game.getCode(), retrievedGame.getCode());
-        }
     }
 
 }

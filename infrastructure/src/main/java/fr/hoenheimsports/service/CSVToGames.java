@@ -171,6 +171,12 @@ public class CSVToGames implements FileToGames {
 
         Score score = mapToScore(csvLine.getScRec(), csvLine.getScVis());
 
+        LocalDate date = mapToLocalDate(csvLine.getLe());
+        Season saeson = mapToSeason(date);
+
+        int year = mapToYear(csvLine.getSemaine());
+        int week = mapToWeek(csvLine.getSemaine());
+
 
         Halle halle = mapToHall(csvLine.getNomSalle(), csvLine.getAdresseSalle(), csvLine.getCP(), csvLine.getVille(), csvLine.getColle());
         return GameBuilder.builder()
@@ -178,6 +184,10 @@ public class CSVToGames implements FileToGames {
                 .withDate(mapToLocalDate(csvLine.getLe()))
                 .withTime(mapToLocalTime(csvLine.getHoraire()))
                 .withDay(dayBuilder -> dayBuilder.withNumber(day).build())
+                .withSeason(saeson)
+                .withWeek(weekBuilder -> weekBuilder
+                        .withYear(year)
+                        .withWeek(week))
                 .withCompetition(competitionBuilder -> competitionBuilder
                         .withName(csvLine.getCompetition())
                         .withPool(poolBuilder -> poolBuilder
@@ -255,23 +265,56 @@ public class CSVToGames implements FileToGames {
         }
     }
 
-    private LocalDate mapToLocalDate(String dateStr) {
+    private Season mapToSeason(LocalDate le) {
+        int startMonth = 8;
+        int startDay = 1;
+        LocalDate seasonStartDate = LocalDate.of(le.getYear(), startMonth, startDay);
+        LocalDate seasonEndDate;
+
+        if(le.isAfter(seasonStartDate) || le.isEqual(seasonStartDate)) {
+            seasonEndDate = seasonStartDate.plusYears(1).minusDays(1);
+        } else {
+            seasonEndDate = seasonStartDate.minusDays(1);
+            seasonStartDate = seasonStartDate.minusYears(1);
+        }
+        String name = "SEASON_" + seasonStartDate.getYear() + "_" + seasonEndDate.getYear();
+        return new Season(name,seasonStartDate,seasonEndDate);
+    }
+
+    private int mapToWeek(String semaine) throws FileDataException {
+        try {
+            String[] parties = semaine.split("-");
+            return Integer.parseInt(parties[1]);
+        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            throw new FileDataException("semaine shoud be like '2022-23'");
+        }
+    }
+
+    private int mapToYear(String semaine) throws FileDataException {
+        try {
+            String[] parties = semaine.split("-");
+            return Integer.parseInt(parties[0]);
+        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            throw new FileDataException("semaine shoud be like '2022-23'");
+        }
+    }
+    private LocalDate mapToLocalDate(String le) {
         LocalDate date = null;
-        if (dateStr != null) {
+        if (le != null) {
             {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                date = LocalDate.parse(dateStr, formatter);
+                date = LocalDate.parse(le, formatter);
             }
         }
         return date;
     }
 
-    private LocalTime mapToLocalTime(String timeStr) {
+    private LocalTime mapToLocalTime(String horaire) {
         LocalTime time = null;
-        if (timeStr != null) {
+        if (horaire != null) {
             {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                time = LocalTime.parse(timeStr, formatter);
+                time = LocalTime.parse(horaire, formatter);
             }
         }
         return time;
@@ -388,9 +431,10 @@ public class CSVToGames implements FileToGames {
         private String arb2Sifle;
         private String EntVis;
         private String TelEntVis;
+        private String semaine;
 /*
         variable doesn't use :
-        private String semaine;
+
         private String CorrespRec;
         private String TelCorrespRec;
         private String CorrespVis;
@@ -463,7 +507,7 @@ public class CSVToGames implements FileToGames {
                 }
                 case "club vis" -> {
                     if (cellValue == null) {
-                        throw new FileDataException("'num poule' column is empty and should be required");
+                        throw new FileDataException("'club vis' column is empty and should be required");
                     }
                     this.clubVis = cellValue;
                 }
@@ -508,13 +552,14 @@ public class CSVToGames implements FileToGames {
 
                 case "arb1 sifle" -> this.arb1Sifle = cellValue;
                 case "arb2 sifle" -> this.arb2Sifle = cellValue;
-/*
                 case "semaine" -> {
                     if(cellValue == null) {
-                        throw new FileDataException();
+                        throw new FileDataException("'Semaine' column is empty and should be required");
                     }
                     this.semaine = cellValue;
                 }
+/*
+
                 case "fdme rec" -> this.fdmeRec = cellValue;
                 case "club hote" -> this.clubHote = cellValue;
                 case "observateur" -> this.observateur = cellValue;
@@ -666,6 +711,9 @@ public class CSVToGames implements FileToGames {
             return arb2Sifle;
         }
 
+        public String getSemaine() {
+            return semaine;
+        }
     }
 
     private static class ParserInfoTeam {

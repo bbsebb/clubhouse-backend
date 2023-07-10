@@ -47,7 +47,7 @@ class GameServiceApplicationTest {
         List<Game> expectedGames = createExpectedGames();
 
         when(gameImportFile.importFileGame(any(InputStream.class))).thenReturn(expectedGames);
-        when(gameMapper.gameToGameDTO(any(Game.class))).thenReturn(new GameDTO(null,null,null,null,null,null,null,null,null,null,null));
+        when(gameMapper.gameToGameDTO(any(Game.class))).thenReturn(new GameDTO(null,null,null,null,null,null,null,null,null,null,null,null,null));
         List<GameDTO> actualGames = gameServiceApplication.importFile(multipartFile);
 
         assertEquals(expectedGames.size(), actualGames.size());
@@ -60,6 +60,8 @@ class GameServiceApplicationTest {
                 .withCode("test1")
                 .withCompetition(Competition.UNKNOWN)
                 .withDay(Day.SINGLE_DAY_GAME)
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withFDME(FDME.UNKNOWN)
                 .withHalle(Halle.UNKNOWN)
                 .withHomeTeam(Team.UNKNOWN)
@@ -71,6 +73,8 @@ class GameServiceApplicationTest {
                 .withCode("test3")
                 .withCompetition(Competition.UNKNOWN)
                 .withDay(Day.SINGLE_DAY_GAME)
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withFDME(FDME.UNKNOWN)
                 .withHalle(Halle.UNKNOWN)
                 .withHomeTeam(Team.UNKNOWN)
@@ -82,6 +86,8 @@ class GameServiceApplicationTest {
                 .withCode("test2")
                 .withCompetition(Competition.UNKNOWN)
                 .withDay(Day.SINGLE_DAY_GAME)
+                .withWeek(Week.NOW)
+                .withSeason(Season.SEASON_2022_2023)
                 .withFDME(FDME.UNKNOWN)
                 .withHalle(Halle.UNKNOWN)
                 .withHomeTeam(Team.UNKNOWN)

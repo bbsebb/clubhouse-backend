@@ -1,6 +1,5 @@
 package fr.hoenheimsports.gamedomain.builder;
 
-import fr.hoenheimsports.gamedomain.model.Score;
 import fr.hoenheimsports.gamedomain.model.Season;
 
 import java.time.LocalDate;
@@ -27,6 +26,7 @@ public class SeasonBuilder {
         this.endDate = endDate;
         return this;
     }
+
 
     public Season build() {
         return new Season(this.name,this.startDate,this.endDate);

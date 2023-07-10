@@ -15,5 +15,6 @@ public record Season(String name, LocalDate startDate, LocalDate endDate) {
         Objects.requireNonNull(name,"name should be not null");
         Objects.requireNonNull(startDate,"startDate should be not null");
         Objects.requireNonNull(endDate,"endDate should be not null");
+
     }
 }

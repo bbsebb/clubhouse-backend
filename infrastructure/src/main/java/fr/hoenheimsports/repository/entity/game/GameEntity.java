@@ -15,6 +15,10 @@ public class GameEntity {
     @Embedded
     private DayEntity day;
     @ManyToOne(cascade = CascadeType.ALL)
+    private SeasonEntity season;
+    @Embedded
+    private WeekEntity week;
+    @ManyToOne(cascade = CascadeType.ALL)
     private HalleEntity halle;
     @Embedded
     private RefereesEntity referees;
@@ -35,19 +39,6 @@ public class GameEntity {
     }
 
 
-    public GameEntity(String code, CompetitionEntity competition, DayEntity day, HalleEntity halle, RefereesEntity referees, TeamEntity homeTeam, TeamEntity visitingTeam, ScoreEntity score, FDMEEntity fdme, LocalDate date, LocalTime time) {
-        this.code = code;
-        this.competition = competition;
-        this.day = day;
-        this.halle = halle;
-        this.referees = referees;
-        this.homeTeam = homeTeam;
-        this.visitingTeam = visitingTeam;
-        this.score = score;
-        this.fdme = fdme;
-        this.date = date;
-        this.time = time;
-    }
 
     public String getCode() {
         return code;
@@ -135,6 +126,22 @@ public class GameEntity {
 
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    public SeasonEntity getSeason() {
+        return season;
+    }
+
+    public void setSeason(SeasonEntity season) {
+        this.season = season;
+    }
+
+    public WeekEntity getWeek() {
+        return week;
+    }
+
+    public void setWeek(WeekEntity week) {
+        this.week = week;
     }
 
     @Override
