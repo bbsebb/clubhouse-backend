@@ -7,16 +7,28 @@ public class CategoryBuilder {
         return new CategoryBuilder();
     }
 
-    private String name;
 
+    private int age;
+    private boolean isMaxAge;
 
-    public CategoryBuilder withName(String name) {
-        this.name = name;
+    public CategoryBuilder withAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+    public CategoryBuilder withIsMaxAge(boolean isMaxAge) {
+        this.isMaxAge = isMaxAge;
         return this;
     }
 
     public Category build() {
+    String name;
+        if(isMaxAge) {
+            name = "-"+this.age+" ans";
+        } else {
+            name = "senior";
+        }
 
-        return new Category(name);
+        return new Category(name,this.age,this.isMaxAge);
     }
 }

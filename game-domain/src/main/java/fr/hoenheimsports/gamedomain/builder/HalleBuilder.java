@@ -52,9 +52,7 @@ public class HalleBuilder {
     public Halle build() {
         if(this.halleRepository != null) {
             var optionalHall = this.halleRepository.findHallByKeys(name,address.street(),address.postalCode(),address.city());
-            if (optionalHall.isPresent()) {
-                this.id = optionalHall.get().id();
-            }
+            optionalHall.ifPresent(halle -> this.id = halle.id());
         }
         if (id == null) {
             id = UUID.randomUUID();

@@ -57,7 +57,8 @@ class GameRepositoryInMemoryTest {
                         .withCode("Code club 1")
                         .withName("Club 1"))
                 .withCategory(categoryBuilder -> categoryBuilder
-                        .withName("categorie 1"))
+                        .withAge(18)
+                        .withIsMaxAge(true))
                 .withGender(Gender.MALE)
                 .withNumber(1)
                 .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
@@ -75,7 +76,8 @@ class GameRepositoryInMemoryTest {
                         .withCode("Code club 2")
                         .withName("Club 2"))
                 .withCategory(categoryBuilder -> categoryBuilder
-                        .withName("categorie 2"))
+                        .withAge(18)
+                        .withIsMaxAge(true))
                 .withGender(Gender.FEMALE)
                 .withNumber(1)
                 .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
@@ -144,14 +146,14 @@ class GameRepositoryInMemoryTest {
     }
     @Test
     void testSave() {
-        assertEquals(game1, gameRepository.findById(game1.getCode()));
-        assertEquals(game2, gameRepository.findById(game2.getCode()));
+        assertEquals(game1, gameRepository.findById(game1.getCode()).get());
+        assertEquals(game2, gameRepository.findById(game2.getCode()).get());
     }
 
     @Test
     void testFindById() {
-        assertEquals(game1, gameRepository.findById(game1.getCode()));
-        assertEquals(game2, gameRepository.findById(game2.getCode()));
+        assertEquals(game1, gameRepository.findById(game1.getCode()).get());
+        assertEquals(game2, gameRepository.findById(game2.getCode()).get());
         assertEquals(2, gameRepository.findAll().size());
     }
 
@@ -185,16 +187,16 @@ class GameRepositoryInMemoryTest {
 
         gameRepository.update(updatedGame);
 
-        assertEquals(updatedGame, gameRepository.findById(game1.getCode()));
-        assertEquals(game2, gameRepository.findById(game2.getCode()));
-        assertEquals(updatedScore, gameRepository.findById(game1.getCode()).getScore());
+        assertEquals(updatedGame, gameRepository.findById(game1.getCode()).get());
+        assertEquals(game2, gameRepository.findById(game2.getCode()).get());
+        assertEquals(updatedScore, gameRepository.findById(game1.getCode()).get().getScore());
     }
 
     @Test
     void testDelete() {
         gameRepository.delete(game1.getCode());
-        assertNull(gameRepository.findById(game1.getCode()));
-        assertEquals(game2, gameRepository.findById(game2.getCode()));
+        assertEquals(Optional.empty(),gameRepository.findById(game1.getCode()));
+        assertEquals(game2, gameRepository.findById(game2.getCode()).get());
     }
 
     @Test

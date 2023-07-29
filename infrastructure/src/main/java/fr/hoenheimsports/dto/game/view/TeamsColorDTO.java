@@ -1,4 +1,4 @@
-package fr.hoenheimsports.dto.game;
+package fr.hoenheimsports.dto.game.view;
 
 import fr.hoenheimsports.gamedomain.model.TeamColor;
 

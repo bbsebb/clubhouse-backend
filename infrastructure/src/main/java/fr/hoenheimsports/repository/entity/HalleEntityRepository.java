@@ -7,6 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface HalleEntityRepository extends JpaRepository<HalleEntity, UUID> {
+    Optional<HalleEntity> findByNameAndAddress_StreetAndAddress_PostalCodeAndAddress_City(String name, String street,int postalCode,String city);
 
-    public Optional<HalleEntity> findByNameAndAddress_StreetAndAddress_PostalCodeAndAddress_City(String name, String street,int postalCode,String city);
 }

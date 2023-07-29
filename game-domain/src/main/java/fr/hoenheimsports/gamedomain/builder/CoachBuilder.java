@@ -47,9 +47,7 @@ public class CoachBuilder {
     public Coach build() {
         if(this.coachRepository != null) {
             var optionalCoach = this.coachRepository.findCoachByKeys(name);
-            if (optionalCoach.isPresent()) {
-                this.id = optionalCoach.get().id();
-            }
+            optionalCoach.ifPresent(coach -> this.id = coach.id());
         }
         if(this.id == null) {
             this.id = UUID.randomUUID();

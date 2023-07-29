@@ -2,6 +2,7 @@ package fr.hoenheimsports.gamedomain.model;
 import fr.hoenheimsports.gamedomain.model.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,10 +44,10 @@ class TeamTest {
     @Test
     public void testEquals() {
         UUID id = UUID.randomUUID();
-        Category category = new Category("Category A");
+        Category category = new Category("-18 ans", 18, true);
         Gender gender = Gender.MALE;
         int number = 1;
-        Club club = new Club("Club A", "ABC");
+        Club club = new Club("Club A", "ABC", Set.of(Halle.UNKNOWN));
         TeamsColor teamsColor = new TeamsColor(
                 TeamColor.BLUE,
                 TeamColor.WHITE,
@@ -66,10 +67,10 @@ class TeamTest {
     @Test
     public void testHashCode() {
         UUID id = UUID.randomUUID();
-        Category category = new Category("Category A");
+        Category category = new Category("-18 ans", 18, true);
         Gender gender = Gender.MALE;
         int number = 1;
-        Club club = new Club("Club A", "ABC");
+        Club club = new Club("Club A", "ABC", Set.of(Halle.UNKNOWN));
         TeamsColor teamsColor = new TeamsColor(
                 TeamColor.BLUE,
                 TeamColor.WHITE,
@@ -87,10 +88,10 @@ class TeamTest {
     @Test
     public void testToString() {
         UUID id = UUID.randomUUID();
-        Category category = new Category("Category A");
+        Category category = new Category("-18 ans", 18, true);
         Gender gender = Gender.MALE;
         int number = 1;
-        Club club = new Club("Club A", "ABC");
+        Club club = new Club("Club A", "ABC", Set.of(Halle.UNKNOWN));
         TeamsColor teamsColor = new TeamsColor(
                 TeamColor.BLUE,
                 TeamColor.WHITE,

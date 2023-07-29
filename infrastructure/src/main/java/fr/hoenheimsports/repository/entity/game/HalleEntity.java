@@ -58,15 +58,5 @@ public class HalleEntity {
         this.glueAuthorization = glueAuthorization;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof HalleEntity that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(address, that.address) && glueAuthorization == that.glueAuthorization;
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, address, glueAuthorization);
-    }
 }

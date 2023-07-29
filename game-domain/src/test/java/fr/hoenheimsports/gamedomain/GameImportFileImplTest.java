@@ -27,7 +27,7 @@ class GameImportFileImplTest {
 
         GameRepository gameRepository = new GameRepositoryInMemory();
 
-        GameImportFile gameImportFile = new GameImportFileImpl(csvToGamesStub, gameRepository);
+        GameImportFile gameImportFile = new GameImportFileImpl(csvToGamesStub);
 
         String fileData = "game1,game2,game3";
         InputStream inputStream = new ByteArrayInputStream(fileData.getBytes());

@@ -1,7 +1,6 @@
-package fr.hoenheimsports.dto.game;
+package fr.hoenheimsports.dto.game.view;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public record GameDTO(String code,
                       CompetitionDTO competition,
@@ -14,6 +13,6 @@ public record GameDTO(String code,
                       TeamDTO visitingTeam,
                       ScoreDTO score,
                       FDMEDTO fdme,
-                      LocalDate date,
-                      LocalTime time) {
+                      LocalDateTime dateTime,
+                      boolean isPlayed) {
 }

@@ -8,7 +8,7 @@ import fr.hoenheimsports.gamedomain.spi.*;
 import java.util.*;
 import java.util.stream.Stream;
 @Stub
-public class GameRepositoryInMemory implements GameRepository, CoachRepository, HalleRepository, RefereeRepository, TeamRepository {
+public class GameRepositoryInMemory implements GameRepository {
     private final Map<String,Game> games = new HashMap<>();
 
     public GameRepositoryInMemory() {
@@ -20,12 +20,9 @@ public class GameRepositoryInMemory implements GameRepository, CoachRepository, 
         return game;
     }
 
-
-
-
     @Override
-    public Game findById(String gameCode) {
-        return this.games.get(gameCode);
+    public Optional<Game> findById(String gameCode) {
+        return Optional.ofNullable(this.games.get(gameCode));
     }
 
     @Override
@@ -43,38 +40,6 @@ public class GameRepositoryInMemory implements GameRepository, CoachRepository, 
         this.games.remove(gameCode);
     }
 
-    @Override
-    public Optional<Coach> findCoachByKeys(String name) {
-        return this.games.values().stream()
-                .flatMap(game -> Stream.of(game.getHomeTeam().getCoach(),game.getVisitingTeam().getCoach()))
-                .filter(coach -> coach != null && coach.name().equals(name))
-                .findFirst();
-    }
-
-    @Override
-    public Optional<Halle> findHallByKeys(String name, String street, int cp, String city) {
-        Address address = AddressBuilder.builder().withStreet(street).withPostalCode(cp).withCity(city).build();
-        return this.games.values().stream()
-                .map(Game::getHalle)
-                .filter(halle -> halle != null && halle.name().equals(name) && halle.address().equals(address))
-                .findFirst();
-    }
-
-    @Override
-    public Optional<Referee> findRefereeByKeys(String name) {
-        return this.games.values().stream()
-                .flatMap(game -> Stream.of(game.getReferees().designatedReferee1(),game.getReferees().designatedReferee2(),game.getReferees().officiatingReferee1(),game.getReferees().officiatingReferee2()))
-                .filter(referee -> referee != null && referee.name().equals(name))
-                .findFirst();
-    }
-
-    @Override
-    public Optional<Team> findTeamByKeys(Club club, Gender gender, Category category, int number) {
-        return this.games.values().stream()
-                .flatMap(game -> Stream.of(game.getHomeTeam(),game.getVisitingTeam()))
-                .filter(team -> team != null && team.getClub().equals(club) && team.getGender().equals(gender) && team.getCategory().equals(category) && team.getNumber() == number)
-                .findFirst();
-    }
     public void populate(List<Game> games) {
         games.forEach(game -> this.games.put(game.getCode(),game));
     }

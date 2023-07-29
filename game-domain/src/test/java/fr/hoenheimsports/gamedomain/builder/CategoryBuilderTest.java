@@ -17,12 +17,18 @@ class CategoryBuilderTest {
     public void testCategoryBuilder() {
         CategoryBuilder categoryBuilder = new CategoryBuilder();
         UUID expectedId = UUID.randomUUID();
+        int age = 18;
+        boolean isMaxAge = true;
         String expectedName = "-18 ans";
 
         Category category = categoryBuilder
-                .withName(expectedName)
+                .withAge(age)
+                .withIsMaxAge(isMaxAge)
                 .build();
 
+
+        assertEquals(age, category.age());
+        assertEquals(isMaxAge, category.isMaxAge());
         assertEquals(expectedName, category.name());
     }
 

@@ -1,14 +1,23 @@
 package fr.hoenheimsports.service.mapper;
 
-import fr.hoenheimsports.dto.game.GameDTO;
+import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.repository.entity.game.GameEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface GameMapper {
     public Game gameEntityToGame(GameEntity gameEntity);
     public GameEntity gameToGameEntity(Game game);
+    @Mapping(target = "isPlayed", expression = "java(game.isPlayed())")
+    @Mapping(target = "dateTime", expression = "java(game.getDate() != null && game.getTime() != null ? LocalDateTime.of(game.getDate(), game.getTime()) : null)")
     public GameDTO gameToGameDTO(Game game);
-    public Game gameDTOToGame(GameDTO gameDTO);
+
+
+    default Game gameDTOToGame(GameDTO gameDTO) {
+        throw new UnsupportedOperationException();
+    }
+
+
 }

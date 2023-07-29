@@ -1,12 +1,11 @@
 package fr.hoenheimsports.service;
 
-import fr.hoenheimsports.dto.game.GameDTO;
+import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.api.GameImportFile;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.gamedomain.model.*;
-import fr.hoenheimsports.gamedomain.spi.FileToGames;
 import fr.hoenheimsports.service.mapper.GameMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,8 +21,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class GameServiceApplicationTest {
@@ -47,7 +44,7 @@ class GameServiceApplicationTest {
         List<Game> expectedGames = createExpectedGames();
 
         when(gameImportFile.importFileGame(any(InputStream.class))).thenReturn(expectedGames);
-        when(gameMapper.gameToGameDTO(any(Game.class))).thenReturn(new GameDTO(null,null,null,null,null,null,null,null,null,null,null,null,null));
+        when(gameMapper.gameToGameDTO(any(Game.class))).thenReturn(new GameDTO(null,null,null,null,null,null,null,null,null,null,null,null,false));
         List<GameDTO> actualGames = gameServiceApplication.importFile(multipartFile);
 
         assertEquals(expectedGames.size(), actualGames.size());

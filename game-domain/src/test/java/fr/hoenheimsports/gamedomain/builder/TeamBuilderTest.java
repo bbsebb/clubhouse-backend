@@ -5,6 +5,7 @@ import fr.hoenheimsports.gamedomain.spi.stub.GameRepositoryInMemory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,10 +32,10 @@ class TeamBuilderTest {
     public void setup() {
         teamBuilder = TeamBuilder.builder();
         expectedId = UUID.randomUUID();
-        expectedCategory = new Category("Category A");
+        expectedCategory = new Category("-18 ans",18,true);
         expectedGender = Gender.MALE;
         expectedNumber = 1;
-        expectedClub = new Club("Club A", "ABC");
+        expectedClub = new Club("Club A", "ABC", Set.of(Halle.UNKNOWN));
         expectedTeamsColor = new TeamsColor(
                 TeamColor.BLUE,
                 TeamColor.WHITE,
@@ -44,10 +45,10 @@ class TeamBuilderTest {
         expectedCoach = new Coach(UUID.randomUUID(), "Coach A", new PhoneNumber("555555555"));
 
         expectedIdInMemory = UUID.randomUUID();
-        expectedCategoryInMemory = new Category("Category 1");
+        expectedCategoryInMemory = new Category("-18 ans",18, true);
         expectedGenderInMemory = Gender.MALE;
         expectedNumberInMemory = 1;
-        expectedClubInMemory = new Club("Code 1", "Club 1");
+        expectedClubInMemory = new Club("Code 1", "Club 1", Set.of(Halle.UNKNOWN));
         expectedTeamsColorInMemory = new TeamsColor(
                 TeamColor.RED,
                 TeamColor.BLUE,
@@ -91,13 +92,15 @@ class TeamBuilderTest {
         Team team = teamBuilder
                 .withId(expectedId)
                 .withCategory(builder -> builder
-                        .withName(expectedCategory.name())
+                        .withAge(18)
+                        .withIsMaxAge(true)
                 )
                 .withGender(expectedGender)
                 .withNumber(expectedNumber)
                 .withClub(builder -> builder
                         .withName(expectedClub.name())
                         .withCode(expectedClub.code())
+                        .addHalle(Halle.UNKNOWN)
                 )
                 .withTeamsColor(builder -> builder
                         .withShirtColor1(colorBuilder -> colorBuilder.withFrenchName(expectedTeamsColor.shirtColor1().getFrenchName()))

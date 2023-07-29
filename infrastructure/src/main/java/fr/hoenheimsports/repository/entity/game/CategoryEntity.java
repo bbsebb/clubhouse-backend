@@ -10,11 +10,10 @@ public class CategoryEntity {
     @Id
     private String name;
 
-    public CategoryEntity() {
-    }
+    private int age;
+    private boolean isMaxAge;
 
-    public CategoryEntity(String name) {
-        this.name = name;
+    public CategoryEntity() {
     }
 
     public String getName() {
@@ -25,16 +24,32 @@ public class CategoryEntity {
         this.name = name;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public boolean getIsMaxAge() {
+        return isMaxAge;
+    }
+
+    public void setIsMaxAge(boolean maxAge) {
+        isMaxAge = maxAge;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CategoryEntity that)) return false;
-        return name.equals(that.name);
+        return age == that.age && isMaxAge == that.isMaxAge && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, age, isMaxAge);
     }
 }
 

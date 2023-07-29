@@ -91,9 +91,7 @@ public class TeamBuilder {
     public Team build() {
         if(this.teamRepository != null) {
             var optionalTeam = this.teamRepository.findTeamByKeys(club,gender,category,number);
-            if (optionalTeam.isPresent()) {
-                this.id = optionalTeam.get().getId();
-            }
+            optionalTeam.ifPresent(team -> this.id = team.getId());
         }
         if (this.id == null) {
             this.id = UUID.randomUUID();

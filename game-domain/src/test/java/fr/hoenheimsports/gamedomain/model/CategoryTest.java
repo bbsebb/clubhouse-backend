@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CategoryTest {
     @Test
     public void testConstructorWithNullParameters() {
-        assertThrows(NullPointerException.class, () -> new Category(null));
+        assertThrows(NullPointerException.class, () -> new Category(null,0,true));
+        assertThrows(IllegalArgumentException.class, () -> new Category("test",-1,true));
     }
 }

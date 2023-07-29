@@ -1,9 +1,8 @@
 package fr.hoenheimsports.service;
 
-import fr.hoenheimsports.dto.game.GameDTO;
+import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.api.GameDisplay;
 import fr.hoenheimsports.gamedomain.api.GameImportFile;
-import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.service.mapper.GameMapper;
@@ -12,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -42,7 +42,11 @@ public class GameServiceApplication {
         return null;
     }
 
-    public List<GameDTO> displayGame() {
-        return this.gameDisplay.findAllGame().stream().map(this.gameMapper::gameToGameDTO).toList();
+    public List<GameDTO> displayGames() {
+        return this.gameDisplay.findAllGame().stream().map(this.gameMapper::gameToGameDTO).sorted(Comparator.nullsLast(Comparator.comparing(GameDTO::dateTime,Comparator.nullsLast(Comparator.naturalOrder())))).toList();
+    }
+
+    public GameDTO displayGame(String code) {
+        return this.gameDisplay.findByCode(code).map(gameMapper::gameToGameDTO).orElse(null);
     }
 }

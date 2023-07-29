@@ -1,4 +1,4 @@
-package fr.hoenheimsports.dto.game;
+package fr.hoenheimsports.dto.game.view;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

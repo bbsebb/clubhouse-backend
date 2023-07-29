@@ -23,15 +23,6 @@ public class TeamEntity {
     public TeamEntity() {
     }
 
-    public TeamEntity(UUID id, CategoryEntity category, GenderEntity gender, int number, ClubEntity club, TeamsColorEntity teamsColor, CoachEntity coach) {
-        this.id = id;
-        this.category = category;
-        this.gender = gender;
-        this.number = number;
-        this.club = club;
-        this.teamsColor = teamsColor;
-        this.coach = coach;
-    }
 
     public UUID getId() {
         return id;

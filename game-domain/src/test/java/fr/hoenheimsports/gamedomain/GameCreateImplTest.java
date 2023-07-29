@@ -6,7 +6,7 @@ import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.stub.GameRepositoryInMemory;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,9 +42,9 @@ class GameCreateImplTest {
         assertEquals(game.getCode(), createdGame.getCode());
 
         // Vérifiez que le jeu a été enregistré dans le GameRepository
-        Game retrievedGame = gameRepository.findById(game.getCode());
+        Optional<Game> retrievedGame = gameRepository.findById(game.getCode());
         assertNotNull(retrievedGame);
-        assertEquals(game.getCode(), retrievedGame.getCode());
+        assertEquals(game.getCode(), retrievedGame.get().getCode());
     }
 
 }

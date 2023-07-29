@@ -6,6 +6,8 @@ import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.GameRepository;
 
 import java.util.List;
+import java.util.Optional;
+
 @DomainService
 public class GameDisplayImpl implements GameDisplay {
 
@@ -18,5 +20,10 @@ public class GameDisplayImpl implements GameDisplay {
     @Override
     public List<Game> findAllGame() {
         return this.gameRepository.findAll();
+    }
+
+    @Override
+    public Optional<Game> findByCode(String code) {
+        return this.gameRepository.findById(code);
     }
 }

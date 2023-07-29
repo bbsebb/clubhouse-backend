@@ -1,23 +1,22 @@
 package fr.hoenheimsports.repository.entity.game;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Objects;
-import java.util.UUID;
+import java.util.Set;
 @Entity
 public class ClubEntity {
     @Id
     private String code;
     private String name;
+    @ManyToMany
+    private Set<HalleEntity> halles = new HashSet<>();
 
     public ClubEntity() {
     }
 
-    public ClubEntity(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
+
 
     public String getCode() {
         return code;
@@ -34,16 +33,13 @@ public class ClubEntity {
     public void setName(String name) {
         this.name = name;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ClubEntity that)) return false;
-        return Objects.equals(code, that.code) && Objects.equals(name, that.name);
+    public Set<HalleEntity> getHalles() {
+        return halles;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(code, name);
+    public void setHalles(Set<HalleEntity> halles) {
+        this.halles = halles;
     }
+
+
 }

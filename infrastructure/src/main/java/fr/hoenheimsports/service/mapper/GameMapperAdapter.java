@@ -1,8 +1,7 @@
 package fr.hoenheimsports.service.mapper;
 
-import fr.hoenheimsports.dto.game.GameDTO;
+import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.builder.GameBuilder;
-import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.model.Competition;
 import fr.hoenheimsports.gamedomain.model.Day;
 import fr.hoenheimsports.gamedomain.model.Game;
@@ -55,8 +54,8 @@ public class GameMapperAdapter implements GameMapper{
     public Game gameDTOToGame(GameDTO gameDTO) {
         Game game = GameBuilder.builder()
                 .withCode(gameDTO.code())
-                .withDate(gameDTO.date())
-                .withTime(gameDTO.time())
+                .withDate(gameDTO.dateTime().toLocalDate())
+                .withTime(gameDTO.dateTime().toLocalTime())
                 .withDay(Day.SINGLE_DAY_GAME)
                 .withCompetition(Competition.UNKNOWN)
                 .withHalle(halleBuilder -> halleBuilder
@@ -72,7 +71,8 @@ public class GameMapperAdapter implements GameMapper{
                                 .withCode(gameDTO.homeTeam().club().code())
                                 .withName(gameDTO.homeTeam().club().name()))
                         .withCategory(categoryBuilder -> categoryBuilder
-                                .withName(gameDTO.homeTeam().category().name()))
+                                .withAge(gameDTO.homeTeam().category().age())
+                                .withIsMaxAge(gameDTO.homeTeam().category().isMaxAge()))
                         .withGender(this.mapToGender(gameDTO.homeTeam().gender().name()))
                         .withNumber(gameDTO.homeTeam().number())
                         .withTeamsColor(teamsColorBuilder -> teamsColorBuilder
@@ -91,7 +91,8 @@ public class GameMapperAdapter implements GameMapper{
                                 .withCode(gameDTO.visitingTeam().club().code())
                                 .withName(gameDTO.visitingTeam().club().name()))
                         .withCategory(categoryBuilder -> categoryBuilder
-                                .withName(gameDTO.visitingTeam().category().name()))
+                                .withAge(gameDTO.visitingTeam().category().age())
+                                .withIsMaxAge(gameDTO.visitingTeam().category().isMaxAge()))
                         .withGender(this.mapToGender(gameDTO.visitingTeam().gender().name()))
                         .withNumber(gameDTO.visitingTeam().number())
                         .withTeamsColor(teamsColorBuilder -> teamsColorBuilder

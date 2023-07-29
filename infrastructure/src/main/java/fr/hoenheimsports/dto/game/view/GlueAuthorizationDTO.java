@@ -1,4 +1,4 @@
-package fr.hoenheimsports.dto.game;
+package fr.hoenheimsports.dto.game.view;
 
 public enum GlueAuthorizationDTO {
     AUTHORIZED,

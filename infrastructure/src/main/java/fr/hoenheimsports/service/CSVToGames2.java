@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class CSVToGames implements FileToGames {
+public class CSVToGames2 implements FileToGames {
 
 
     private static final List<String> headerNoPlayed = Arrays.asList(
@@ -109,7 +109,7 @@ public class CSVToGames implements FileToGames {
     private final TeamRepository teamRepository;
     private final GameRepository gameRepository;
 
-    public CSVToGames(CoachRepository coachRepository, HalleRepository halleRepository, RefereeRepository refereeRepository, TeamRepository teamRepository, GameRepository gameRepository) {
+    public CSVToGames2(CoachRepository coachRepository, HalleRepository halleRepository, RefereeRepository refereeRepository, TeamRepository teamRepository, GameRepository gameRepository) {
         this.coachRepository = coachRepository;
         this.halleRepository = halleRepository;
         this.refereeRepository = refereeRepository;
@@ -163,11 +163,13 @@ public class CSVToGames implements FileToGames {
 
         int numberHomeTeam = ParserInfoTeam.mapToTeamNumber(csvLine.getClubRec());
         String nameHomeTeam = ParserInfoTeam.mapToClubName(csvLine.getClubRec());
-        String categoryHomeTeam = ParserInfoTeam.mapToCategoryName(csvLine.getClubRec());
+        int categoryAgeHomeTeam = ParserInfoTeam.mapToCategoryAge(csvLine.getClubRec());
+        boolean categoryIsMaxAgeHomeTeam = ParserInfoTeam.mapToCategoryIsMaxAge(csvLine.getClubRec());
 
         int numberVisitingTeam = ParserInfoTeam.mapToTeamNumber(csvLine.getClubVis());
         String nameVisitingTeam = ParserInfoTeam.mapToClubName(csvLine.getClubVis());
-        String categoryVisitingTeam = ParserInfoTeam.mapToCategoryName(csvLine.getClubVis());
+        int categoryAgeVisitingTeam = ParserInfoTeam.mapToCategoryAge(csvLine.getClubVis());
+        boolean categoryIsMaxAgeVisitingTeam = ParserInfoTeam.mapToCategoryIsMaxAge(csvLine.getClubVis());
 
         Score score = mapToScore(csvLine.getScRec(), csvLine.getScVis());
 
@@ -198,9 +200,11 @@ public class CSVToGames implements FileToGames {
                         .addIdGeneratorFromRepository(this.teamRepository)
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode(csvLine.getNumRec())
-                                .withName(nameHomeTeam))
+                                .withName(nameHomeTeam)
+                                .addHalle(halle))
                         .withCategory(categoryBuilder -> categoryBuilder
-                                .withName(categoryHomeTeam))
+                                .withAge(categoryAgeHomeTeam)
+                                .withIsMaxAge(categoryIsMaxAgeHomeTeam))
                         .withGender(gender)
                         .withNumber(numberHomeTeam)
                         .withTeamsColor(ParserTeamColor.mapToTeamsColor(csvLine.getCoulRec(), csvLine.getCoulGardRec()))
@@ -211,7 +215,8 @@ public class CSVToGames implements FileToGames {
                                 .withCode(csvLine.getNumVis())
                                 .withName(nameVisitingTeam))
                         .withCategory(categoryBuilder -> categoryBuilder
-                                .withName(categoryVisitingTeam))
+                                .withAge(categoryAgeVisitingTeam)
+                                .withIsMaxAge(categoryIsMaxAgeVisitingTeam))
                         .withGender(gender)
                         .withNumber(numberVisitingTeam)
                         .withTeamsColor(ParserTeamColor.mapToTeamsColor(csvLine.getCoulVis(), csvLine.getCoulGardVis()))
@@ -266,6 +271,8 @@ public class CSVToGames implements FileToGames {
     }
 
     private Season mapToSeason(LocalDate le) {
+        // If there is no date, the season is le season from today
+        le = (le == null) ?LocalDate.now():le;
         int startMonth = 8;
         int startDay = 1;
         LocalDate seasonStartDate = LocalDate.of(le.getYear(), startMonth, startDay);
@@ -724,28 +731,39 @@ public class CSVToGames implements FileToGames {
             2 groupe : catégorie ou null pour les séniors
             3 groupe : le numéro d'équipe au null
 
-            Le groupe 1 est eronné si NOM CLUB SM (ou SF), mais il semble qu'il ait tjs un numéro d'équipe pour les séniors.
+            Le groupe 1 est erroné si NOM CLUB SM (ou SF), mais il semble qu'il ait tjs un numéro d'équipe pour les séniors.
 
             Cas particulier, s'il n'y a pas de catégorie, c'est soit SF, soit SM et tjs l'équipe 1.
+
+            ERREURS CONNUES :
+            * les accents ne sont pas reconnus
 
          */
         private final static Pattern pattern = Pattern.compile(REGEX);
 
         static String mapToClubName(String club) throws FileDataException {
             checkClub(club);
-            return parseInfoTeam(club).group(1);
+            return parseInfoTeam(club).group(1).toUpperCase();
         }
 
-        static String mapToCategoryName(String club) throws FileDataException {
+        static int mapToCategoryAge(String club) throws FileDataException {
             checkClub(club);
             String category = parseInfoTeam(club).group(2);
-            String categoryName;
+            int categoryAge;
             if (category != null) {
-                categoryName = "moins de " + category + " ans";
+                categoryAge = Integer.parseInt(category);
             } else {
-                categoryName = "senior";
+                categoryAge = 18;
             }
-            return categoryName;
+            return categoryAge;
+        }
+
+        static boolean mapToCategoryIsMaxAge(String club) throws FileDataException {
+            checkClub(club);
+            String category = parseInfoTeam(club).group(2);
+            boolean categoryIsMaxAge;
+            categoryIsMaxAge = category != null;
+            return categoryIsMaxAge;
         }
 
         static int mapToTeamNumber(String club) throws FileDataException {

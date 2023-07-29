@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,20 +47,20 @@ class GameBuilderTest {
                 ),
                 new Team(
                         UUID.randomUUID(),
-                        new Category("Category1"),
+                        new Category("-18 ans", 18, true),
                         Gender.MALE,
                         1,
-                        new Club("Club1", "ClubName1"),
+                        new Club("Club1", "ClubName1", Set.of(Halle.UNKNOWN)),
                         new TeamsColor(TeamColor.BEIGE,TeamColor.BROWN,TeamColor.BLACK,TeamColor.BURGUNDY),
                         new Coach(UUID.randomUUID(), "Coach1", new PhoneNumber("1111111111"))
 
                 ),
                 new Team(
                         UUID.randomUUID(),
-                        new Category("Category2"),
+                        new Category("-18 ans", 18, true),
                         Gender.FEMALE,
                         5,
-                        new Club("Club2", "ClubName2"),
+                        new Club("Club2", "ClubName2",Set.of(Halle.UNKNOWN)),
                         new TeamsColor(TeamColor.BLACK,TeamColor.GARNET,TeamColor.NAVY_BLUE,TeamColor.GREY),
                         new Coach(UUID.randomUUID(), "Coach2", new PhoneNumber("2222222222"))
                 ),
@@ -131,7 +132,7 @@ class GameBuilderTest {
         UUID referee4Id = UUID.randomUUID();
         String referee4Name = "Referee4";
         UUID homeTeamId = UUID.randomUUID();
-        String homeCategoryName = "Category1";
+        String homeCategoryName = "-18 ans";
         Gender homeGender = Gender.MALE;
         int homeNumber = 1;
         String homeClubCode = "Club1";
@@ -144,7 +145,7 @@ class GameBuilderTest {
         String homeCoachName = "Coach1";
         String homeCoachPhoneNumber = "1111111111";
         UUID visitingTeamId = UUID.randomUUID();
-        String visitingCategoryName = "Category2";
+        String visitingCategoryName = "senior";
         Gender visitingGender = Gender.FEMALE;
         int visitingNumber = 5;
         String visitingClubCode = "Club2";
@@ -208,7 +209,7 @@ class GameBuilderTest {
                 .withHomeTeam(teamBuilder -> {
                     teamBuilder.withId(homeTeamId);
                     teamBuilder.withCategory(categoryBuilder -> {
-                        categoryBuilder.withName(homeCategoryName);
+                        categoryBuilder.withAge(18).withIsMaxAge(true);
                     });
                     teamBuilder.withGender(homeGender);
                     teamBuilder.withNumber(homeNumber);
@@ -231,7 +232,7 @@ class GameBuilderTest {
                 .withVisitingTeam(teamBuilder -> {
                     teamBuilder.withId(visitingTeamId);
                     teamBuilder.withCategory(categoryBuilder -> {
-                        categoryBuilder.withName(visitingCategoryName);
+                        categoryBuilder.withAge(18).withIsMaxAge(false);
                     });
                     teamBuilder.withGender(visitingGender);
                     teamBuilder.withNumber(visitingNumber);

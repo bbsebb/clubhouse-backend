@@ -1,8 +1,6 @@
 package fr.hoenheimsports.controller;
 
-import fr.hoenheimsports.dto.game.GameDTO;
-import fr.hoenheimsports.gamedomain.builder.GameBuilder;
-import fr.hoenheimsports.gamedomain.model.*;
+import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.service.GameServiceApplication;
@@ -12,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/games")
@@ -33,8 +29,13 @@ public class GameController {
     }
 
     @GetMapping("")
-    public List<GameDTO> displayGames() {
-        return this.gameService.displayGame();
+    public ResponseEntity<List<GameDTO>> displayGames() {
+        return ResponseEntity.ok(this.gameService.displayGames());
+    }
+
+    @GetMapping("/{code}")
+    public ResponseEntity<GameDTO> displayGames(@PathVariable String code) {
+        return ResponseEntity.ok(this.gameService.displayGame(code));
     }
 
     @PostMapping("/import")

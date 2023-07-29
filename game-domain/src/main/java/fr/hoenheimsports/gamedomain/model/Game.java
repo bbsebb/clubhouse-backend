@@ -126,6 +126,9 @@ public final class Game {
     }
 
 
+    public boolean isPlayed() {
+        return this.score.homeScore() + this.score.visitingScore() > 0;
+    }
 
     @Override
     public boolean equals(Object o) {

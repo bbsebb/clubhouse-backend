@@ -38,7 +38,7 @@ class CSVToGamesTest {
     @Mock
     private GameRepository gameRepository;
     @InjectMocks
-    private CSVToGames fileToGames;
+    private FileToGames fileToGames;
     private static final String csvFileWithUnplayedGame = """
             semaine;"num poule";competition;poule;J;le;horaire;"club rec";"club vis";"club hote";"arb1 designe";"arb2 designe";observateur;delegue;"code renc";"nom salle";"adresse salle";CP;Ville;colle;"Coul. Rec";"Coul. Gard. Rec";"Coul. Vis";"Coul. Gard. Vis";"Ent. Rec";"Tel Ent. Rec";"Corresp. Rec";"Tel Corresp. Rec";"Ent. Vis";"Tel Ent. Vis";"Corresp. Vis";"Tel Corresp. Vis";"Num rec";"Num vis"
             2022-42;M56671000G;"67-21 coupe d'encouragement credit mutuel masc";"1ER TOUR CE CCM MASC";1;22/10/2022;19:30:00;"SOULTZ KUTZENHAUSEN SM2";"HOENHEIM SM2";"SOULTZ KUTZENHAUSEN";;;" ";" ";SAEJPJW;"GYMNASE DU SIVU";" rue du gymnase";67250;"SOULTZ SOUS FORETS";"Toutes colles interdites";Vert;;;;"ROYER JEAN-LUC";+330611324377;"ROYER JEAN-LUC";+330611324377;;;;;5667095;5667028
@@ -215,13 +215,13 @@ class CSVToGamesTest {
     void fileToGamesWithCP() {
         String csvFileWithBadCP = """
             semaine;"num poule";competition;poule;J;le;horaire;"club rec";"club vis";"club hote";"arb1 designe";"arb2 designe";observateur;delegue;"code renc";"nom salle";"adresse salle";CP;Ville;colle;"Coul. Rec";"Coul. Gard. Rec";"Coul. Vis";"Coul. Gard. Vis";"Ent. Rec";"Tel Ent. Rec";"Corresp. Rec";"Tel Corresp. Rec";"Ent. Vis";"Tel Ent. Vis";"Corresp. Vis";"Tel Corresp. Vis";"Num rec";"Num vis"
-            2023-42;M56671000G;"67-21 coupe d'encouragement credit mutuel masc";"1ER TOUR CE CCM MASC";a;22/10/2022;19:30:00;"SOULTZ KUTZENHAUSEN SM2";"HOENHEIM SM2";"SOULTZ KUTZENHAUSEN";;;" ";" ";SAEJPJW;"GYMNASE DU SIVU";" rue du gymnase";a;"SOULTZ SOUS FORETS";"Toutes colles interdites";Vert;;;;"ROYER JEAN-LUC";+330611324377;"ROYER JEAN-LUC";+330611324377;;;;;5667095;5667028
+            2023-42;M56671000G;"67-21 coupe d'encouragement credit mutuel masc";"1ER TOUR CE CCM MASC";1;22/10/2022;19:30:00;"SOULTZ KUTZENHAUSEN SM2";"HOENHEIM SM2";"SOULTZ KUTZENHAUSEN";;;" ";" ";SAEJPJW;"GYMNASE DU SIVU";" rue du gymnase";a;"SOULTZ SOUS FORETS";"Toutes colles interdites";Vert;;;;"ROYER JEAN-LUC";+330611324377;"ROYER JEAN-LUC";+330611324377;;;;;5667095;5667028
                     """;
         InputStream inputStreamCsvFileWithBadCP = new ByteArrayInputStream(csvFileWithBadCP.getBytes());
         var exception = assertThrows(FileDataException.class, () -> fileToGames.fileToGames(inputStreamCsvFileWithBadCP));
         String expectedMessage = "csv column cp should be a integer";
         String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertEquals(actualMessage,expectedMessage);
     }
 
     @Test
@@ -251,10 +251,7 @@ class CSVToGamesTest {
         when(coachRepository.findCoachByKeys(any(String.class))).thenReturn(Optional.empty());
         when(halleRepository.findHallByKeys(any(String.class), any(String.class), any(Integer.class), any(String.class))).thenReturn(Optional.empty());
         when(teamRepository.findTeamByKeys(any(Club.class), any(Gender.class), any(Category.class), any(Integer.class))).thenReturn(Optional.empty());
-        when(gameRepository.save(any(Game.class))).thenAnswer(invocation -> {
-            Game game = invocation.getArgument(0);
-            return game;
-        });
+        when(gameRepository.save(any(Game.class))).thenAnswer(invocation -> invocation.<Game>getArgument(0));
         InputStream inputStreamCsvFilePoolNum = new ByteArrayInputStream(csvFilePoolNum.getBytes());
         List<Game> games = fileToGames.fileToGames(inputStreamCsvFilePoolNum);
         assertEquals(games.get(0).getHomeTeam().getGender(),games.get(0).getVisitingTeam().getGender());
@@ -269,7 +266,33 @@ class CSVToGamesTest {
 
     @Test
     void fileToGamesClubTest() throws FileException, FileDataException {
-        Map<String,String> dataSetTest;
+        Map<String,Map<String,String>> dataSetTest = Map.of(
+                "SOULTZ KUTZENHAUSEN SM2",Map.of(
+                        "club","SOULTZ KUTZENHAUSEN",
+                        "team","2",
+                        "category","senior"
+                ),
+                "Hoenheim SM1",Map.of(
+                        "club","HOENHEIM",
+                        "team","1",
+                        "category","senior"
+                ),
+                "trois mots a U18F",Map.of(
+                        "club","TROIS MOTS A",
+                        "team","1",
+                        "category","-18 ans"
+                ),
+                "hoenHeIm -11F3",Map.of(
+                        "club","HOENHEIM",
+                        "team","3",
+                        "category","-11 ans"
+                ),
+                "Hoenheim",Map.of(
+                        "club","HOENHEIM",
+                        "team","1",
+                        "category","senior"
+                )
+        );
         String csvFileClub = """
             semaine;"num poule";competition;poule;J;le;horaire;"club rec";"club vis";"club hote";"arb1 designe";"arb2 designe";observateur;delegue;"code renc";"nom salle";"adresse salle";CP;Ville;colle;"Coul. Rec";"Coul. Gard. Rec";"Coul. Vis";"Coul. Gard. Vis";"Ent. Rec";"Tel Ent. Rec";"Corresp. Rec";"Tel Corresp. Rec";"Ent. Vis";"Tel Ent. Vis";"Corresp. Vis";"Tel Corresp. Vis";"Num rec";"Num vis"
             2023-42;M56671000G;"67-21 coupe d'encouragement credit mutuel masc";"1ER TOUR CE CCM MASC";1;22/10/2022;19:30:00;"%s";"HOENHEIM SM2";"SOULTZ KUTZENHAUSEN";;;" ";" ";SAEJPJW;"GYMNASE DU SIVU";" rue du gymnase";67250;"SOULTZ SOUS FORETS";"Toutes colles interdites";Vert;;;;"ROYER JEAN-LUC";+330611324377;"ROYER JEAN-LUC";+330611324377;;;;;5667095;5667028
@@ -277,15 +300,18 @@ class CSVToGamesTest {
         when(coachRepository.findCoachByKeys(any(String.class))).thenReturn(Optional.empty());
         when(halleRepository.findHallByKeys(any(String.class), any(String.class), any(Integer.class), any(String.class))).thenReturn(Optional.empty());
         when(teamRepository.findTeamByKeys(any(Club.class), any(Gender.class), any(Category.class), any(Integer.class))).thenReturn(Optional.empty());
-        when(gameRepository.save(any(Game.class))).thenAnswer(invocation -> {
-            Game game = invocation.getArgument(0);
-            return game;
-        });
-        InputStream inputStreamCsvFileClub = new ByteArrayInputStream(csvFileClub.getBytes());
+        when(gameRepository.save(any(Game.class))).thenAnswer(invocation -> invocation.<Game>getArgument(0));
+        for (String cle : dataSetTest.keySet()) {
+            String formattedCsvFileClub = csvFileClub.formatted(cle);
+            InputStream inputStreamCsvFileClub = new ByteArrayInputStream(formattedCsvFileClub.getBytes());
+            List<Game> games = fileToGames.fileToGames(inputStreamCsvFileClub);
+            assertEquals(dataSetTest.get(cle).get("category"),games.get(0).getHomeTeam().getCategory().name());
+            assertEquals(dataSetTest.get(cle).get("club"),games.get(0).getHomeTeam().getClub().name());
+            assertEquals(dataSetTest.get(cle).get("team"),String.valueOf(games.get(0).getHomeTeam().getNumber()));
+        }
 
-        List<Game> games = fileToGames.fileToGames(inputStreamCsvFileClub);
-        assertEquals(games.get(0).getHomeTeam().getGender(),games.get(0).getVisitingTeam().getGender());
-        assertEquals(Gender.MALE,games.get(0).getHomeTeam().getGender());
+
+
     }
 
     @Test
@@ -326,10 +352,7 @@ class CSVToGamesTest {
         when(halleRepository.findHallByKeys(any(String.class), any(String.class), any(Integer.class), any(String.class))).thenReturn(Optional.empty());
         when(refereeRepository.findRefereeByKeys(any(String.class))).thenReturn(Optional.empty());
         when(teamRepository.findTeamByKeys(any(Club.class), any(Gender.class), any(Category.class), any(Integer.class))).thenReturn(Optional.empty());
-        when(gameRepository.save(any(Game.class))).thenAnswer(invocation -> {
-            Game game = invocation.getArgument(0);
-            return game;
-        });
+        when(gameRepository.save(any(Game.class))).thenAnswer(invocation -> invocation.<Game>getArgument(0));
 
         List<Game> games = fileToGames.fileToGames(inputStreamCsvFile);
         Game game = games.get(1);

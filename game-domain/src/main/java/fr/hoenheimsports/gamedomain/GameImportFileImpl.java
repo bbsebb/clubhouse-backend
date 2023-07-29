@@ -15,11 +15,9 @@ import java.util.List;
 public class GameImportFileImpl implements GameImportFile {
 
     final private  FileToGames fileToGames;
-    final private GameRepository gameRepository;
 
-    public GameImportFileImpl(FileToGames fileToGames, GameRepository gameRepository) {
+    public GameImportFileImpl(FileToGames fileToGames) {
         this.fileToGames = fileToGames;
-        this.gameRepository = gameRepository;
     }
 
     @Override
