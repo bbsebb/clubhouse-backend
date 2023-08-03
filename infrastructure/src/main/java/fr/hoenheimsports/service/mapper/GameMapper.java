@@ -1,6 +1,8 @@
 package fr.hoenheimsports.service.mapper;
 
+import fr.hoenheimsports.dto.game.importFromCsv.ImportCsvGameDTO;
 import fr.hoenheimsports.dto.game.view.GameDTO;
+import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.repository.entity.game.GameEntity;
 import org.mapstruct.Mapper;
@@ -16,6 +18,9 @@ public interface GameMapper {
 
 
     default Game gameDTOToGame(GameDTO gameDTO) {
+        throw new UnsupportedOperationException();
+    }
+    default Game importCsvGameDTOToGame(ImportCsvGameDTO importCsvGameDTO) throws FileDataException {
         throw new UnsupportedOperationException();
     }
 

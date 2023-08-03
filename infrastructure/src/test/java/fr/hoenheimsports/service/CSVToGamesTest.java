@@ -6,9 +6,10 @@ import fr.hoenheimsports.gamedomain.model.*;
 import fr.hoenheimsports.gamedomain.spi.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -24,21 +25,22 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 class CSVToGamesTest {
-    @Mock
+    @MockBean
     private CoachRepository coachRepository;
-    @Mock
+    @MockBean
     private HalleRepository halleRepository;
-    @Mock
+    @MockBean
     private RefereeRepository refereeRepository;
-    @Mock
+    @MockBean
     private TeamRepository teamRepository;
-    @Mock
+    @MockBean
     private GameRepository gameRepository;
-    @InjectMocks
+    @Autowired
     private FileToGames fileToGames;
+
     private static final String csvFileWithUnplayedGame = """
             semaine;"num poule";competition;poule;J;le;horaire;"club rec";"club vis";"club hote";"arb1 designe";"arb2 designe";observateur;delegue;"code renc";"nom salle";"adresse salle";CP;Ville;colle;"Coul. Rec";"Coul. Gard. Rec";"Coul. Vis";"Coul. Gard. Vis";"Ent. Rec";"Tel Ent. Rec";"Corresp. Rec";"Tel Corresp. Rec";"Ent. Vis";"Tel Ent. Vis";"Corresp. Vis";"Tel Corresp. Vis";"Num rec";"Num vis"
             2022-42;M56671000G;"67-21 coupe d'encouragement credit mutuel masc";"1ER TOUR CE CCM MASC";1;22/10/2022;19:30:00;"SOULTZ KUTZENHAUSEN SM2";"HOENHEIM SM2";"SOULTZ KUTZENHAUSEN";;;" ";" ";SAEJPJW;"GYMNASE DU SIVU";" rue du gymnase";67250;"SOULTZ SOUS FORETS";"Toutes colles interdites";Vert;;;;"ROYER JEAN-LUC";+330611324377;"ROYER JEAN-LUC";+330611324377;;;;;5667095;5667028
@@ -52,6 +54,8 @@ class CSVToGamesTest {
             2022-37;M56670200G;"67-03 3eme division territoriale masculins";"67-03 DTM PLE A";1;17/09/2022;19:00:00;"ALPHA HANDBALL SM2";"HOENHEIM SM3";37;20;37;20;0;0;0;0;"RAPPOLD JOEL";;"RAPPOLD JOEL";;"HEID STEPHANE";"WENDLING ANDRE";;;;;SAEEPWS;5667117;5667028;JOUE;;;http://fdmerv.ff-handball.org/S/A/E/E/SAEEPWS_nN9iw7Umdd0mN7Zf0WwABQ==.pdf;"17/09/2022 21:07"
             2022-37;F56670001G;"67-11 1ere division territoriale feminines";"67-01 DTF";1;16/09/2022;21:00:00;"HOENHEIM SF2";"REICHSTETT SF3";34;23;34;23;0;0;0;0;"PETIT GUILLAUME";;"PETIT GUILLAUME";;;"ELCHINGER THOMAS";;;;;SAEEQIY;5667028;5667045;JOUE;;;http://fdmerv.ff-handball.org/S/A/E/E/SAEEQIY_IJQY2iirvZue3g1vmAOOHA==.pdf;"16/09/2022 22:30"
                     """;
+
+
 
     @Test
     void fileToGamesWithHeaderNoPlayed() throws FileException, FileDataException {

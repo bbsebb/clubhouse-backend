@@ -4,7 +4,9 @@ import fr.hoenheimsports.gamedomain.exception.FileDataException;
 
 import java.util.List;
 
-public class ImportCSVGameUnplayedDTO {
+public class ImportCsvGameDTO {
+
+
     private String numPoule;
     private String competition;
     private String poule;
@@ -64,7 +66,7 @@ public class ImportCSVGameUnplayedDTO {
 
        */
 
-    public ImportCSVGameUnplayedDTO(List<String> headers, List<String> csvLine) throws FileDataException {
+    public ImportCsvGameDTO(List<String> headers, List<String> csvLine) throws FileDataException {
         if (headers.size() != csvLine.size()) {
             throw new FileDataException("csv file data hasn't the required format");
         }
@@ -321,6 +323,10 @@ public class ImportCSVGameUnplayedDTO {
     public String getSemaine() {
         return semaine;
     }
+
+
+    public void setFdme(String fdme) {
+        this.fdme = fdme;
+    }
+
 }
-
-

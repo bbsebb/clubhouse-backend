@@ -16,10 +16,10 @@ import java.util.List;
 
 @Service
 public class GameServiceApplication {
+
     private final GameImportFile gameImportFile;
     private final GameDisplay gameDisplay;
     private final GameMapper gameMapper;
-
 
 
     public GameServiceApplication(GameImportFile gameImportFile, GameDisplay gameDisplay, GameMapper gameMapper) {
@@ -27,6 +27,7 @@ public class GameServiceApplication {
         this.gameDisplay = gameDisplay;
         this.gameMapper = gameMapper;
     }
+
 
     public List<GameDTO> importFile(MultipartFile csvFile) throws FileException, FileDataException {
         InputStream inputStream = null;
