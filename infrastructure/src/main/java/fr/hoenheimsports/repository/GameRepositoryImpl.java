@@ -1,13 +1,14 @@
 package fr.hoenheimsports.repository;
 
-import fr.hoenheimsports.gamedomain.model.Club;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.GameRepository;
+import fr.hoenheimsports.gamedomain.spi.TeamRepository;
 import fr.hoenheimsports.repository.entity.*;
 import fr.hoenheimsports.repository.entity.game.*;
 import fr.hoenheimsports.service.mapper.GameMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,7 +49,20 @@ public class GameRepositoryImpl implements GameRepository {
         gameEntity.setCompetition(this.competitionEntityRepository.save(gameEntity.getCompetition()));
         gameEntity.setSeason(this.seasonEntityRepository.save(gameEntity.getSeason()));
         gameEntity.setHalle(this.halleEntityRepository.save(gameEntity.getHalle()));
+
+        Set<HalleEntity> halleEntitiesHomeTeam = this.clubEntityRepository.findById( gameEntity.getHomeTeam().getClub().getCode())
+                .map(clubEntity -> new HashSet<>(clubEntity.getHalles()))
+                .orElse(new HashSet<>());
+        halleEntitiesHomeTeam.add(gameEntity.getHalle());
+        gameEntity.getHomeTeam().getClub().getHalles().addAll(halleEntitiesHomeTeam);
+
         gameEntity.setHomeTeam(this.saveTeam(gameEntity.getHomeTeam()));
+
+        Set<HalleEntity> halleEntitiesVisitingTeam = this.clubEntityRepository.findById( gameEntity.getVisitingTeam().getClub().getCode())
+                .map(clubEntity -> new HashSet<>(clubEntity.getHalles()))
+                .orElse(new HashSet<>());
+        gameEntity.getVisitingTeam().getClub().getHalles().addAll(halleEntitiesVisitingTeam);
+
         gameEntity.setVisitingTeam(this.saveTeam(gameEntity.getVisitingTeam()));
         gameEntity.setReferees(this.saveReferees(gameEntity.getReferees()));
         gameEntity = this.gameEntityRepository.save(gameEntity);
@@ -84,9 +98,15 @@ public class GameRepositoryImpl implements GameRepository {
 
     private TeamEntity saveTeam(TeamEntity teamEntity) {
         teamEntity.setCategory(this.categoryEntityRepository.save(teamEntity.getCategory()));
-        this.clubEntityRepository.findById(teamEntity.getClub().getCode()).ifPresent(club -> teamEntity.getClub().getHalles().addAll(club.getHalles()));
         teamEntity.setClub(this.clubEntityRepository.save(teamEntity.getClub()));
         teamEntity.setCoach(this.coachEntityRepository.save(teamEntity.getCoach()));
+        this.teamEntityRepository.findByClubAndGenderAndCategoryAndNumber(
+                teamEntity.getClub(),
+                teamEntity.getGender(),
+                teamEntity.getCategory(),
+                teamEntity.getNumber()).ifPresent(
+                        previousTeamEntity -> teamEntity.setId(previousTeamEntity.getId())
+        );
         return this.teamEntityRepository.save(teamEntity);
     }
 

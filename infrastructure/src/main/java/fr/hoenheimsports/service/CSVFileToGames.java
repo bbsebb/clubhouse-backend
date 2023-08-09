@@ -12,6 +12,7 @@ import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.FileToGames;
 import fr.hoenheimsports.gamedomain.spi.GameRepository;
 import fr.hoenheimsports.service.mapper.GameMapper;
+import jakarta.transaction.Transactional;
 import org.apache.commons.io.input.BOMInputStream;
 import org.springframework.stereotype.Service;
 
@@ -108,6 +109,7 @@ public class CSVFileToGames implements FileToGames {
         this.gameRepository = gameRepository;
         this.gameMapper = gameMapper;
     }
+    @Transactional
     @Override
     public List<Game> fileToGames(InputStream fileStream) throws FileDataException, FileException {
         List<ImportCsvGameDTO> importCSVGameDTOS = this.fileToImportCSVGameDTO(fileStream);
@@ -116,14 +118,15 @@ public class CSVFileToGames implements FileToGames {
             Game game =  this.gameMapper.importCsvGameDTOToGame(csvGameDTO);
 
             Optional<Game> previousGame = this.gameRepository.findById(game.getCode());
-            if(!game.isPlayed() && previousGame.isPresent()) {
-                game = this.mergeUnplayedGameWithExistingGame(game,previousGame.get());
-            }
-            if(game.isPlayed() && previousGame.isPresent()) {
-                game = this.mergePlayedGameWithExistingGame(game,previousGame.get());
+            if(previousGame.isPresent()) {
+                if(game.isPlayed()) {
+                    game = this.mergePlayedGameWithExistingGame(game,previousGame.get());
+                } else {
+                    game = this.mergeUnplayedGameWithExistingGame(game,previousGame.get());
+                }
             }
 
-            games.add(game);
+            games.add(this.gameRepository.save(game));
         }
         return games;
     }
@@ -190,8 +193,6 @@ public class CSVFileToGames implements FileToGames {
         playedGame.getHomeTeam().setCoach(existingGame.getHomeTeam().getCoach());
         playedGame.getVisitingTeam().setTeamsColor(existingGame.getVisitingTeam().getTeamsColor());
         playedGame.getVisitingTeam().setCoach(existingGame.getVisitingTeam().getCoach());
-        playedGame.getHomeTeam().getClub().halles().clear();
-        playedGame.getHomeTeam().getClub().halles().add(existingGame.getHalle());
         return GameBuilder.builder()
                 .withCode(playedGame.getCode())
                 .withDate(playedGame.getDate())

@@ -5,6 +5,7 @@ import fr.hoenheimsports.gamedomain.api.GameDisplay;
 import fr.hoenheimsports.gamedomain.api.GameImportFile;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
+import fr.hoenheimsports.gamedomain.spi.GameRepository;
 import fr.hoenheimsports.service.mapper.GameMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,10 +23,12 @@ public class GameServiceApplication {
     private final GameMapper gameMapper;
 
 
+
     public GameServiceApplication(GameImportFile gameImportFile, GameDisplay gameDisplay, GameMapper gameMapper) {
         this.gameImportFile = gameImportFile;
         this.gameDisplay = gameDisplay;
         this.gameMapper = gameMapper;
+
     }
 
 
@@ -36,7 +39,9 @@ public class GameServiceApplication {
         } catch (IOException ioe) {
             throw new FileException();
         }
-        return this.gameImportFile.importFileGame(inputStream).stream().map(this.gameMapper::gameToGameDTO).toList();
+        return this.gameImportFile.importFileGame(inputStream).stream()
+                .map(this.gameMapper::gameToGameDTO)
+                .toList();
     }
 
     public GameDTO createGame(GameDTO gameDTO) {

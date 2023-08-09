@@ -25,7 +25,6 @@ public class TeamController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TeamDTO> displayTeam(@PathVariable String id) {
-        System.out.println("team" + id + " demandé");
         return ResponseEntity.ok(this.teamServiceApplication.displayTeam(id));
     }
 
@@ -35,7 +34,6 @@ public class TeamController {
             @RequestParam(required = false) String gender,
             @RequestParam(required = false) String category
             ) throws MissingServletRequestParameterException {
-        System.out.println("Teams demandé");
         List<TeamDTO> teams;
         if((gender != null) ^ (category != null)) {
             throw new MissingServletRequestParameterException("gender",GenderDTO.class.getTypeName());
