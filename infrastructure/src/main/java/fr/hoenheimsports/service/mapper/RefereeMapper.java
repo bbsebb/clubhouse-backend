@@ -1,7 +1,7 @@
 package fr.hoenheimsports.service.mapper;
 
 import fr.hoenheimsports.gamedomain.model.Referee;
-import fr.hoenheimsports.repository.entity.game.RefereeEntity;
+import fr.hoenheimsports.repository.game.entity.game.RefereeEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

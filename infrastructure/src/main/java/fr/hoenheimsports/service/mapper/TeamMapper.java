@@ -2,7 +2,7 @@ package fr.hoenheimsports.service.mapper;
 
 import fr.hoenheimsports.dto.game.view.TeamDTO;
 import fr.hoenheimsports.gamedomain.model.Team;
-import fr.hoenheimsports.repository.entity.game.TeamEntity;
+import fr.hoenheimsports.repository.game.entity.game.TeamEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

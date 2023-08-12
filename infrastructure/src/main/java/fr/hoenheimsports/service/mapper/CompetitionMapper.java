@@ -1,7 +1,7 @@
 package fr.hoenheimsports.service.mapper;
 
 import fr.hoenheimsports.gamedomain.model.Competition;
-import fr.hoenheimsports.repository.entity.game.CompetitionEntity;
+import fr.hoenheimsports.repository.game.entity.game.CompetitionEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

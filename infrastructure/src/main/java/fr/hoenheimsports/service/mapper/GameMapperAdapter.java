@@ -9,7 +9,7 @@ import fr.hoenheimsports.gamedomain.spi.CoachRepository;
 import fr.hoenheimsports.gamedomain.spi.HalleRepository;
 import fr.hoenheimsports.gamedomain.spi.RefereeRepository;
 import fr.hoenheimsports.gamedomain.spi.TeamRepository;
-import fr.hoenheimsports.repository.entity.game.GameEntity;
+import fr.hoenheimsports.repository.game.entity.game.GameEntity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;

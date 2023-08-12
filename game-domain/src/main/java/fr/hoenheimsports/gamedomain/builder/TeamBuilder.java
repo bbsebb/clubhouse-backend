@@ -96,6 +96,18 @@ public class TeamBuilder {
         if (this.id == null) {
             this.id = UUID.randomUUID();
         }
+        if(category == null) {
+            this.category = Category.UNKNOWN;
+        }
+        if(gender == null) {
+            this.gender = Gender.UNKNOWN;
+        }
+        if(teamsColor == null) {
+            this.teamsColor = TeamsColor.UNKNOWN;
+        }
+        if(coach == null) {
+            this.coach = Coach.UNKNOWN;
+        }
         return new Team(id, category, gender, number, club, teamsColor, coach);
     }
 }

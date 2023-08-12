@@ -1,9 +1,12 @@
 package fr.hoenheimsports.controller;
 
+import fr.hoenheimsports.dto.game.create.GameCreateDTO;
 import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
+import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.service.GameServiceApplication;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/games")
@@ -23,9 +27,10 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    @GetMapping("/create")
-    public ResponseEntity<GameDTO> createGame(@RequestBody GameDTO gameDTO) {
-        return ResponseEntity.ok(this.gameService.createGame(gameDTO));
+    @PostMapping("/create")
+    public ResponseEntity<Map<String,String>> createGame(@RequestBody GameCreateDTO gameCreateDTO) {
+        GameDTO game = this.gameService.createGame(gameCreateDTO);
+        return ResponseEntity.ok(Map.of("code",game.code()));
     }
 
     @GetMapping("")
@@ -39,9 +44,13 @@ public class GameController {
     }
 
     @PostMapping("/import")
-    public ResponseEntity<List<GameDTO>> importFile(@RequestParam("csv") MultipartFile csvFile)  {
+    @Transactional
+    public ResponseEntity<Void> importFile(@RequestParam("files") MultipartFile[] csvFiles)  {
         try {
-            return ResponseEntity.ok(this.gameService.importFile(csvFile));
+            for(MultipartFile csvFile : csvFiles) {
+                this.gameService.importFile(csvFile);
+            }
+            return ResponseEntity.ok().build();
         } catch (FileException e) {
             LOGGER.warn(e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -49,5 +58,6 @@ public class GameController {
             LOGGER.warn(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
+
     }
 }

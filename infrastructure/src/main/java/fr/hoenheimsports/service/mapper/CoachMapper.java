@@ -1,7 +1,7 @@
 package fr.hoenheimsports.service.mapper;
 
 import fr.hoenheimsports.gamedomain.model.Coach;
-import fr.hoenheimsports.repository.entity.game.CoachEntity;
+import fr.hoenheimsports.repository.game.entity.game.CoachEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

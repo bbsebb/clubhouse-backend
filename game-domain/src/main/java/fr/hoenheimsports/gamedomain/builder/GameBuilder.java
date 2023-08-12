@@ -164,6 +164,36 @@ public class GameBuilder {
         if(code == null) {
             code = UUID.randomUUID().toString();
         }
+        if(competition == null) {
+            this.competition = Competition.UNKNOWN;
+        }
+        if(season == null) {
+            this.season = Season.SEASON_2022_2023;
+        }
+        if(day == null) {
+            this.day = Day.SINGLE_DAY_GAME;
+        }
+        if(week == null) {
+            this.week = Week.NOW;
+        }
+        if(halle == null) {
+            this.halle = Halle.UNKNOWN;
+        }
+        if(referees == null) {
+            this.referees = Referees.UNKNOWN;
+        }
+        if(homeTeam == null) {
+            this.homeTeam = Team.UNKNOWN;
+        }
+        if(visitingTeam == null) {
+            this.visitingTeam = Team.UNKNOWN;
+        }
+        if(score == null) {
+            this.score = Score.DEFAULT;
+        }
+        if(fdme == null) {
+            this.fdme = FDME.UNKNOWN;
+        }
         return new Game(code, competition, season, day, week, halle, referees, homeTeam, visitingTeam, score, fdme, date,time);
     }
 }

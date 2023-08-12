@@ -4,7 +4,7 @@ import fr.hoenheimsports.dto.game.importFromCsv.ImportCsvGameDTO;
 import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.model.Game;
-import fr.hoenheimsports.repository.entity.game.GameEntity;
+import fr.hoenheimsports.repository.game.entity.game.GameEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
