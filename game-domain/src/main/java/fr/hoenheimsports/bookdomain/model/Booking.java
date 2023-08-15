@@ -7,5 +7,5 @@ public class Booking {
     private Hall hall;
     private HallUser user;
     private Timeslot timeslot;
-    private BookingState state;
+    private BookingState state = BookingState.PENDING;
 }
