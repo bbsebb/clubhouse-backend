@@ -7,6 +7,10 @@ import fr.hoenheimsports.userdomain.spi.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Repository
 public class UserRepositoryImpl implements UserRepository {
     private final UserEntityRepository userEntityRepository;
@@ -25,5 +29,20 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
         return this.userEntityRepository.findByEmail(email).map(this.userMapper::userEntityToUser);
+    }
+
+    @Override
+    public User save(User user) {
+        return this.userMapper.userEntityToUser(this.userEntityRepository.save(this.userMapper.userToUserEntity(user)));
+    }
+
+    @Override
+    public Optional<User> findById(UUID userId) {
+        return this.userEntityRepository.findById(userId).map(userMapper::userEntityToUser);
+    }
+
+    @Override
+    public Set<User> findAll() {
+        return this.userEntityRepository.findAll().stream().map(userMapper::userEntityToUser).collect(Collectors.toSet());
     }
 }

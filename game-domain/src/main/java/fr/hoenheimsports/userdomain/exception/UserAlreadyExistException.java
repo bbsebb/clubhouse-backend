@@ -1,6 +1,6 @@
 package fr.hoenheimsports.userdomain.exception;
 
-public class UserAlreadyExistException extends  Exception{
+public class UserAlreadyExistException extends  RuntimeException{
     public UserAlreadyExistException() {
         super();
     }

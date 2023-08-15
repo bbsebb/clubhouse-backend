@@ -1,6 +1,7 @@
 package fr.hoenheimsports.userdomain.model;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class User {
@@ -9,10 +10,10 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private List<Role> roles;
+    private Set<Role> roles;
 
 
-    public User(UUID id, String username, String password, String email, List<Role> roles) {
+    public User(UUID id, String username, String password, String email, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -48,11 +49,11 @@ public class User {
         this.email = email;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 }

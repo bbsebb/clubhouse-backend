@@ -1,6 +1,7 @@
 package fr.hoenheimsports.service;
 
 import fr.hoenheimsports.userdomain.api.AccountService;
+import fr.hoenheimsports.userdomain.exception.UserNotFoundException;
 import fr.hoenheimsports.userdomain.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,10 +24,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optUser = this.accountService.loadByUsername(username);
+        User user;
+        try {
+            user = this.accountService.loadByLogin(username);
+        } catch (UserNotFoundException e) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
         Collection<GrantedAuthority> authorities= List.of(new SimpleGrantedAuthority("test"));
-        return optUser
-                .map(user ->  new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities))
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return  new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
     }
 }

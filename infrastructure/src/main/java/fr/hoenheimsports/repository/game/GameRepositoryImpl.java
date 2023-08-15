@@ -72,7 +72,7 @@ public class GameRepositoryImpl implements GameRepository {
         RefereeEntity designatedReferee1 = this.refereeEntityRepository.save(refereesEntity.getDesignatedReferee1());
         RefereeEntity designatedReferee2 = this.refereeEntityRepository.save(refereesEntity.getDesignatedReferee2());
 
-        // The couple name/uuid must be unique and name isn't a key
+        // The couple name/id must be unique and name isn't a key
         if (designatedReferee1.getName().equals(refereesEntity.getOfficiatingReferee1().getName())) {
             refereesEntity.setOfficiatingReferee1(designatedReferee1);
         } else if (designatedReferee2.getName().equals(refereesEntity.getOfficiatingReferee1().getName())) {

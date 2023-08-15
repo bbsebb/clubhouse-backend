@@ -1,9 +1,8 @@
 package fr.hoenheimsports.repository.user.entity;
 
-import fr.hoenheimsports.userdomain.model.Role;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 @Entity
 public class UserEntity {
@@ -16,8 +15,8 @@ public class UserEntity {
     private String password;
     @Column(unique = true)
     private String email;
-    @ManyToMany
-    private List<RoleEntity> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<RoleEntity> roles;
 
 
 
@@ -53,11 +52,11 @@ public class UserEntity {
         this.email = email;
     }
 
-    public List<RoleEntity> getRoles() {
+    public Set<RoleEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RoleEntity> roles) {
+    public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
     }
 }
