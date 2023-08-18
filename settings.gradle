@@ -1,4 +1,5 @@
 rootProject.name = 'clubhouse-backend'
 include 'game-domain'
 include 'infrastructure'
+include 'book-domain'
 

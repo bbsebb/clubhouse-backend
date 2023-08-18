@@ -8,7 +8,8 @@ group 'fr.hoenheimsports'
 version 'unspecified'
 
 java {
-    sourceCompatibility = '17'
+    sourceCompatibility = '20'
+    targetCompatibility = '20'
 }
 
 configurations {
@@ -23,6 +24,7 @@ repositories {
 
 dependencies {
     implementation project(':game-domain')
+    implementation project(':book-domain')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-web'
