@@ -4,10 +4,7 @@ import fr.hoenheimsports.bookdomain.model.Address;
 import fr.hoenheimsports.bookdomain.model.Hall;
 import fr.hoenheimsports.bookdomain.spi.HallRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class HallStub implements HallRepository {
     private final Map<UUID,Hall> halls;
@@ -20,6 +17,11 @@ public class HallStub implements HallRepository {
     @Override
     public List<Hall> findAll() {
         return null;
+    }
+
+    @Override
+    public Optional<Hall> findById(UUID id) {
+        return Optional.ofNullable(this.halls.get(id));
     }
 
     private void populate() {

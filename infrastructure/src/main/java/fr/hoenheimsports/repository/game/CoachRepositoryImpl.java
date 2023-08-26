@@ -4,7 +4,7 @@ import fr.hoenheimsports.gamedomain.model.Coach;
 import fr.hoenheimsports.gamedomain.spi.CoachRepository;
 import fr.hoenheimsports.repository.game.entity.CoachEntityRepository;
 import fr.hoenheimsports.repository.game.entity.game.CoachEntity;
-import fr.hoenheimsports.service.mapper.CoachMapper;
+import fr.hoenheimsports.service.game.mapper.CoachMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

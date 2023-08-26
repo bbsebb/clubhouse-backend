@@ -1,7 +1,7 @@
 package fr.hoenheimsports.gamedomain.builder;
 
 import fr.hoenheimsports.gamedomain.model.Club;
-import fr.hoenheimsports.gamedomain.model.Halle;
+import fr.hoenheimsports.gamedomain.model.Hall;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,11 +21,11 @@ class ClubBuilderTest {
         Club club = clubBuilder
                 .withCode(expectedCode)
                 .withName(expectedName)
-                .addHalle(Halle.UNKNOWN)
+                .addHalle(Hall.UNKNOWN)
                 .build();
 
         assertEquals(expectedCode, club.code());
         assertEquals(expectedName, club.name());
-        assertTrue(club.halles().contains(Halle.UNKNOWN));
+        assertTrue(club.halles().contains(Hall.UNKNOWN));
     }
 }

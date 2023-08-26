@@ -3,7 +3,7 @@ package fr.hoenheimsports.repository.game;
 import fr.hoenheimsports.gamedomain.model.Season;
 import fr.hoenheimsports.gamedomain.spi.SeasonRepository;
 import fr.hoenheimsports.repository.game.entity.SeasonEntityRepository;
-import fr.hoenheimsports.service.mapper.SeasonMapper;
+import fr.hoenheimsports.service.game.mapper.SeasonMapper;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;

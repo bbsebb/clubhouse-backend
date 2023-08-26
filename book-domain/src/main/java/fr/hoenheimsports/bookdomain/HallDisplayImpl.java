@@ -6,6 +6,8 @@ import fr.hoenheimsports.bookdomain.model.Hall;
 import fr.hoenheimsports.bookdomain.spi.HallRepository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @DomainService
 public class HallDisplayImpl implements HallDisplay {
@@ -19,4 +21,11 @@ public class HallDisplayImpl implements HallDisplay {
     public List<Hall> findAll() {
         return this.halleRepository.findAll();
     }
+
+    @Override
+    public Optional<Hall> findById(UUID id) {
+        return this.halleRepository.findById(id);
+    }
+
+
 }

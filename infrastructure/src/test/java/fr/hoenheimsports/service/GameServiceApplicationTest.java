@@ -6,7 +6,8 @@ import fr.hoenheimsports.gamedomain.builder.GameBuilder;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
 import fr.hoenheimsports.gamedomain.model.*;
-import fr.hoenheimsports.service.mapper.GameMapper;
+import fr.hoenheimsports.service.game.GameServiceApplication;
+import fr.hoenheimsports.service.game.mapper.GameMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -60,7 +61,7 @@ class GameServiceApplicationTest {
                 .withWeek(Week.NOW)
                 .withSeason(Season.SEASON_2022_2023)
                 .withFDME(FDME.UNKNOWN)
-                .withHalle(Halle.UNKNOWN)
+                .withHalle(Hall.UNKNOWN)
                 .withHomeTeam(Team.UNKNOWN)
                 .withVisitingTeam(Team.UNKNOWN)
                 .withReferees(Referees.UNKNOWN)
@@ -73,7 +74,7 @@ class GameServiceApplicationTest {
                 .withWeek(Week.NOW)
                 .withSeason(Season.SEASON_2022_2023)
                 .withFDME(FDME.UNKNOWN)
-                .withHalle(Halle.UNKNOWN)
+                .withHalle(Hall.UNKNOWN)
                 .withHomeTeam(Team.UNKNOWN)
                 .withVisitingTeam(Team.UNKNOWN)
                 .withReferees(Referees.UNKNOWN)
@@ -86,7 +87,7 @@ class GameServiceApplicationTest {
                 .withWeek(Week.NOW)
                 .withSeason(Season.SEASON_2022_2023)
                 .withFDME(FDME.UNKNOWN)
-                .withHalle(Halle.UNKNOWN)
+                .withHalle(Hall.UNKNOWN)
                 .withHomeTeam(Team.UNKNOWN)
                 .withVisitingTeam(Team.UNKNOWN)
                 .withReferees(Referees.UNKNOWN)

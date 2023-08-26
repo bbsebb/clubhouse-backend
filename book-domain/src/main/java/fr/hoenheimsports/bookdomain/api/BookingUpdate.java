@@ -2,12 +2,14 @@ package fr.hoenheimsports.bookdomain.api;
 
 import fr.hoenheimsports.bookdomain.model.Booking;
 
+import java.util.UUID;
+
 public interface BookingUpdate {
-    Booking accept(Booking booking);
+    Booking accept(UUID bookingID);
 
-    Booking refuse(Booking booking);
+    Booking refuse(UUID bookingID);
 
-    Booking cancel(Booking booking);
+    Booking cancel(UUID bookingID);
 
-    Booking valid(Booking booking);
+    Booking valid(UUID bookingID);
 }

@@ -5,10 +5,10 @@ import fr.hoenheimsports.gamedomain.spi.TeamRepository;
 import fr.hoenheimsports.repository.game.entity.TeamEntityRepository;
 import fr.hoenheimsports.repository.game.entity.game.GenderEntity;
 import fr.hoenheimsports.repository.game.entity.game.TeamEntity;
-import fr.hoenheimsports.service.mapper.CategoryMapper;
-import fr.hoenheimsports.service.mapper.ClubMapper;
-import fr.hoenheimsports.service.mapper.GenderMapper;
-import fr.hoenheimsports.service.mapper.TeamMapper;
+import fr.hoenheimsports.service.game.mapper.CategoryMapper;
+import fr.hoenheimsports.service.game.mapper.ClubMapper;
+import fr.hoenheimsports.service.game.mapper.GenderMapper;
+import fr.hoenheimsports.service.game.mapper.TeamMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

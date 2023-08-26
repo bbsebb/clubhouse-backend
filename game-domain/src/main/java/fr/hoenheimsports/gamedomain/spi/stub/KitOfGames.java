@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 @Stub
 public class KitOfGames {
@@ -39,7 +38,7 @@ public class KitOfGames {
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode("Code club 1")
                                 .withName("Club 1")
-                                .addHalle(Halle.UNKNOWN))
+                                .addHalle(Hall.UNKNOWN))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withAge(10)
                                 .withIsMaxAge(true))
@@ -60,7 +59,7 @@ public class KitOfGames {
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode("Code club 2")
                                 .withName("Club 2")
-                                .addHalle(Halle.UNKNOWN))
+                                .addHalle(Hall.UNKNOWN))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withAge(10)
                                 .withIsMaxAge(true))
@@ -119,7 +118,7 @@ public class KitOfGames {
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode("Code club 3")
                                 .withName("Club 3")
-                                .addHalle(Halle.UNKNOWN))
+                                .addHalle(Hall.UNKNOWN))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withAge(10)
                                 .withIsMaxAge(true))
@@ -140,7 +139,7 @@ public class KitOfGames {
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode("Code club 4")
                                 .withName("Club 4")
-                                .addHalle(Halle.UNKNOWN))
+                                .addHalle(Hall.UNKNOWN))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withAge(10)
                                 .withIsMaxAge(true))
@@ -199,7 +198,7 @@ public class KitOfGames {
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode("Code club 5")
                                 .withName("Club 5")
-                                .addHalle(Halle.UNKNOWN))
+                                .addHalle(Hall.UNKNOWN))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withAge(10)
                                 .withIsMaxAge(true))
@@ -220,7 +219,7 @@ public class KitOfGames {
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode("Code club 6")
                                 .withName("Club 6")
-                                .addHalle(Halle.UNKNOWN))
+                                .addHalle(Hall.UNKNOWN))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withAge(10)
                                 .withIsMaxAge(true))
@@ -280,7 +279,7 @@ public class KitOfGames {
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode("Code club 7")
                                 .withName("Club 7")
-                                .addHalle(Halle.UNKNOWN))
+                                .addHalle(Hall.UNKNOWN))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withAge(10)
                                 .withIsMaxAge(true))
@@ -301,7 +300,7 @@ public class KitOfGames {
                         .withClub(clubBuilder -> clubBuilder
                                 .withCode("Code club 8")
                                 .withName("Club 8")
-                                .addHalle(Halle.UNKNOWN))
+                                .addHalle(Hall.UNKNOWN))
                         .withCategory(categoryBuilder -> categoryBuilder
                                 .withAge(10)
                                 .withIsMaxAge(true))

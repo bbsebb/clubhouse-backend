@@ -30,6 +30,6 @@ public class BookingDisplayImpl implements BookingDisplay {
 
     @Override
     public Optional<Booking> findById(UUID id) {
-        return this.bookingRepository.find(id);
+        return this.bookingRepository.findById(id);
     }
 }

@@ -28,27 +28,26 @@ public class BookingStub implements BookingRepository {
 
     @Override
     public List<Booking> findByOverlappingTimeslot(Timeslot timeslot) {
-        Set<Timeslot> timeslots = this.bookings.values().stream().map(Booking::timeslot).collect(Collectors.toSet());
+        Set<Timeslot> timeslots = this.bookings.values().stream().map(Booking::getTimeslot).collect(Collectors.toSet());
         Set<Timeslot> overlappingTimeslots = timeslots.stream()
-                .filter(t1 ->  t1.equals(timeslot) || t1.overlaps(timeslot))
+                .filter(t1 ->  t1.equals(timeslot) || t1.isOverlaps(timeslot))
                 .collect(Collectors.toSet());
-        return this.bookings.values().stream().filter(booking -> overlappingTimeslots.contains(booking.timeslot())).toList();
+        return this.bookings.values().stream().filter(booking -> overlappingTimeslots.contains(booking.getTimeslot())).toList();
     }
 
     @Override
-    public Optional<Booking> find(UUID id) {
-
+    public Optional<Booking> findById(UUID id) {
         return Optional.ofNullable(this.bookings.get(id));
     }
 
     @Override
     public Booking save(Booking booking) {
-         this.bookings.put(booking.id(),booking);
+         this.bookings.put(booking.getId(),booking);
          return booking;
     }
 
     public void clear() {
-        this.bookings.clear();;
+        this.bookings.clear();
     }
 
 

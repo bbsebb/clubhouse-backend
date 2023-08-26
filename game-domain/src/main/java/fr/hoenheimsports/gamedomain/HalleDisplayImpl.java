@@ -1,27 +1,27 @@
 package fr.hoenheimsports.gamedomain;
 
 import fr.hoenheimsports.gamedomain.annotation.DomainService;
-import fr.hoenheimsports.gamedomain.api.HalleDisplay;
-import fr.hoenheimsports.gamedomain.model.Halle;
-import fr.hoenheimsports.gamedomain.spi.HalleRepository;
+import fr.hoenheimsports.gamedomain.api.HallDisplay;
+import fr.hoenheimsports.gamedomain.model.Hall;
+import fr.hoenheimsports.gamedomain.spi.HallRepository;
 
 import java.util.Set;
 
 @DomainService
-public class HalleDisplayImpl implements HalleDisplay {
-    private final HalleRepository halleRepository;
+public class HalleDisplayImpl implements HallDisplay {
+    private final HallRepository halleRepository;
 
-    public HalleDisplayImpl(HalleRepository halleRepository) {
+    public HalleDisplayImpl(HallRepository halleRepository) {
         this.halleRepository = halleRepository;
     }
 
     @Override
-    public Set<Halle> findAll() {
-        return this.halleRepository.findAllHalles();
+    public Set<Hall> findAll() {
+        return this.halleRepository.findAllHalls();
     }
 
     @Override
-    public Set<Halle> findByClubCode(String clubCode) {
+    public Set<Hall> findByClubCode(String clubCode) {
         return this.halleRepository.findByClubCode(clubCode);
     }
 }

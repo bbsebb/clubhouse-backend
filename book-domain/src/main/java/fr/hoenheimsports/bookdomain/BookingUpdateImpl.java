@@ -6,63 +6,42 @@ import fr.hoenheimsports.bookdomain.api.BookingUpdate;
 import fr.hoenheimsports.bookdomain.model.Booking;
 import fr.hoenheimsports.bookdomain.model.BookingState;
 import fr.hoenheimsports.bookdomain.spi.BookingRepository;
-import fr.hoenheimsports.bookdomain.spi.EmailProvider;
+
+import java.util.UUID;
+
 @DomainService
 public class BookingUpdateImpl implements BookingUpdate {
     private final BookingRepository bookingRepository;
-    private final EmailProvider emailService;
 
-
-    public BookingUpdateImpl(BookingRepository bookingRepository, EmailProvider emailService) {
+    public BookingUpdateImpl(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
-        this.emailService = emailService;
     }
 
     @Override
-    public Booking accept(Booking booking) {
-        this.emailService.sendEmail(booking.user().email(),booking);
-        return this.bookingRepository.save(new Booking(
-                booking.id(),
-                booking.hall(),
-                booking.user(),
-                booking.timeslot(),
-                BookingState.ACCEPTED
-        ));
+    public Booking accept(UUID bookingID) {
+        Booking booking = this.bookingRepository.findById(bookingID).orElseThrow();
+        booking.setState(BookingState.ACCEPTED);
+        return this.bookingRepository.save(booking);
     }
 
     @Override
-    public Booking refuse(Booking booking) {
-        this.emailService.sendEmail(booking.user().email(),booking);
-        return this.bookingRepository.save(new Booking(
-                booking.id(),
-                booking.hall(),
-                booking.user(),
-                booking.timeslot(),
-                BookingState.UNAUTHORIZED
-        ));
+    public Booking refuse(UUID bookingID) {
+        Booking booking = this.bookingRepository.findById(bookingID).orElseThrow();
+        booking.setState(BookingState.REFUSED);
+        return this.bookingRepository.save(booking);
     }
 
     @Override
-    public Booking cancel(Booking booking) {
-        this.emailService.sendEmail(booking.user().email(),booking);
-        return this.bookingRepository.save(new Booking(
-                booking.id(),
-                booking.hall(),
-                booking.user(),
-                booking.timeslot(),
-                BookingState.CANCELED
-        ));
+    public Booking cancel(UUID bookingID) {
+        Booking booking = this.bookingRepository.findById(bookingID).orElseThrow();
+        booking.setState(BookingState.CANCELED);
+        return this.bookingRepository.save(booking);
     }
 
     @Override
-    public Booking valid(Booking booking) {
-        this.emailService.sendEmail(booking.user().email(),booking);
-        return this.bookingRepository.save(new Booking(
-                booking.id(),
-                booking.hall(),
-                booking.user(),
-                booking.timeslot(),
-                BookingState.VALIDATED
-        ));
+    public Booking valid(UUID bookingID) {
+        Booking booking = this.bookingRepository.findById(bookingID).orElseThrow();
+        booking.setState(BookingState.VALIDATED);
+        return this.bookingRepository.save(booking);
     }
 }

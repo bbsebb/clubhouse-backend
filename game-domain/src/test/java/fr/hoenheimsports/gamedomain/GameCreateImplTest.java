@@ -27,7 +27,7 @@ class GameCreateImplTest {
                 .withCompetition(Competition.UNKNOWN)
                 .withDay(Day.SINGLE_DAY_GAME)
                 .withFDME(FDME.UNKNOWN)
-                .withHalle(Halle.UNKNOWN)
+                .withHalle(Hall.UNKNOWN)
                 .withHomeTeam(Team.UNKNOWN)
                 .withVisitingTeam(Team.UNKNOWN)
                 .withReferees(Referees.UNKNOWN)

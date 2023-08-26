@@ -1,7 +1,7 @@
 package fr.hoenheimsports.gamedomain.builder;
 
 import fr.hoenheimsports.gamedomain.model.Club;
-import fr.hoenheimsports.gamedomain.model.Halle;
+import fr.hoenheimsports.gamedomain.model.Hall;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +13,7 @@ public class ClubBuilder {
     private String code;
     private String name;
 
-    private Set<Halle> halles = new HashSet<>();
+    private Set<Hall> halles = new HashSet<>();
 
     public ClubBuilder withCode(String code) {
         this.code = code;
@@ -25,7 +25,7 @@ public class ClubBuilder {
         return this;
     }
 
-    public ClubBuilder addHalle(Halle halle) {
+    public ClubBuilder addHalle(Hall halle) {
         this.halles.add(halle);
         return this;
     }

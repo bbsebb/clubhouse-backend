@@ -11,10 +11,23 @@ public record Timeslot(LocalDateTime start,LocalDateTime end) {
             throw new IllegalArgumentException("'start' should start before 'end'");
         }
     }
-    public boolean overlaps(Timeslot other) {
-        return !(this.start.isAfter(other.end) ||
-                this.end.isBefore(other.start) ||
-                this.end.isEqual(other.start) ||
-                this.start.isEqual(other.end));
+    public boolean isOverlaps(Timeslot other) {
+        boolean entirelyBefore = other.end.isBefore(this.start) || other.end.isEqual(this.start);
+        boolean entirelyAfter = other.start.isAfter(this.end) || other.start.isEqual(this.end);
+        return !(entirelyBefore || entirelyAfter);
+    }
+
+    private boolean isFollows(Timeslot other) {
+        return this.end.isEqual(other.start) || this.start.equals(other.end);
+    }
+
+    public Timeslot mergeOverlappingTimeslot(Timeslot overlappingTimeslot) {
+        Timeslot mergedTimeslot = this;
+        if(this.isOverlaps(overlappingTimeslot) || this.isFollows(overlappingTimeslot)) {
+            var earliestStart = start.isBefore(overlappingTimeslot.start) ? start : overlappingTimeslot.start;
+            var latestEnd = end.isAfter(overlappingTimeslot.end) ? end : overlappingTimeslot.end;
+            mergedTimeslot = new Timeslot(earliestStart,latestEnd);
+        }
+        return mergedTimeslot;
     }
 }

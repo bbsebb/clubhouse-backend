@@ -16,7 +16,7 @@ public class GameBuilder {
     private Season season;
     private Week week;
     private Day day;
-    private Halle halle;
+    private Hall halle;
     private Referees referees;
     private Team homeTeam;
     private Team visitingTeam;
@@ -87,7 +87,7 @@ public class GameBuilder {
         return this;
     }
 
-    public GameBuilder withHalle(Halle halle) {
+    public GameBuilder withHalle(Hall halle) {
         this.halle = halle;
         return this;
     }
@@ -177,7 +177,7 @@ public class GameBuilder {
             this.week = Week.NOW;
         }
         if(halle == null) {
-            this.halle = Halle.UNKNOWN;
+            this.halle = Hall.UNKNOWN;
         }
         if(referees == null) {
             this.referees = Referees.UNKNOWN;

@@ -1,5 +1,4 @@
 package fr.hoenheimsports.gamedomain.model;
-import fr.hoenheimsports.gamedomain.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -47,7 +46,7 @@ class TeamTest {
         Category category = new Category("-18 ans", 18, true);
         Gender gender = Gender.MALE;
         int number = 1;
-        Club club = new Club("Club A", "ABC", Set.of(Halle.UNKNOWN));
+        Club club = new Club("Club A", "ABC", Set.of(Hall.UNKNOWN));
         TeamsColor teamsColor = new TeamsColor(
                 TeamColor.BLUE,
                 TeamColor.WHITE,
@@ -70,7 +69,7 @@ class TeamTest {
         Category category = new Category("-18 ans", 18, true);
         Gender gender = Gender.MALE;
         int number = 1;
-        Club club = new Club("Club A", "ABC", Set.of(Halle.UNKNOWN));
+        Club club = new Club("Club A", "ABC", Set.of(Hall.UNKNOWN));
         TeamsColor teamsColor = new TeamsColor(
                 TeamColor.BLUE,
                 TeamColor.WHITE,
@@ -91,7 +90,7 @@ class TeamTest {
         Category category = new Category("-18 ans", 18, true);
         Gender gender = Gender.MALE;
         int number = 1;
-        Club club = new Club("Club A", "ABC", Set.of(Halle.UNKNOWN));
+        Club club = new Club("Club A", "ABC", Set.of(Hall.UNKNOWN));
         TeamsColor teamsColor = new TeamsColor(
                 TeamColor.BLUE,
                 TeamColor.WHITE,

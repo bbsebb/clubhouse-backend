@@ -35,7 +35,7 @@ class RefereeBuilderTest {
                         .withWeek(Week.NOW)
                         .withSeason(Season.SEASON_2022_2023)
                         .withFDME(FDME.UNKNOWN)
-                        .withHalle(Halle.UNKNOWN)
+                        .withHalle(Hall.UNKNOWN)
                         .withHomeTeam(homeTeamBuilder -> homeTeamBuilder
                                 .withClub(Club.UNKNOWN)
                                 .withGender(Gender.UNKNOWN)

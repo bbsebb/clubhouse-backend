@@ -10,7 +10,7 @@ public class ClubEntity {
     private String code;
     private String name;
     @ManyToMany
-    private Set<HalleEntity> halles = new HashSet<>();
+    private Set<HallEntity> halles = new HashSet<>();
 
     public ClubEntity() {
     }
@@ -32,11 +32,11 @@ public class ClubEntity {
     public void setName(String name) {
         this.name = name;
     }
-    public Set<HalleEntity> getHalles() {
+    public Set<HallEntity> getHalles() {
         return halles;
     }
 
-    public void setHalles(Set<HalleEntity> halles) {
+    public void setHalles(Set<HallEntity> halles) {
         this.halles = halles;
     }
 

@@ -35,7 +35,7 @@ class TeamBuilderTest {
         expectedCategory = new Category("-18 ans",18,true);
         expectedGender = Gender.MALE;
         expectedNumber = 1;
-        expectedClub = new Club("Club A", "ABC", Set.of(Halle.UNKNOWN));
+        expectedClub = new Club("Club A", "ABC", Set.of(Hall.UNKNOWN));
         expectedTeamsColor = new TeamsColor(
                 TeamColor.BLUE,
                 TeamColor.WHITE,
@@ -48,7 +48,7 @@ class TeamBuilderTest {
         expectedCategoryInMemory = new Category("-18 ans",18, true);
         expectedGenderInMemory = Gender.MALE;
         expectedNumberInMemory = 1;
-        expectedClubInMemory = new Club("Code 1", "Club 1", Set.of(Halle.UNKNOWN));
+        expectedClubInMemory = new Club("Code 1", "Club 1", Set.of(Hall.UNKNOWN));
         expectedTeamsColorInMemory = new TeamsColor(
                 TeamColor.RED,
                 TeamColor.BLUE,
@@ -66,7 +66,7 @@ class TeamBuilderTest {
                         .withWeek(Week.NOW)
                         .withSeason(Season.SEASON_2022_2023)
                         .withFDME(FDME.UNKNOWN)
-                        .withHalle(Halle.UNKNOWN)
+                        .withHalle(Hall.UNKNOWN)
                         .withHomeTeam(homeTeamBuilder -> homeTeamBuilder
                                 .withId(expectedIdInMemory)
                                 .withClub(expectedClubInMemory)
@@ -100,7 +100,7 @@ class TeamBuilderTest {
                 .withClub(builder -> builder
                         .withName(expectedClub.name())
                         .withCode(expectedClub.code())
-                        .addHalle(Halle.UNKNOWN)
+                        .addHalle(Hall.UNKNOWN)
                 )
                 .withTeamsColor(builder -> builder
                         .withShirtColor1(colorBuilder -> colorBuilder.withFrenchName(expectedTeamsColor.shirtColor1().getFrenchName()))

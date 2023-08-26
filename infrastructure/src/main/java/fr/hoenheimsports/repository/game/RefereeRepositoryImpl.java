@@ -4,7 +4,7 @@ import fr.hoenheimsports.gamedomain.model.Referee;
 import fr.hoenheimsports.gamedomain.spi.RefereeRepository;
 import fr.hoenheimsports.repository.game.entity.RefereeEntityRepository;
 import fr.hoenheimsports.repository.game.entity.game.RefereeEntity;
-import fr.hoenheimsports.service.mapper.RefereeMapper;
+import fr.hoenheimsports.service.game.mapper.RefereeMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

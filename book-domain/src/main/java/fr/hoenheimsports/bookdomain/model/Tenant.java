@@ -3,12 +3,29 @@ package fr.hoenheimsports.bookdomain.model;
 import java.util.Objects;
 import java.util.UUID;
 
-public record Tenant(UUID id,String username,String email,Address address) implements HallUser {
+public final class Tenant extends HallUser{
 
-    public Tenant {
-        Objects.requireNonNull(id,"id should be not null");
-        Objects.requireNonNull(username,"username should be not null");
-        Objects.requireNonNull(email,"email should be not null");
-        Objects.requireNonNull(address,"address should be not null");
+    private Address address;
+    private boolean isMember;
+    public Tenant(UUID id, String username, String email, Address address, boolean isMember) {
+        super(id,username,email);
+        Objects.requireNonNull(address, "address should be not null");
+        this.address = address;
+        this.isMember = isMember;
+    }
+    public Address getAddress() {
+        return address;
+    }
+
+    public boolean isMember() {
+        return isMember;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public void setMember(boolean member) {
+        isMember = member;
     }
 }

@@ -18,7 +18,7 @@ class GameRepositoryInMemoryTest {
     private Game game1;
     private Game game2;
     private Coach coach;
-    private Halle halle;
+    private Hall halle;
     private Referee referee;
     private Team homeTeam;
     private Team visitingTeam;
@@ -215,7 +215,7 @@ class GameRepositoryInMemoryTest {
 
     @Test
     void testFindHallByKeys() {
-        Optional<Halle> foundHalle = gameRepository.findHallByKeys(halle.name(), halle.address().street(), halle.address().postalCode(), halle.address().city());
+        Optional<Hall> foundHalle = gameRepository.findHallByKeys(halle.name(), halle.address().street(), halle.address().postalCode(), halle.address().city());
         assertTrue(foundHalle.isPresent());
         assertEquals(halle, foundHalle.get());
     }

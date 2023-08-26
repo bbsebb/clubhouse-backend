@@ -13,7 +13,7 @@ public final class Game {
 
     private final Day day;
     private final Week week;
-    private Halle halle;
+    private Hall halle;
     private Referees referees;
     private final Team homeTeam;
     private final Team visitingTeam;
@@ -22,7 +22,7 @@ public final class Game {
     private LocalDate date;
     private LocalTime time;
 
-    public Game(String code, Competition competition, Season season, Day day, Week week, Halle halle, Referees referees, Team homeTeam, Team visitingTeam, Score score, FDME fdme, LocalDate date, LocalTime time) {
+    public Game(String code, Competition competition, Season season, Day day, Week week, Hall halle, Referees referees, Team homeTeam, Team visitingTeam, Score score, FDME fdme, LocalDate date, LocalTime time) {
 
         Objects.requireNonNull(code, "code should not be null");
         Objects.requireNonNull(competition, "competition should not be null");
@@ -69,7 +69,7 @@ public final class Game {
         return day;
     }
 
-    public Halle getHalle() {
+    public Hall getHalle() {
         return halle;
     }
 
@@ -97,7 +97,7 @@ public final class Game {
         return date;
     }
 
-    public void setHalle(Halle halle) {
+    public void setHalle(Hall halle) {
         this.halle = halle;
     }
 

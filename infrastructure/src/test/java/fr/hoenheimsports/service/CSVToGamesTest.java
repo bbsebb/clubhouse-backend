@@ -31,7 +31,7 @@ class CSVToGamesTest {
     @MockBean
     private CoachRepository coachRepository;
     @MockBean
-    private HalleRepository halleRepository;
+    private HallRepository halleRepository;
     @MockBean
     private RefereeRepository refereeRepository;
     @MockBean

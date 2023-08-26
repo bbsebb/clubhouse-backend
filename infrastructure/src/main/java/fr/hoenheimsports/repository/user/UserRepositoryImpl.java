@@ -1,7 +1,7 @@
 package fr.hoenheimsports.repository.user;
 
 import fr.hoenheimsports.repository.user.entity.UserEntityRepository;
-import fr.hoenheimsports.service.mapper.UserMapper;
+import fr.hoenheimsports.service.user.mapper.UserMapper;
 import fr.hoenheimsports.userdomain.model.User;
 import fr.hoenheimsports.userdomain.spi.UserRepository;
 import org.springframework.stereotype.Repository;

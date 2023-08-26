@@ -3,7 +3,7 @@ package fr.hoenheimsports.bookdomain.model;
 public enum BookingState {
     VALIDATED,
     ACCEPTED,
-    UNAUTHORIZED,
+    REFUSED,
     CANCELED,
     PENDING,
     FINISHED,

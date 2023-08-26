@@ -1,7 +1,7 @@
 package fr.hoenheimsports.repository.user;
 
 import fr.hoenheimsports.repository.user.entity.RoleEntityRepository;
-import fr.hoenheimsports.service.mapper.RoleMapper;
+import fr.hoenheimsports.service.user.mapper.RoleMapper;
 import fr.hoenheimsports.userdomain.model.Role;
 import fr.hoenheimsports.userdomain.spi.RoleRepository;
 import org.springframework.stereotype.Repository;

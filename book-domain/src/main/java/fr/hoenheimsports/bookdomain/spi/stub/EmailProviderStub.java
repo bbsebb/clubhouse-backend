@@ -17,7 +17,7 @@ public class EmailProviderStub implements EmailProvider {
 
     @Override
     public void sendEmail(String to, Booking booking) {
-        this.emails.add(new Email(to, this.createBodyEmail(booking.state())));
+        this.emails.add(new Email(to, this.createBodyEmail(booking.getState())));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class EmailProviderStub implements EmailProvider {
             case VALIDATED -> "booking validated";
             case CANCELED -> "booking canceled";
             case FINISHED -> "booking finished";
-            case UNAUTHORIZED -> "booking unauthorized";
+            case REFUSED -> "booking refused";
         };
     }
 

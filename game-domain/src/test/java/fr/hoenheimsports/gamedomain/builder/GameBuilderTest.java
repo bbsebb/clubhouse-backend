@@ -33,7 +33,7 @@ class GameBuilderTest {
                         )
                 ),
                 Season.SEASON_2022_2023, new Day(1),
-                new Week(LocalDate.now()), new Halle(
+                new Week(LocalDate.now()), new Hall(
                         UUID.randomUUID(),
                         "Halle1",
                         new Address("Street2", 67890, "City2"),
@@ -50,7 +50,7 @@ class GameBuilderTest {
                         new Category("-18 ans", 18, true),
                         Gender.MALE,
                         1,
-                        new Club("Club1", "ClubName1", Set.of(Halle.UNKNOWN)),
+                        new Club("Club1", "ClubName1", Set.of(Hall.UNKNOWN)),
                         new TeamsColor(TeamColor.BEIGE,TeamColor.BROWN,TeamColor.BLACK,TeamColor.BURGUNDY),
                         new Coach(UUID.randomUUID(), "Coach1", new PhoneNumber("1111111111"))
 
@@ -60,7 +60,7 @@ class GameBuilderTest {
                         new Category("-18 ans", 18, true),
                         Gender.FEMALE,
                         5,
-                        new Club("Club2", "ClubName2",Set.of(Halle.UNKNOWN)),
+                        new Club("Club2", "ClubName2",Set.of(Hall.UNKNOWN)),
                         new TeamsColor(TeamColor.BLACK,TeamColor.GARNET,TeamColor.NAVY_BLUE,TeamColor.GREY),
                         new Coach(UUID.randomUUID(), "Coach2", new PhoneNumber("2222222222"))
                 ),

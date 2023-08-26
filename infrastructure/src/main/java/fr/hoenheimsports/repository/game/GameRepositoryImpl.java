@@ -4,7 +4,7 @@ import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.GameRepository;
 import fr.hoenheimsports.repository.game.entity.*;
 import fr.hoenheimsports.repository.game.entity.game.*;
-import fr.hoenheimsports.service.mapper.GameMapper;
+import fr.hoenheimsports.service.game.mapper.GameMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -20,14 +20,14 @@ public class GameRepositoryImpl implements GameRepository {
     private final ClubEntityRepository clubEntityRepository;
     private final CoachEntityRepository coachEntityRepository;
     private final CompetitionEntityRepository competitionEntityRepository;
-    private final HalleEntityRepository halleEntityRepository;
+    private final HallEntityRepository halleEntityRepository;
     private final RefereeEntityRepository refereeEntityRepository;
     private final PoolEntityRepository poolEntityRepository;
     private final SeasonEntityRepository seasonEntityRepository;
     private final TeamEntityRepository teamEntityRepository;
 
 
-    public GameRepositoryImpl(GameMapper gameMapper, GameEntityRepository gameRepositoryJPA, CategoryEntityRepository categoryEntityRepository, ClubEntityRepository clubEntityRepository, CoachEntityRepository coachEntityRepository, CompetitionEntityRepository competitionEntityRepository, HalleEntityRepository halleEntityRepository, RefereeEntityRepository refereeEntityRepository, PoolEntityRepository poolEntityRepository, SeasonEntityRepository seasonEntityRepository, TeamEntityRepository teamEntityRepository) {
+    public GameRepositoryImpl(GameMapper gameMapper, GameEntityRepository gameRepositoryJPA, CategoryEntityRepository categoryEntityRepository, ClubEntityRepository clubEntityRepository, CoachEntityRepository coachEntityRepository, CompetitionEntityRepository competitionEntityRepository, HallEntityRepository halleEntityRepository, RefereeEntityRepository refereeEntityRepository, PoolEntityRepository poolEntityRepository, SeasonEntityRepository seasonEntityRepository, TeamEntityRepository teamEntityRepository) {
         this.gameMapper = gameMapper;
         this.gameEntityRepository = gameRepositoryJPA;
         this.categoryEntityRepository = categoryEntityRepository;
@@ -49,7 +49,7 @@ public class GameRepositoryImpl implements GameRepository {
         gameEntity.setSeason(this.seasonEntityRepository.save(gameEntity.getSeason()));
         gameEntity.setHalle(this.halleEntityRepository.save(gameEntity.getHalle()));
 
-        Set<HalleEntity> halleEntitiesHomeTeam = this.clubEntityRepository.findById( gameEntity.getHomeTeam().getClub().getCode())
+        Set<HallEntity> halleEntitiesHomeTeam = this.clubEntityRepository.findById( gameEntity.getHomeTeam().getClub().getCode())
                 .map(clubEntity -> new HashSet<>(clubEntity.getHalles()))
                 .orElse(new HashSet<>());
         halleEntitiesHomeTeam.add(gameEntity.getHalle());
@@ -57,7 +57,7 @@ public class GameRepositoryImpl implements GameRepository {
 
         gameEntity.setHomeTeam(this.saveTeam(gameEntity.getHomeTeam()));
 
-        Set<HalleEntity> halleEntitiesVisitingTeam = this.clubEntityRepository.findById( gameEntity.getVisitingTeam().getClub().getCode())
+        Set<HallEntity> halleEntitiesVisitingTeam = this.clubEntityRepository.findById( gameEntity.getVisitingTeam().getClub().getCode())
                 .map(clubEntity -> new HashSet<>(clubEntity.getHalles()))
                 .orElse(new HashSet<>());
         gameEntity.getVisitingTeam().getClub().getHalles().addAll(halleEntitiesVisitingTeam);

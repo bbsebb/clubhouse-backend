@@ -3,7 +3,7 @@ package fr.hoenheimsports.repository.game;
 import fr.hoenheimsports.gamedomain.model.Category;
 import fr.hoenheimsports.gamedomain.spi.CategoryRepository;
 import fr.hoenheimsports.repository.game.entity.CategoryEntityRepository;
-import fr.hoenheimsports.service.mapper.CategoryMapper;
+import fr.hoenheimsports.service.game.mapper.CategoryMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 

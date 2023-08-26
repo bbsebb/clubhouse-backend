@@ -3,7 +3,7 @@ package fr.hoenheimsports.repository.game;
 import fr.hoenheimsports.gamedomain.model.Club;
 import fr.hoenheimsports.gamedomain.spi.ClubRepository;
 import fr.hoenheimsports.repository.game.entity.ClubEntityRepository;
-import fr.hoenheimsports.service.mapper.ClubMapper;
+import fr.hoenheimsports.service.game.mapper.ClubMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

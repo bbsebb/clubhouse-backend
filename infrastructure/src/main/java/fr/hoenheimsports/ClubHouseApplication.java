@@ -1,6 +1,9 @@
 package fr.hoenheimsports;
 
 
+import fr.hoenheimsports.repository.booking.entity.HallEntityRepository;
+import fr.hoenheimsports.repository.booking.entity.booking.AddressEntity;
+import fr.hoenheimsports.repository.booking.entity.booking.HallEntity;
 import fr.hoenheimsports.repository.user.entity.UserEntity;
 import fr.hoenheimsports.repository.user.entity.UserEntityRepository;
 import fr.hoenheimsports.userdomain.UserCreateImpl;
@@ -18,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
 
-@SpringBootApplication(scanBasePackages = {"fr.hoenheimsports.gamedomain", "fr.hoenheimsports"})
+@SpringBootApplication(scanBasePackages = {"fr.hoenheimsports.gamedomain", "fr.hoenheimsports.bookdomain", "fr.hoenheimsports.userdomain","fr.hoenheimsports"})
 public class ClubHouseApplication {
 
     public static void main(String[] args) {
@@ -26,12 +29,23 @@ public class ClubHouseApplication {
     }
 
     @Bean
-    CommandLineRunner start(UserCreate userCreate, RoleCreate roleCreate, UserUpdate userUpdate){
+    CommandLineRunner start(UserCreate userCreate, RoleCreate roleCreate, UserUpdate userUpdate, HallEntityRepository hallEntityRepository){
         return args -> {
 
             Role roleUser = roleCreate.create("USER");
             Role roleAdmin = roleCreate.create("ADMIN");
+            User user = userCreate.create("user1",new BCryptPasswordEncoder().encode("1234"),"seb@seb.seb");
 
+            HallEntity hallEntity = new HallEntity();
+            hallEntity.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+            hallEntity.setName("test");
+            hallEntity.setCapacity(100);
+            AddressEntity addressEntity = new AddressEntity();
+            addressEntity.setCity("city");
+            addressEntity.setCp(0);
+            addressEntity.setStreet("street");
+            hallEntity.setAddress(addressEntity);
+            hallEntityRepository.save(hallEntity);
             //User user1 = userCreate.create("user1","1234","sebastien.burckhardt@gmail.com");
             //User user2 = userCreate.create("admin","1234","sebastien.burckhardt@hoenheimsports.fr");
 

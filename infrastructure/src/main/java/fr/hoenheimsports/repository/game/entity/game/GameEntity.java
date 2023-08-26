@@ -19,7 +19,7 @@ public class GameEntity {
     @Embedded
     private WeekEntity week;
     @ManyToOne(cascade = CascadeType.ALL)
-    private HalleEntity halle;
+    private HallEntity halle;
     @Embedded
     private RefereesEntity referees;
     @ManyToOne(cascade = CascadeType.ALL)
@@ -64,11 +64,11 @@ public class GameEntity {
         this.day = day;
     }
 
-    public HalleEntity getHalle() {
+    public HallEntity getHalle() {
         return halle;
     }
 
-    public void setHalle(HalleEntity halle) {
+    public void setHalle(HallEntity halle) {
         this.halle = halle;
     }
 
