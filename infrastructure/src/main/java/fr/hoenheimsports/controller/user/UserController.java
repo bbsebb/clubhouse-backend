@@ -29,14 +29,8 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createUser(@RequestBody UserCreateDTO userCreateDTO) {
-        Map<String,String> response;
-        try {
-            UserDTO userDTO = this.userServiceApplication.createUser(userCreateDTO);
-            response = Map.of("userId", userDTO.id());
-        } catch (UserAlreadyExistException uaee) {
-            response = Map.of("error", "user with username : %s or email : %s exist already".formatted(userCreateDTO.username(),userCreateDTO.email()));
-        }
-        return ResponseEntity.ok(response);
+        UserDTO userDTO = this.userServiceApplication.createUser(userCreateDTO);
+        return ResponseEntity.ok(Map.of("userId", userDTO.id()));
     }
 
     @PostMapping("/{id}/addRole")

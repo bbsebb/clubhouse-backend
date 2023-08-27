@@ -29,14 +29,12 @@ public class UserCreateImpl implements UserCreate {
         if(this.userRepository.findByUsername(username).isPresent() || this.userRepository.findByEmail(email).isPresent()) {
             throw new UserAlreadyExistException("User exist already");
         }
-
         Role defaultRole = null;
         try {
             defaultRole = this.roleCreate.create("USER");
         } catch (RoleAlreadyExistException e) {
             defaultRole = this.roleRepository.findByRoleName("USER").orElseThrow();
         }
-
         return  this.userRepository.save(new User(UUID.randomUUID(),username,password,email, Set.of(defaultRole)));
     }
 }

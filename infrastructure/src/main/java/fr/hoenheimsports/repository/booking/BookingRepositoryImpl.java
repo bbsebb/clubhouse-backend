@@ -29,7 +29,7 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public List<Booking> findByOverlappingTimeslot(Timeslot timeslot) {
-        return bookingEntityRepository.findByTimeslot_StartGreaterThanEqualAndTimeslot_EndLessThanEqual(timeslot.start(),timeslot.end())
+        return bookingEntityRepository.findOverlappingBookings(timeslot.start(),timeslot.end())
                         .stream()
                         .map(this.bookingMapper::toBooking)
                         .toList();
