@@ -1,6 +1,6 @@
 package fr.hoenheimsports.bookdomain.api;
 
-import fr.hoenheimsports.bookdomain.exception.TimeslotAlreadyBooked;
+import fr.hoenheimsports.bookdomain.exception.TimeslotAlreadyBookedException;
 import fr.hoenheimsports.bookdomain.model.Booking;
 import fr.hoenheimsports.bookdomain.model.Hall;
 import fr.hoenheimsports.bookdomain.model.HallUser;
@@ -17,9 +17,9 @@ public interface BookingCreate {
      * @param timeslot
      * @param use
      * @return Booking
-     * @throws TimeslotAlreadyBooked
+     * @throws TimeslotAlreadyBookedException
      */
-    Booking create(Hall halle, HallUser user, Timeslot timeslot, String use) throws TimeslotAlreadyBooked;
+    Booking create(Hall halle, HallUser user, Timeslot timeslot, String use) throws TimeslotAlreadyBookedException;
 
     /**
      * Save a booking in the database

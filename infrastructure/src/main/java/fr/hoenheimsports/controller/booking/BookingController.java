@@ -1,5 +1,6 @@
 package fr.hoenheimsports.controller.booking;
 
+import fr.hoenheimsports.bookdomain.exception.TimeslotAlreadyBookedException;
 import fr.hoenheimsports.dto.booking.BookingCreateDTO;
 import fr.hoenheimsports.dto.booking.BookingDTO;
 import fr.hoenheimsports.dto.booking.BookingPayDTO;
@@ -29,8 +30,12 @@ public class BookingController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<BookingDTO> createBooking(@RequestBody BookingCreateDTO bookingCreateDTO) {
-        return ResponseEntity.ok(this.bookingServiceApplication.createBooking(bookingCreateDTO));
+    public ResponseEntity<?> createBooking(@RequestBody BookingCreateDTO bookingCreateDTO) {
+        try {
+            return ResponseEntity.ok(this.bookingServiceApplication.createBooking(bookingCreateDTO));
+        } catch (TimeslotAlreadyBookedException e) {
+            return ResponseEntity.badRequest().body("Le créneau est déjà réservé");
+        }
     }
 
     @PutMapping("/{id}/pay")

@@ -1,7 +1,7 @@
 package fr.hoenheimsports.bookdomain;
 
 import fr.hoenheimsports.bookdomain.api.BookingCreate;
-import fr.hoenheimsports.bookdomain.exception.TimeslotAlreadyBooked;
+import fr.hoenheimsports.bookdomain.exception.TimeslotAlreadyBookedException;
 import fr.hoenheimsports.bookdomain.model.*;
 import fr.hoenheimsports.bookdomain.rule.AssociationHallUserBookingStateRule;
 import fr.hoenheimsports.bookdomain.rule.RuleChain;
@@ -74,7 +74,7 @@ class BookingCreateImplTest {
                 LocalDateTime.of(2020,1,1,1,0));
 
         //With other user and same timeslot already recorded
-        Exception exception = assertThrows(TimeslotAlreadyBooked.class, () -> this.bookingCreate.create(hall, tenant2,overlapseTimeslot,use));
+        Exception exception = assertThrows(TimeslotAlreadyBookedException.class, () -> this.bookingCreate.create(hall, tenant2,overlapseTimeslot,use));
         assertEquals("timeslot already booked",exception.getMessage());
         //With same user and same timeslot already recorded
         assertDoesNotThrow(() -> this.bookingCreate.create(hall, tenant1,overlapseTimeslot,use));

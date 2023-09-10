@@ -3,7 +3,7 @@ package fr.hoenheimsports.bookdomain;
 import fr.hoenheimsports.bookdomain.annotation.DomainService;
 import fr.hoenheimsports.bookdomain.api.BookingCreate;
 import fr.hoenheimsports.bookdomain.api.EmailService;
-import fr.hoenheimsports.bookdomain.exception.TimeslotAlreadyBooked;
+import fr.hoenheimsports.bookdomain.exception.TimeslotAlreadyBookedException;
 import fr.hoenheimsports.bookdomain.model.*;
 import fr.hoenheimsports.bookdomain.rule.*;
 import fr.hoenheimsports.bookdomain.spi.BookingRepository;
@@ -31,7 +31,7 @@ public class BookingCreateImpl implements BookingCreate {
     }
 
     @Override
-    public Booking create(Hall hall, HallUser user, Timeslot timeslot, String use) throws TimeslotAlreadyBooked {
+    public Booking create(Hall hall, HallUser user, Timeslot timeslot, String use) throws TimeslotAlreadyBookedException {
 
         Booking booking = new Booking(UUID.randomUUID(), hall, user, timeslot, BookingState.PENDING, Payment.UNKNOWN, false, use);
 
@@ -41,12 +41,13 @@ public class BookingCreateImpl implements BookingCreate {
                 new TenantBookingStateRule(),
                 new AssociationHallUserBookingStateRule(),
                 new TenantBookingPaymentRule(),
-                new AssociationHallUserBookingPaymentRule());
+                new AssociationHallUserBookingPaymentRule()
+        );
         booking = bookingRuleChain.handle(booking);
 
         List<Booking> bookingsWithOverlappingTimeslot = this.bookingRepository.findByOverlappingTimeslot(timeslot);
         if (!booking.hasTimeslotFree(bookingsWithOverlappingTimeslot)) {
-            throw new TimeslotAlreadyBooked("timeslot already booked");
+            throw new TimeslotAlreadyBookedException("timeslot already booked");
         }
 
         Optional<Booking> userOverlappingBooking = this.findUserOverlappingBookingWithSameStateAndHall(bookingsWithOverlappingTimeslot, user.getId(), booking.getState(), hall);

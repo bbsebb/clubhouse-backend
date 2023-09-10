@@ -2,10 +2,6 @@ package fr.hoenheimsports;
 
 
 import fr.hoenheimsports.repository.booking.entity.HallEntityRepository;
-import fr.hoenheimsports.repository.booking.entity.booking.AddressEntity;
-import fr.hoenheimsports.repository.booking.entity.booking.HallEntity;
-import fr.hoenheimsports.repository.user.entity.UserEntity;
-import fr.hoenheimsports.repository.user.entity.UserEntityRepository;
 import fr.hoenheimsports.userdomain.UserCreateImpl;
 import fr.hoenheimsports.userdomain.api.RoleCreate;
 import fr.hoenheimsports.userdomain.api.UserCreate;
@@ -17,10 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.UUID;
 @EnableAsync
 @SpringBootApplication(scanBasePackages = {"fr.hoenheimsports.gamedomain", "fr.hoenheimsports.bookdomain", "fr.hoenheimsports.userdomain","fr.hoenheimsports"})
 public class ClubHouseApplication {

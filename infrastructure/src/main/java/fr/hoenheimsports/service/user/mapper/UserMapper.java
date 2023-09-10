@@ -1,6 +1,5 @@
 package fr.hoenheimsports.service.user.mapper;
 
-import fr.hoenheimsports.dto.user.RoleDTO;
 import fr.hoenheimsports.dto.user.UserDTO;
 import fr.hoenheimsports.repository.user.entity.UserEntity;
 import fr.hoenheimsports.userdomain.model.User;

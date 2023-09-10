@@ -1,6 +1,7 @@
 package fr.hoenheimsports.userdomain;
 
-import fr.hoenheimsports.gamedomain.annotation.DomainService;
+
+import fr.hoenheimsports.userdomain.annotation.DomainService;
 import fr.hoenheimsports.userdomain.api.RoleCreate;
 import fr.hoenheimsports.userdomain.exception.RoleAlreadyExistException;
 import fr.hoenheimsports.userdomain.model.Role;

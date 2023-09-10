@@ -1,7 +1,6 @@
 package fr.hoenheimsports.service.booking;
 
 import fr.hoenheimsports.bookdomain.api.*;
-import fr.hoenheimsports.bookdomain.model.PaymentType;
 import fr.hoenheimsports.bookdomain.model.Timeslot;
 import fr.hoenheimsports.dto.booking.BookingCreateDTO;
 import fr.hoenheimsports.dto.booking.BookingDTO;
@@ -12,7 +11,6 @@ import fr.hoenheimsports.userdomain.exception.UserNotFoundException;
 import fr.hoenheimsports.userdomain.model.User;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
