@@ -2,6 +2,7 @@ package fr.hoenheimsports.bookdomain;
 
 import fr.hoenheimsports.bookdomain.annotation.DomainService;
 import fr.hoenheimsports.bookdomain.api.BookingCreate;
+import fr.hoenheimsports.bookdomain.api.EmailService;
 import fr.hoenheimsports.bookdomain.exception.TimeslotAlreadyBooked;
 import fr.hoenheimsports.bookdomain.model.*;
 import fr.hoenheimsports.bookdomain.rule.*;
@@ -11,18 +12,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @DomainService
 public class BookingCreateImpl implements BookingCreate {
     private final BookingRepository bookingRepository;
+    private final EmailService emailService;
 
-    public BookingCreateImpl(BookingRepository bookingRepository) {
+
+    /**
+     * Constructor of BookingCreateImpl
+     *
+     * @param bookingRepository BookingRepository to save the booking
+     * @param emailService     EmailService to send email to the user and the recipient
+     */
+    public BookingCreateImpl(BookingRepository bookingRepository, EmailService emailService) {
         this.bookingRepository = bookingRepository;
+        this.emailService = emailService;
     }
 
     @Override
-    public Booking create(Hall hall, HallUser user, Timeslot timeslot,String use) throws TimeslotAlreadyBooked {
+    public Booking create(Hall hall, HallUser user, Timeslot timeslot, String use) throws TimeslotAlreadyBooked {
 
-        Booking booking = new Booking(UUID.randomUUID(), hall, user, timeslot, BookingState.PENDING, Payment.UNKNOWN, use);
+        Booking booking = new Booking(UUID.randomUUID(), hall, user, timeslot, BookingState.PENDING, Payment.UNKNOWN, false, use);
 
         RuleChain<Booking> bookingRuleChain = RuleChain.buildChain(
                 new OverlapPermissionRule(),
@@ -34,18 +45,21 @@ public class BookingCreateImpl implements BookingCreate {
         booking = bookingRuleChain.handle(booking);
 
         List<Booking> bookingsWithOverlappingTimeslot = this.bookingRepository.findByOverlappingTimeslot(timeslot);
-        if(!booking.hasTimeslotFree(bookingsWithOverlappingTimeslot)) {
+        if (!booking.hasTimeslotFree(bookingsWithOverlappingTimeslot)) {
             throw new TimeslotAlreadyBooked("timeslot already booked");
         }
 
         Optional<Booking> userOverlappingBooking = this.findUserOverlappingBookingWithSameStateAndHall(bookingsWithOverlappingTimeslot, user.getId(), booking.getState(), hall);
 
-        if(userOverlappingBooking.isPresent()) {
+        if (userOverlappingBooking.isPresent()) {
             Booking olbooking = userOverlappingBooking.get();
             Timeslot mergedTimeslot = olbooking.mergeOverlappingTimeslot(booking.getTimeslot());
-            String mergedUse = booking.getUse() + " et " + use;
-            booking = new Booking(olbooking.getId(), booking.getHall(), booking.getUser(), mergedTimeslot, booking.getState(), Payment.UNKNOWN, mergedUse);
+            String mergedUse = olbooking.getUse() + " et " + use;
+            booking = new Booking(olbooking.getId(), booking.getHall(), booking.getUser(), mergedTimeslot, booking.getState(), Payment.UNKNOWN, booking.isAllowsOverlap(), mergedUse);
         }
+
+        this.emailService.sendEmailNotifyBookingToUser(booking);
+        this.emailService.sendEmailNotifyBookingToRecipient(booking);
 
         return booking;
     }
@@ -56,8 +70,8 @@ public class BookingCreateImpl implements BookingCreate {
     }
 
     @Override
-    public Booking createAndSave(Hall hall, HallUser user, Timeslot timeslot,String use) {
-        return this.save(this.create(hall,user,timeslot,use));
+    public Booking createAndSave(Hall hall, HallUser user, Timeslot timeslot, String use) {
+        return this.save(this.create(hall, user, timeslot, use));
     }
 
     private Optional<Booking> findUserOverlappingBookingWithSameStateAndHall(List<Booking> bookingsWithOverlappingTimeslot, UUID userId, BookingState state, Hall hall) {

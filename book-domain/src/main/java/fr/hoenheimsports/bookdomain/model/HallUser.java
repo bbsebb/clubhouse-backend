@@ -3,6 +3,14 @@ package fr.hoenheimsports.bookdomain.model;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * HallUser class is the main class of the domain. It represents a user of the application. It contains the following attributes:
+ * <ul>
+ *      <li>id: the unique identifier of the user</li>
+ *      <li>username: the username of the user</li>
+ *      <li>email: the email of the user</li>
+ * </ul>
+ */
 public abstract class HallUser {
     private UUID id;
     private String username;
@@ -20,19 +28,21 @@ public abstract class HallUser {
     public UUID getId() {
         return this.id;
     }
-    public String getUsername(){
-        return this.username;
-    }
-    public String getEmail(){
-        return this.email;
-    }
 
     public void setId(UUID id) {
         this.id = id;
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 
     public void setEmail(String email) {

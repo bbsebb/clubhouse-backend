@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Stub
 public class BookingStub implements BookingRepository {
 
-    private final Map<UUID,Booking> bookings;
+    private final Map<UUID, Booking> bookings;
 
     public BookingStub(Map<UUID, Booking> bookings) {
         this.bookings = bookings;
@@ -30,7 +30,7 @@ public class BookingStub implements BookingRepository {
     public List<Booking> findByOverlappingTimeslot(Timeslot timeslot) {
         Set<Timeslot> timeslots = this.bookings.values().stream().map(Booking::getTimeslot).collect(Collectors.toSet());
         Set<Timeslot> overlappingTimeslots = timeslots.stream()
-                .filter(t1 ->  t1.equals(timeslot) || t1.isOverlaps(timeslot))
+                .filter(t1 -> t1.equals(timeslot) || t1.isOverlaps(timeslot))
                 .collect(Collectors.toSet());
         return this.bookings.values().stream().filter(booking -> overlappingTimeslots.contains(booking.getTimeslot())).toList();
     }
@@ -42,8 +42,8 @@ public class BookingStub implements BookingRepository {
 
     @Override
     public Booking save(Booking booking) {
-         this.bookings.put(booking.getId(),booking);
-         return booking;
+        this.bookings.put(booking.getId(), booking);
+        return booking;
     }
 
     public void clear() {

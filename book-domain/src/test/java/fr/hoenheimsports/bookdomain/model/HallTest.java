@@ -12,7 +12,7 @@ class HallTest {
     void testIdNotNull() {
         Exception exception = assertThrows(NullPointerException.class, () -> new Hall(null, "name", new Address("Street", 1234, "City"), 50));
 
-        String expectedMessage = "stard should not be null";
+        String expectedMessage = "start should not be null";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

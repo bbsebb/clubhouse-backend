@@ -9,8 +9,12 @@ import java.util.UUID;
 
 public interface HallUserRepository {
     Optional<Tenant> findRegisteredUserById(UUID id);
+
     Optional<AssociationHallUser> findUnregisteredUserById(UUID id);
+
     Optional<HallUser> findById(UUID id);
+
     HallUser save(Tenant tenant);
+
     HallUser save(AssociationHallUser associationHallUser);
 }

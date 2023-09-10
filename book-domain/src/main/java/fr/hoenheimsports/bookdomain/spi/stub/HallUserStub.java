@@ -12,11 +12,11 @@ import java.util.UUID;
 
 public class HallUserStub implements HallUserRepository {
 
-    private final Map<UUID,Tenant> tenants;
-    private final Map<UUID,AssociationHallUser> associationHallUsers;
+    private final Map<UUID, Tenant> tenants;
+    private final Map<UUID, AssociationHallUser> associationHallUsers;
 
     public HallUserStub() {
-        this(new HashMap<>(),new HashMap<>());
+        this(new HashMap<>(), new HashMap<>());
     }
 
     public HallUserStub(Map<UUID, Tenant> tenants, Map<UUID, AssociationHallUser> associationHallUsers) {
@@ -37,7 +37,7 @@ public class HallUserStub implements HallUserRepository {
     @Override
     public Optional<HallUser> findById(UUID id) {
         HallUser hallUser = this.tenants.get(id);
-        if(hallUser == null) {
+        if (hallUser == null) {
             hallUser = this.associationHallUsers.get(id);
         }
         return Optional.ofNullable(hallUser);
@@ -45,11 +45,13 @@ public class HallUserStub implements HallUserRepository {
 
     @Override
     public HallUser save(Tenant tenant) {
-        return this.tenants.put(tenant.getId(),tenant);
+         this.tenants.put(tenant.getId(), tenant);
+        return tenant;
     }
 
     @Override
     public HallUser save(AssociationHallUser associationHallUser) {
-        return this.associationHallUsers.put(associationHallUser.getId(),associationHallUser);
+        this.associationHallUsers.put(associationHallUser.getId(), associationHallUser);
+        return associationHallUser;
     }
 }

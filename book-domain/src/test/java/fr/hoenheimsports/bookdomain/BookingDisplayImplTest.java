@@ -30,8 +30,8 @@ class BookingDisplayImplTest {
         timeslot1 = new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(2));
         timeslot2 = new Timeslot(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(5));
 
-        booking1 = new Booking(UUID.randomUUID(), hall1, user1, timeslot1, BookingState.PENDING, payment1, "use");
-        booking2 = new Booking(UUID.randomUUID(), hall1, tenant, timeslot2, BookingState.PENDING, payment1, "use");
+        booking1 = new Booking(UUID.randomUUID(), hall1, user1, timeslot1, BookingState.PENDING, payment1, true, "use");
+        booking2 = new Booking(UUID.randomUUID(), hall1, tenant, timeslot2, BookingState.PENDING, payment1,true , "use");
 
         BookingStub bookingRepository = new BookingStub();
         bookingRepository.save(booking1);

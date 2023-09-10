@@ -1,6 +1,7 @@
 package fr.hoenheimsports.controller.game;
 
 import fr.hoenheimsports.dto.game.create.GameCreateDTO;
+import fr.hoenheimsports.dto.game.filter.TimeslotFilterDTO;
 import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import fr.hoenheimsports.gamedomain.exception.FileException;
@@ -8,10 +9,12 @@ import fr.hoenheimsports.service.game.GameServiceApplication;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -33,9 +36,17 @@ public class GameController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<GameDTO>> displayGames() {
+    public ResponseEntity<List<GameDTO>> displayGames(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime start,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime end) {
+
+        if(start != null && end != null) {
+            return ResponseEntity.ok(this.gameService.displayGames(new TimeslotFilterDTO(start,end)));
+        }
         return ResponseEntity.ok(this.gameService.displayGames());
     }
+
+
 
     @GetMapping("/{code}")
     public ResponseEntity<GameDTO> displayGames(@PathVariable String code) {

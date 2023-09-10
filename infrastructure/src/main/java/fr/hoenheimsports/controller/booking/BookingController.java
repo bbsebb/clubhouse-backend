@@ -24,7 +24,7 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookingDTO> displayBooking(@RequestParam String id) {
+    public ResponseEntity<BookingDTO> displayBooking(@PathVariable String id) {
         return ResponseEntity.ok(this.bookingServiceApplication.displayBooking(id));
     }
 
@@ -33,25 +33,25 @@ public class BookingController {
         return ResponseEntity.ok(this.bookingServiceApplication.createBooking(bookingCreateDTO));
     }
 
-    @PostMapping("/{id}/pay")
-    public ResponseEntity<BookingDTO> payBooking(@RequestParam String id,@RequestBody BookingPayDTO bookingPayDTO){
+    @PutMapping("/{id}/pay")
+    public ResponseEntity<BookingDTO> payBooking(@PathVariable String id,@RequestBody BookingPayDTO bookingPayDTO){
         return ResponseEntity.ok(this.bookingServiceApplication.payBooking(id,bookingPayDTO));
     }
 
     @PutMapping("/{id}/accept")
-    public ResponseEntity<BookingDTO> acceptBooking(@RequestParam String id){
+    public ResponseEntity<BookingDTO> acceptBooking(@PathVariable String id){
         return ResponseEntity.ok(this.bookingServiceApplication.acceptBooking(id));
     }
     @PutMapping("/{id}/refuse")
-    public ResponseEntity<BookingDTO> refuseBooking(@RequestParam String id){
+    public ResponseEntity<BookingDTO> refuseBooking(@PathVariable String id){
         return ResponseEntity.ok(this.bookingServiceApplication.refuseBooking(id));
     }
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<BookingDTO> cancelBooking(@RequestParam String id){
+    public ResponseEntity<BookingDTO> cancelBooking(@PathVariable String id){
         return ResponseEntity.ok(this.bookingServiceApplication.cancelBooking(id));
     }
     @PutMapping("/{id}/valid")
-    public ResponseEntity<BookingDTO> validBooking(@RequestParam String id){
+    public ResponseEntity<BookingDTO> validBooking(@PathVariable String id){
         return ResponseEntity.ok(this.bookingServiceApplication.validBooking(id));
     }
 }

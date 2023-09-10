@@ -7,16 +7,15 @@ import fr.hoenheimsports.bookdomain.spi.HallRepository;
 import java.util.*;
 
 public class HallStub implements HallRepository {
-    private final Map<UUID,Hall> halls;
+    private final Map<UUID, Hall> halls;
 
     public HallStub() {
         this.halls = new HashMap<>();
-        this.populate();
     }
 
     @Override
     public List<Hall> findAll() {
-        return null;
+        return this.halls.values().stream().toList();
     }
 
     @Override
@@ -24,8 +23,7 @@ public class HallStub implements HallRepository {
         return Optional.ofNullable(this.halls.get(id));
     }
 
-    private void populate() {
-        Hall hall = new Hall(UUID.randomUUID(),"club house",new Address("rue des vosges",67800,"Hoeneim"),0);
-        this.halls.put(hall.id(),hall);
+    public Map<UUID, Hall> getHalls() {
+        return halls;
     }
 }

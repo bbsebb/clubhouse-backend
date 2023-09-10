@@ -75,6 +75,6 @@ public class BookingServiceApplication {
 
     public BookingDTO payBooking(String bookingId,BookingPayDTO bookingPayDTO) {
         User collector = this.userDisplay.findById(UUID.fromString(bookingPayDTO.collectorId())).orElseThrow(UserNotFoundException::new);
-        return this.bookingMapper.toBookingDTO(this.bookingPay.pay(UUID.fromString(bookingId),bookingPayDTO.amountPaid(),bookingPayDTO.paymentType(),collector.getId()));
+        return this.bookingMapper.toBookingDTO(this.bookingPay.pay(UUID.fromString(bookingId),bookingPayDTO.paymentType(),collector.getId()));
     }
 }

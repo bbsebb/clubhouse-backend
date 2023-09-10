@@ -1,6 +1,7 @@
 package fr.hoenheimsports.service.game;
 
 import fr.hoenheimsports.dto.game.create.GameCreateDTO;
+import fr.hoenheimsports.dto.game.filter.TimeslotFilterDTO;
 import fr.hoenheimsports.dto.game.view.GameDTO;
 import fr.hoenheimsports.gamedomain.api.GameDisplay;
 import fr.hoenheimsports.gamedomain.api.GameImportFile;
@@ -96,8 +97,18 @@ public class GameServiceApplication {
     public List<GameDTO> displayGames() {
         return this.gameDisplay.findAllGame().stream().map(this.gameMapper::gameToGameDTO).sorted(Comparator.nullsLast(Comparator.comparing(GameDTO::dateTime,Comparator.nullsLast(Comparator.naturalOrder())))).toList();
     }
+    public List<GameDTO> displayGames(TimeslotFilterDTO timeslotFilterDTO) {
+        return this.gameDisplay.findAllGame()
+                .stream()
+                .map(this.gameMapper::gameToGameDTO)
+                .filter(gameDTO -> gameDTO.dateTime() != null && gameDTO.dateTime().isAfter(timeslotFilterDTO.start()) && gameDTO.dateTime().isBefore(timeslotFilterDTO.end()))
+                .filter(gameDTO -> gameDTO.halle().address().city().equalsIgnoreCase("HOENHEIM"))
+                .sorted(Comparator.nullsLast(Comparator.comparing(GameDTO::dateTime,Comparator.nullsLast(Comparator.naturalOrder())))).toList();
+    }
 
     public GameDTO displayGame(String code) {
         return this.gameDisplay.findByCode(code).map(gameMapper::gameToGameDTO).orElse(null);
     }
+
+
 }

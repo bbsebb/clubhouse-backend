@@ -22,25 +22,19 @@ class PaymentTest {
     @Test
     void pay_shouldThrowException_whenPaymentTypeIsNull() {
         Payment payment = new Payment(BigDecimal.valueOf(100), false, null, null);
-        assertThrows(NullPointerException.class, () -> payment.pay(BigDecimal.valueOf(100), null, UUID.randomUUID()));
+        assertThrows(NullPointerException.class, () -> payment.pay(null, UUID.randomUUID()));
     }
 
     @Test
     void pay_shouldThrowException_whenCollectorIdIsNull() {
         Payment payment = new Payment(BigDecimal.valueOf(100), false, PaymentType.CASH, null);
-        assertThrows(NullPointerException.class, () -> payment.pay(BigDecimal.valueOf(100), PaymentType.CASH, null));
-    }
-
-    @Test
-    void pay_shouldThrowException_whenAmountPaidIsNotEqualToAmount() {
-        Payment payment = new Payment(BigDecimal.valueOf(100), false, PaymentType.CASH, UUID.randomUUID());
-        assertThrows(IllegalArgumentException.class, () -> payment.pay(BigDecimal.valueOf(50), PaymentType.CASH, UUID.randomUUID()));
+        assertThrows(NullPointerException.class, () -> payment.pay(PaymentType.CASH, null));
     }
 
     @Test
     void pay_shouldUpdateIsPaidToTrue_whenAmountPaidIsEqualToAmount() {
         Payment payment = new Payment(BigDecimal.valueOf(100), false, PaymentType.CASH, UUID.randomUUID());
-        Payment updatedPayment = payment.pay(BigDecimal.valueOf(100), PaymentType.CASH, UUID.randomUUID());
+        Payment updatedPayment = payment.pay(PaymentType.CASH, UUID.randomUUID());
         assertTrue(updatedPayment.isPaid());
     }
 
@@ -48,7 +42,7 @@ class PaymentTest {
     void pay_shouldUpdatePaymentTypeAndCollectorId() {
         Payment payment = new Payment(BigDecimal.valueOf(100), false, PaymentType.CASH, UUID.randomUUID());
         UUID newCollectorId = UUID.randomUUID();
-        Payment updatedPayment = payment.pay(BigDecimal.valueOf(100), PaymentType.CASH, newCollectorId);
+        Payment updatedPayment = payment.pay(PaymentType.CASH, newCollectorId);
 
         assertEquals(PaymentType.CASH, updatedPayment.paymentType());
         assertEquals(newCollectorId, updatedPayment.collectorId());

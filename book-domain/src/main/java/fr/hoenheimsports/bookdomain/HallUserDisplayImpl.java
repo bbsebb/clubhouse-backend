@@ -7,6 +7,7 @@ import fr.hoenheimsports.bookdomain.spi.HallUserRepository;
 
 import java.util.Optional;
 import java.util.UUID;
+
 @DomainService
 public class HallUserDisplayImpl implements HallUserDisplay {
     private final HallUserRepository hallUserRepository;

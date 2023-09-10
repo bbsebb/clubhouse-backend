@@ -9,7 +9,9 @@ import java.util.UUID;
 
 public interface BookingRepository {
     List<Booking> findAll();
+
     List<Booking> findByOverlappingTimeslot(Timeslot timeslot);
+
     Optional<Booking> findById(UUID id);
 
     Booking save(Booking booking);

@@ -7,6 +7,7 @@ import fr.hoenheimsports.bookdomain.rule.AssociationHallUserBookingStateRule;
 import fr.hoenheimsports.bookdomain.rule.RuleChain;
 import fr.hoenheimsports.bookdomain.rule.TenantBookingStateRule;
 import fr.hoenheimsports.bookdomain.spi.stub.BookingStub;
+import fr.hoenheimsports.bookdomain.spi.stub.EmailProviderStub;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class BookingCreateImplTest {
 
     @BeforeEach
     void setUp() {
-        this.bookingCreate = new BookingCreateImpl(this.bookingStub);
+        this.bookingCreate = new BookingCreateImpl(this.bookingStub, new EmailServiceImpl(new EmailProviderStub()));
 
     }
 
@@ -58,7 +59,7 @@ class BookingCreateImplTest {
                 LocalDateTime.of(2020,1,1,1,0));
         Booking actual = this.bookingCreate.create(hall, associationHallUser,timeslot,"use");
 
-        Booking excepted = new Booking(actual.getId(), hall, associationHallUser,timeslot,actual.getState(), Payment.UNKNOWN, "use");
+        Booking excepted = new Booking(actual.getId(), hall, associationHallUser,timeslot,actual.getState(), Payment.UNKNOWN,true, "use");
 
         assertEquals(excepted,actual);
 
@@ -86,12 +87,12 @@ class BookingCreateImplTest {
         var overlapseTimeslot = new Timeslot(
                 LocalDateTime.of(2020,1,1,0,10),
                 LocalDateTime.of(2020,1,1,2,0));
-        Booking actual = this.bookingCreate.create(hall, tenant1,overlapseTimeslot,use);
+        Booking actual = this.bookingCreate.create(hall, tenant1,overlapseTimeslot,"use2");
         var mergedTimeslot = new Timeslot(
                 LocalDateTime.of(2020,1,1,0,0),
                 LocalDateTime.of(2020,1,1,2,0));
 
-        Booking excepted = new Booking(actual.getId(), hall, tenant1,mergedTimeslot,actual.getState(), Payment.UNKNOWN, use);
+        Booking excepted = new Booking(actual.getId(), hall, tenant1,mergedTimeslot,actual.getState(), Payment.UNKNOWN,false , "use et use2");
 
         assertEquals(mergedTimeslot,actual.getTimeslot());
         assertEquals(excepted,actual);
@@ -121,7 +122,7 @@ class BookingCreateImplTest {
         var timeslot1 = new Timeslot(
                 LocalDateTime.of(2020,1,1,0,0),
                 LocalDateTime.of(2020,1,1,1,0));
-        var booking1 = new Booking(UUID.randomUUID(), hall, tenant1,timeslot1,BookingState.PENDING, Payment.UNKNOWN, "use");
+        var booking1 = new Booking(UUID.randomUUID(), hall, tenant1,timeslot1,BookingState.PENDING, Payment.UNKNOWN,false , "use");
         this.bookingStub.save(RuleChain.buildChain(new TenantBookingStateRule(),new AssociationHallUserBookingStateRule()).handle(booking1));
     }
 

@@ -21,20 +21,19 @@ public class HallUserCreateImpl implements HallUserCreate {
 
 
     @Override
-    public HallUser createUnregisteredUser(String username, String email, Address address,boolean isMembre) {
-        return this.hallUserRepository.save(new Tenant(UUID.randomUUID(),username,email,address,isMembre));
+    public HallUser createUnregisteredUser(String username, String email, Address address, boolean isMembre) {
+        return this.hallUserRepository.save(new Tenant(UUID.randomUUID(), username, email, address, isMembre));
     }
 
     @Override
-    public HallUser createRegisteredUser(UUID id,String username, String email) {
-        return this.hallUserRepository.save(new AssociationHallUser(id,username,email));
+    public HallUser createRegisteredUser(UUID id, String username, String email) {
+        return this.hallUserRepository.save(new AssociationHallUser(id, username, email));
     }
-
 
 
     @Override
     public Optional<HallUser> findByUd(UUID id) {
-         return this.hallUserRepository.findById(id);
+        return this.hallUserRepository.findById(id);
     }
 
 

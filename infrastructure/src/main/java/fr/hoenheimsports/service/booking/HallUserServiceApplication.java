@@ -44,7 +44,7 @@ public class HallUserServiceApplication {
             User user = this.userDisplay.findById(UUID.fromString(hallUserCreateDTO.id())).orElseThrow(UserNotFoundException::new);
             hallUser = this.hallUserCreate.createRegisteredUser(user.getId(),user.getUsername(),user.getEmail());
         } else {
-            Address address = new Address(hallUserCreateDTO.addressDTO().street(), hallUserCreateDTO.addressDTO().cp(), hallUserCreateDTO.addressDTO().city());
+            Address address = new Address(hallUserCreateDTO.address().street(), hallUserCreateDTO.address().cp(), hallUserCreateDTO.address().city());
             hallUser = this.hallUserCreate.createUnregisteredUser(hallUserCreateDTO.username(), hallUserCreateDTO.email(),address,false);
         }
         return hallUser;

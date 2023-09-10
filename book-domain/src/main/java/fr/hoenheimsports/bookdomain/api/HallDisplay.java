@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface HallDisplay {
     List<Hall> findAll();
+
     Optional<Hall> findById(UUID id);
 }

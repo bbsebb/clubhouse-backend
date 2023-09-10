@@ -1,6 +1,6 @@
 package fr.hoenheimsports.bookdomain.exception;
 
-public class TimeslotAlreadyBooked extends RuntimeException{
+public class TimeslotAlreadyBooked extends RuntimeException {
     public TimeslotAlreadyBooked() {
     }
 

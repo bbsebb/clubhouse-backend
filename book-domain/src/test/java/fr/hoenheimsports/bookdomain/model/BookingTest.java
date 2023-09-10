@@ -26,18 +26,18 @@ class BookingTest {
         bookingUnderTest = new Booking(UUID.randomUUID(), hall, tenant1,
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(2)),
                 BookingState.PENDING,
-                Payment.UNKNOWN, "use");
+                Payment.UNKNOWN, false, "use");
 
         // Other bookings
         otherBooking1 = new Booking(UUID.randomUUID(), hall, tenant2,
                 new Timeslot(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
                 BookingState.ACCEPTED,
-                Payment.UNKNOWN, "use");
+                Payment.UNKNOWN, false, "use");
 
         otherBooking2 = new Booking(UUID.randomUUID(), hall, tenant2,
                 new Timeslot(LocalDateTime.now().plusHours(3), LocalDateTime.now().plusHours(5)),
                 BookingState.ACCEPTED,
-                Payment.UNKNOWN, "use");
+                Payment.UNKNOWN, false, "use");
     }
     @Test
     void testIdNotNull() {
@@ -45,7 +45,7 @@ class BookingTest {
                 new Hall(UUID.randomUUID(), "name", new Address("Street", 1234, "City"), 50),
                 new AssociationHallUser(UUID.randomUUID(), "username", "email@example.com"),
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
-                BookingState.VALIDATED, Payment.UNKNOWN, "use"));
+                BookingState.VALIDATED, Payment.UNKNOWN, true, "use"));
 
         String expectedMessage = "start should not be null"; // Peut-être une coquille dans votre message d'erreur original ?
         String actualMessage = exception.getMessage();
@@ -59,7 +59,7 @@ class BookingTest {
                 null,
                 new AssociationHallUser(UUID.randomUUID(), "username", "email@example.com"),
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
-                BookingState.VALIDATED, Payment.UNKNOWN, "use"));
+                BookingState.VALIDATED, Payment.UNKNOWN,true , "use"));
 
         String expectedMessage = "hall should not be null";
         String actualMessage = exception.getMessage();
@@ -73,7 +73,7 @@ class BookingTest {
                 new Hall(UUID.randomUUID(), "name", new Address("Street", 1234, "City"), 50),
                 null,
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
-                BookingState.VALIDATED, Payment.UNKNOWN, "use"));
+                BookingState.VALIDATED, Payment.UNKNOWN,true , "use"));
 
         String expectedMessage = "user should not be null";
         String actualMessage = exception.getMessage();
@@ -87,7 +87,7 @@ class BookingTest {
                 new Hall(UUID.randomUUID(), "name", new Address("Street", 1234, "City"), 50),
                 new AssociationHallUser(UUID.randomUUID(), "username", "email@example.com"),
                 null,
-                BookingState.VALIDATED, Payment.UNKNOWN, "use"));
+                BookingState.VALIDATED, Payment.UNKNOWN,true , "use"));
 
         String expectedMessage = "timeslot should not be null";
         String actualMessage = exception.getMessage();
@@ -101,7 +101,7 @@ class BookingTest {
                 new Hall(UUID.randomUUID(), "name", new Address("Street", 1234, "City"), 50),
                 new AssociationHallUser(UUID.randomUUID(), "username", "email@example.com"),
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
-                null, Payment.UNKNOWN, "use"));
+                null, Payment.UNKNOWN,true , "use"));
 
         String expectedMessage = "state should not be null";
         String actualMessage = exception.getMessage();
@@ -115,7 +115,7 @@ class BookingTest {
                 new Hall(UUID.randomUUID(), "name", new Address("Street", 1234, "City"), 50),
                 new AssociationHallUser(UUID.randomUUID(), "username", "email@example.com"),
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
-                BookingState.VALIDATED, null, "use"));
+                BookingState.VALIDATED, null,true , "use"));
 
         String expectedMessage = "payment should not be null";
         String actualMessage = exception.getMessage();
@@ -128,7 +128,7 @@ class BookingTest {
                 new Hall(UUID.randomUUID(), "name", new Address("Street", 1234, "City"), 50),
                 new AssociationHallUser(UUID.randomUUID(), "username", "email@example.com"),
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
-                BookingState.VALIDATED, Payment.UNKNOWN, null));
+                BookingState.VALIDATED, Payment.UNKNOWN,true , null));
 
         String expectedMessage = "use should not be null";
         String actualMessage = exception.getMessage();
@@ -142,7 +142,7 @@ class BookingTest {
                 new Hall(UUID.randomUUID(), "name", new Address("Street", 1234, "City"), 50),
                 new AssociationHallUser(UUID.randomUUID(), "username", "email@example.com"),
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
-                BookingState.PENDING, initialPayment, "use");
+                BookingState.PENDING, initialPayment,true , "use");
 
         assertThrows(IllegalStateException.class, () -> booking.toPrice(BigDecimal.valueOf(150)));
     }
@@ -154,7 +154,7 @@ class BookingTest {
                 new Hall(UUID.randomUUID(), "name", new Address("Street", 1234, "City"), 50),
                 new AssociationHallUser(UUID.randomUUID(), "username", "email@example.com"),
                 new Timeslot(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
-                BookingState.PENDING, initialPayment, "use");
+                BookingState.PENDING, initialPayment,true , "use");
 
         booking.toPrice(BigDecimal.valueOf(150));
 
@@ -185,7 +185,7 @@ class BookingTest {
         otherBooking1 = new Booking(UUID.randomUUID(), hall, tenant1,
                 new Timeslot(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(3)),
                 BookingState.ACCEPTED,
-                Payment.UNKNOWN, "use");
+                Payment.UNKNOWN,true , "use");
 
         List<Booking> bookings = List.of(otherBooking1);
         assertTrue(bookingUnderTest.hasTimeslotFree(bookings));
