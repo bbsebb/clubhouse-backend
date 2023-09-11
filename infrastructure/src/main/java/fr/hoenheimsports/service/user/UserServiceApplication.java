@@ -3,10 +3,7 @@ package fr.hoenheimsports.service.user;
 import fr.hoenheimsports.dto.user.UserCreateDTO;
 import fr.hoenheimsports.dto.user.UserDTO;
 import fr.hoenheimsports.service.user.mapper.UserMapper;
-import fr.hoenheimsports.userdomain.api.AccountService;
-import fr.hoenheimsports.userdomain.api.UserCreate;
-import fr.hoenheimsports.userdomain.api.UserDisplay;
-import fr.hoenheimsports.userdomain.api.UserUpdate;
+import fr.hoenheimsports.userdomain.api.*;
 import fr.hoenheimsports.userdomain.exception.RoleNotFoundException;
 import fr.hoenheimsports.userdomain.exception.UserAlreadyExistException;
 import fr.hoenheimsports.userdomain.exception.UserNotFoundException;
@@ -25,15 +22,17 @@ public class UserServiceApplication {
     private final AccountService accountService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleDisplay roleDisplay;
 
     public UserServiceApplication(UserCreate userCreate,
-                                  UserUpdate userUpdate, UserDisplay userDisplay, AccountService accountService, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+                                  UserUpdate userUpdate, UserDisplay userDisplay, AccountService accountService, UserMapper userMapper, PasswordEncoder passwordEncoder, RoleDisplay roleDisplay) {
         this.userCreate = userCreate;
         this.userUpdate = userUpdate;
         this.userDisplay = userDisplay;
         this.accountService = accountService;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.roleDisplay = roleDisplay;
     }
 
     public UserDTO createUser(UserCreateDTO userCreateDTO) throws UserAlreadyExistException {
@@ -50,5 +49,9 @@ public class UserServiceApplication {
 
     public UserDTO displayUser(String login) throws UserNotFoundException {
         return this.userMapper.userToUserDTO(this.accountService.loadByLogin(login));
+    }
+
+    public UserDTO activateUser(String id) {
+        return this.addRole(id, List.of(this.roleDisplay.findAll().stream().filter(role -> role.getRoleName().equals("USER")).findFirst().get().getId().toString()));
     }
 }

@@ -35,15 +35,17 @@ public class UserController {
 
     @PostMapping("/{id}/addRole")
     public ResponseEntity<Map<String, String>> addRole(@PathVariable String id, @RequestBody AddRolesToUserDTOs addRoleToUserDTO) {
-        Map<String,String> response;
-        try {
-            UserDTO userDTO = this.userServiceApplication.addRole(id,addRoleToUserDTO.ids());
-            response = Map.of("userId",userDTO.id());
-        } catch (UserNotFoundException | RoleNotFoundException e) {
-            response = Map.of("error","user or role didn't find");
-        }
-        return ResponseEntity.ok(response);
+        UserDTO userDTO = this.userServiceApplication.addRole(id,addRoleToUserDTO.ids());
+        return ResponseEntity.ok(Map.of("userId",userDTO.id()));
     }
+
+    @GetMapping("/{id}/activate")
+    public ResponseEntity<Map<String, String>> activateUser(@PathVariable String id) {
+        UserDTO userDTO = this.userServiceApplication.activateUser(id);
+        return ResponseEntity.ok(Map.of("userId",userDTO.id()));
+    }
+
+
 
 
 

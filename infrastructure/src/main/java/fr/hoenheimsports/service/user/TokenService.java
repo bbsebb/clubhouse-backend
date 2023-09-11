@@ -27,6 +27,7 @@ public class TokenService {
         String scope=user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
+
         Instant instant = Instant.now();
         JwtClaimsSet jwtClaimsSet=JwtClaimsSet.builder()
                 .issuer("auth-service")
