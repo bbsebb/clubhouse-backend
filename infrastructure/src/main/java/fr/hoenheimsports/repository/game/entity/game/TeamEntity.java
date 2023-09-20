@@ -10,14 +10,14 @@ import java.util.UUID;
 public class TeamEntity {
     @Id
     private UUID id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private CategoryEntity category;
     private GenderEntity gender;
     private int number;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private ClubEntity club;
     private TeamsColorEntity teamsColor;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private CoachEntity coach;
 
     public TeamEntity() {

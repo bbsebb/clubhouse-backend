@@ -1,17 +1,28 @@
 package fr.hoenheimsports.gamedomain.model;
 
-import fr.hoenheimsports.gamedomain.model.Competition;
-import fr.hoenheimsports.gamedomain.model.Pool;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CompetitionTest {
+
     @Test
-    public void testConstructorWithNullParameters() {
-        assertThrows(NullPointerException.class, () -> new Competition(null, new Pool("0", "Pool")));
-        assertThrows(NullPointerException.class, () -> new Competition("Name", null));
+    void testValidCompetitionCreation() {
+        Competition competition = new Competition("Champion's League");
+        assertEquals("Champion's League", competition.name());
+    }
+
+    @Test
+    void testUnknownCompetition() {
+        Competition competition = Competition.UNKNOWN;
+        assertEquals("unknown", competition.name());
+    }
+
+    @Test
+    void testNullNameThrowsException() {
+        assertThrows(NullPointerException.class, () -> {
+            new Competition(null);
+        });
     }
 }

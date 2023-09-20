@@ -2,11 +2,10 @@ package fr.hoenheimsports.gamedomain;
 
 import fr.hoenheimsports.gamedomain.annotation.DomainService;
 import fr.hoenheimsports.gamedomain.api.GameImportFile;
+import fr.hoenheimsports.gamedomain.exception.*;
 import fr.hoenheimsports.gamedomain.model.Game;
 import fr.hoenheimsports.gamedomain.spi.FileToGames;
 import fr.hoenheimsports.gamedomain.spi.GameRepository;
-import fr.hoenheimsports.gamedomain.exception.FileDataException;
-import fr.hoenheimsports.gamedomain.exception.FileException;
 
 import java.io.InputStream;
 import java.util.List;
@@ -21,9 +20,9 @@ public class GameImportFileImpl implements GameImportFile {
     }
 
     @Override
-    public List<Game> importFileGame(InputStream fileInputStream) throws FileDataException, FileException {
+    public List<Game> importFileGame(InputStream fileInputStream) throws FileDataException, FileException, CoachNotFoundException, ClubNotFoundException, HallNotFoundException, TeamNotFoundException, GameNotFoundException {
 
-        return fileToGames.fileToGames(fileInputStream);
+        return fileToGames.importFile(fileInputStream);
     }
 
 

@@ -22,6 +22,7 @@ public class ClubServiceApplication {
     }
 
     public ClubDTO displayClub(String code) {
+        var t =this.clubDisplay.findByCode(code);
         return this.clubDisplay.findByCode(code).map(this.clubMapper::clubToClubDTO).orElse(null);
     }
 }

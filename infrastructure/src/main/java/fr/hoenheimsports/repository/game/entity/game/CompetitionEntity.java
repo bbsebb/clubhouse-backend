@@ -8,15 +8,13 @@ import java.util.Objects;
 public  class CompetitionEntity {
     @Id
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private PoolEntity pool;
+
 
     public CompetitionEntity() {
     }
 
-    public CompetitionEntity(String name, PoolEntity pool) {
+    public CompetitionEntity(String name) {
         this.name = name;
-        this.pool = pool;
     }
 
     public String getName() {
@@ -27,23 +25,16 @@ public  class CompetitionEntity {
         this.name = name;
     }
 
-    public PoolEntity getPool() {
-        return pool;
-    }
-
-    public void setPool(PoolEntity pool) {
-        this.pool = pool;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CompetitionEntity that)) return false;
-        return Objects.equals(name, that.name) && Objects.equals(pool, that.pool);
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, pool);
+        return Objects.hash(name);
     }
 }

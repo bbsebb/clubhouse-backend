@@ -1,20 +1,22 @@
 package fr.hoenheimsports.controller.game;
 
 import fr.hoenheimsports.dto.game.create.GameCreateDTO;
-import fr.hoenheimsports.dto.game.filter.TimeslotFilterDTO;
+import fr.hoenheimsports.dto.booking.filter.TimeslotFilterDTO;
 import fr.hoenheimsports.dto.game.view.GameDTO;
-import fr.hoenheimsports.gamedomain.exception.FileDataException;
-import fr.hoenheimsports.gamedomain.exception.FileException;
+import fr.hoenheimsports.gamedomain.exception.*;
 import fr.hoenheimsports.service.game.GameServiceApplication;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +32,7 @@ public class GameController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String,String>> createGame(@RequestBody GameCreateDTO gameCreateDTO) {
+    public ResponseEntity<Map<String,String>> createGame(@RequestBody GameCreateDTO gameCreateDTO) throws GameAlreadyExistsException, TeamNotFoundException, ClubNotFoundException, CategoryNotFoundException {
         GameDTO game = this.gameService.createGame(gameCreateDTO);
         return ResponseEntity.ok(Map.of("code",game.code()));
     }
@@ -55,18 +57,16 @@ public class GameController {
 
     @PostMapping("/import")
     @Transactional
-    public ResponseEntity<Void> importFile(@RequestParam("files") MultipartFile[] csvFiles)  {
+    public ResponseEntity<List<GameDTO>> importFile(@RequestParam("files") MultipartFile[] csvFiles)    throws Exception {
         try {
+            List<GameDTO> games = new ArrayList<>();
             for(MultipartFile csvFile : csvFiles) {
-                this.gameService.importFile(csvFile);
+                games.addAll(this.gameService.importFile(csvFile));
             }
-            return ResponseEntity.ok().build();
-        } catch (FileException e) {
+            return ResponseEntity.ok(games);
+        } catch (FileException | FileDataException e) {
             LOGGER.warn(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        } catch (FileDataException e) {
-            LOGGER.warn(e.getMessage());
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
     }

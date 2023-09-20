@@ -5,6 +5,7 @@ import fr.hoenheimsports.gamedomain.exception.FileDataException;
 import java.util.List;
 
 public class ImportCsvGameDTO {
+    private boolean isPlayedGame;
 
 
     private String numPoule;
@@ -329,4 +330,11 @@ public class ImportCsvGameDTO {
         this.fdme = fdme;
     }
 
+    public boolean isPlayedGame() {
+        return isPlayedGame;
+    }
+
+    public void setPlayedGame(boolean playedGame) {
+        isPlayedGame = playedGame;
+    }
 }

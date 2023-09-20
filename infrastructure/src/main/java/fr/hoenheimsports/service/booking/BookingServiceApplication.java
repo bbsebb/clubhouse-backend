@@ -50,7 +50,7 @@ public class BookingServiceApplication {
 
     public BookingDTO createBooking(BookingCreateDTO bookingCreateDTO) {
         var user = this.userServiceApplication.createHallUser(bookingCreateDTO.user());
-        var hall = this.hallDisplay.findById(UUID.fromString(bookingCreateDTO.halleId())).orElseThrow();
+        var hall = this.hallDisplay.findById(UUID.fromString(bookingCreateDTO.hallId())).orElseThrow();
         var timeslot = new Timeslot(bookingCreateDTO.timeslot().start(), bookingCreateDTO.timeslot().end());
         return this.bookingMapper.toBookingDTO(this.bookingCreate.createAndSave(hall,user,timeslot,bookingCreateDTO.use()));
     }

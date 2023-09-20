@@ -32,7 +32,7 @@ public class TeamRepositoryImpl implements TeamRepository {
     }
 
     @Override
-    public Optional<Team> findTeamByKeys(Club club, Gender gender, Category category, int number) {
+    public Optional<Team> findByKeys(Club club, Gender gender, Category category, int number) {
         Optional<TeamEntity> optionalTeamEntity = this.teamEntityRepository
                 .findByClubAndGenderAndCategoryAndNumber(
                         this.clubMapper.clubToClubEntity(club),
@@ -43,7 +43,7 @@ public class TeamRepositoryImpl implements TeamRepository {
     }
 
     @Override
-    public List<Team> findAllTeam() {
+    public List<Team> findAll() {
         return this.teamEntityRepository.findAll().stream().map(teamMapper::teamEntityToTeam).toList();
     }
 
@@ -56,5 +56,10 @@ public class TeamRepositoryImpl implements TeamRepository {
     @Override
     public Optional<Team> findById(String id) {
         return this.teamEntityRepository.findById(UUID.fromString(id)).map(teamMapper::teamEntityToTeam);
+    }
+
+    @Override
+    public Team save(Team team) {
+        return this.teamMapper.teamEntityToTeam(this.teamEntityRepository.save(this.teamMapper.teamToTeamEntity(team)));
     }
 }

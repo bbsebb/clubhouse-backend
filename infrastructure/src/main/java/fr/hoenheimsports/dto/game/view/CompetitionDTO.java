@@ -1,5 +1,5 @@
 package fr.hoenheimsports.dto.game.view;
 
-public record CompetitionDTO(String name, PoolDTO pool) {
+public record CompetitionDTO(String name) {
 
 }

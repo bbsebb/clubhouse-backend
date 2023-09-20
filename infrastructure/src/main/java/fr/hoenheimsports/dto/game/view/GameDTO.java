@@ -3,7 +3,7 @@ package fr.hoenheimsports.dto.game.view;
 import java.time.LocalDateTime;
 
 public record GameDTO(String code,
-                      CompetitionDTO competition,
+                      PoolDTO pool,
                       DayDTO day,
                       WeekDTO week,
                       SeasonDTO season,

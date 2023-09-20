@@ -21,12 +21,19 @@ public class ClubRepositoryImpl implements ClubRepository {
     }
 
     @Override
-    public List<Club> findAllClub() {
+    public List<Club> findAll() {
         return this.clubEntityRepository.findAll().stream().map(clubMapper::clubEntityToClub).toList();
     }
 
     @Override
-    public Optional<Club> findByCode(String code) {
+    public Optional<Club> findById(String code) {
+        var opt = this.clubEntityRepository.findById(code);
+        var bool = opt.isPresent();
         return this.clubEntityRepository.findById(code).map(clubMapper::clubEntityToClub);
+    }
+
+    @Override
+    public Club save(Club club) {
+        return this.clubMapper.clubEntityToClub(this.clubEntityRepository.save(this.clubMapper.clubToClubEntity(club)));
     }
 }

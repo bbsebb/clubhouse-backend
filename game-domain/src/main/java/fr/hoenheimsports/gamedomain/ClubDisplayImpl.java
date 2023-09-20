@@ -19,11 +19,11 @@ public class ClubDisplayImpl implements ClubDisplay {
 
     @Override
     public List<Club> findAll() {
-        return this.clubRepository.findAllClub();
+        return this.clubRepository.findAll();
     }
 
     @Override
     public Optional<Club> findByCode(String code) {
-        return this.clubRepository.findByCode(code);
+        return this.clubRepository.findById(code);
     }
 }

@@ -29,7 +29,12 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    public Optional<Category> findByName(String name) {
+    public Optional<Category> findById(String name) {
         return this.categoryEntityRepository.findById(name).map(this.categoryMapper::categoryEntityToCategory);
+    }
+
+    @Override
+    public Category save(Category category) {
+           return this.categoryMapper.categoryEntityToCategory(this.categoryEntityRepository.save(this.categoryMapper.categoryToCategoryEntity(category)));
     }
 }

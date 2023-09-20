@@ -9,8 +9,8 @@ public class ClubEntity {
     @Id
     private String code;
     private String name;
-    @ManyToMany
-    private Set<HallEntity> halles = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private Set<HallEntity> halls = new HashSet<>();
 
     public ClubEntity() {
     }
@@ -32,12 +32,12 @@ public class ClubEntity {
     public void setName(String name) {
         this.name = name;
     }
-    public Set<HallEntity> getHalles() {
-        return halles;
+    public Set<HallEntity> getHalls() {
+        return halls;
     }
 
-    public void setHalles(Set<HallEntity> halles) {
-        this.halles = halles;
+    public void setHalls(Set<HallEntity> halls) {
+        this.halls = halls;
     }
 
 

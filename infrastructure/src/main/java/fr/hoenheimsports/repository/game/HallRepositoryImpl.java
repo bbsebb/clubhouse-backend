@@ -25,25 +25,30 @@ public class HallRepositoryImpl implements HallRepository {
     }
 
     @Override
-    public Optional<Hall> findHallByKeys(String name, String address, int cp, String city) {
+    public Optional<Hall> findByKeys(String name, String address, int cp, String city) {
         Optional<HallEntity>  optionalHalleEntity= this.hallEntityRepository.findByNameAndAddress_StreetAndAddress_PostalCodeAndAddress_City(name,address,cp,city);
         return optionalHalleEntity.map(this.hallMapper::hallEntityToHall);
     }
 
     @Override
-    public Optional<Hall> findHallById(String id) {
+    public Optional<Hall> findById(String id) {
         return  this.hallEntityRepository.findById(UUID.fromString(id)).map(this.hallMapper::hallEntityToHall);
     }
 
     @Override
-    public Set<Hall> findAllHalls() {
+    public Set<Hall> findAll() {
         return this.hallEntityRepository.findAll().stream().map(hallMapper::hallEntityToHall).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Hall> findByClubCode(String clubCode) {
+    public Set<Hall> findByClubId(String clubCode) {
          Optional<ClubEntity> optionalClubEntity =this.clubEntityRepository.findById(clubCode);
-        return optionalClubEntity.map(ClubEntity::getHalles).orElse(new HashSet<>())
+        return optionalClubEntity.map(ClubEntity::getHalls).orElse(new HashSet<>())
                 .stream().map(hallMapper::hallEntityToHall).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Hall save(Hall hall) {
+        return this.hallMapper.hallEntityToHall(this.hallEntityRepository.save(this.hallMapper.hallToHallEntity(hall)));
     }
 }

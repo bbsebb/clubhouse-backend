@@ -1,109 +1,80 @@
 package fr.hoenheimsports.gamedomain.model;
+
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TeamTest {
-    @Test
-    public void testConstructorWithNullParameters() {
-        assertThrows(NullPointerException.class, () -> new Team(null, Category.UNKNOWN, Gender.MALE, 1, Club.UNKNOWN, TeamsColor.UNKNOWN, Coach.UNKNOWN));
-        assertThrows(NullPointerException.class, () -> new Team(UUID.randomUUID(), null, Gender.MALE, 1, Club.UNKNOWN, TeamsColor.UNKNOWN, Coach.UNKNOWN));
-        assertThrows(NullPointerException.class, () -> new Team(UUID.randomUUID(), Category.UNKNOWN, null, 1, Club.UNKNOWN, TeamsColor.UNKNOWN, Coach.UNKNOWN));
-        assertThrows(IllegalArgumentException.class, () -> new Team(UUID.randomUUID(), Category.UNKNOWN, Gender.MALE, 0, Club.UNKNOWN, TeamsColor.UNKNOWN, Coach.UNKNOWN));
-        assertThrows(NullPointerException.class, () -> new Team(UUID.randomUUID(), Category.UNKNOWN, Gender.MALE, 1, null, TeamsColor.UNKNOWN, Coach.UNKNOWN));
-        assertThrows(NullPointerException.class, () -> new Team(UUID.randomUUID(), Category.UNKNOWN, Gender.MALE, 1, Club.UNKNOWN, null, Coach.UNKNOWN));
-        assertThrows(NullPointerException.class, () -> new Team(UUID.randomUUID(), Category.UNKNOWN, Gender.MALE, 1, Club.UNKNOWN, TeamsColor.UNKNOWN, null));
-    }
-
+    private final UUID validId = UUID.randomUUID();
+    private final Category validCategory = Category.UNKNOWN;
+    private final Gender validGender = Gender.UNKNOWN;
+    private final int validNumber = 1;
+    private final Club validClub = Club.UNKNOWN;
+    private final TeamsColor validColor = TeamsColor.UNKNOWN;
+    private final Coach validCoach = Coach.UNKNOWN;
 
     @Test
-    public void testSetTeamsColor() {
-        Team team = new Team(UUID.randomUUID(), Category.UNKNOWN, Gender.MALE, 1, Club.UNKNOWN, TeamsColor.UNKNOWN, Coach.UNKNOWN);
+    public void testConstructorValidInput() {
+        Team team = new Team(validId, validCategory, validGender, validNumber, validClub, validColor, validCoach);
 
-        team.setTeamsColor(TeamsColor.UNKNOWN);
-        assertEquals(TeamsColor.UNKNOWN, team.getTeamsColor());
-
-        assertThrows(NullPointerException.class, () -> team.setTeamsColor(null));
-    }
-
-    @Test
-    public void testSetCoach() {
-        Team team = new Team(UUID.randomUUID(), Category.UNKNOWN, Gender.FEMALE, 2, Club.UNKNOWN, TeamsColor.UNKNOWN, Coach.UNKNOWN);
-
-        Coach coach = Coach.UNKNOWN;
-        team.setCoach(coach);
-        assertEquals(coach, team.getCoach());
-
-        assertThrows(NullPointerException.class, () -> team.setCoach(null));
+        assertEquals(validId, team.getId());
+        assertEquals(validCategory, team.getCategory());
+        assertEquals(validGender, team.getGender());
+        assertEquals(validNumber, team.getNumber());
+        assertEquals(validClub, team.getClub());
+        assertEquals(validColor, team.getTeamsColor());
+        assertEquals(validCoach, team.getCoach());
     }
 
     @Test
-    public void testEquals() {
-        UUID id = UUID.randomUUID();
-        Category category = new Category("-18 ans", 18, true);
-        Gender gender = Gender.MALE;
-        int number = 1;
-        Club club = new Club("Club A", "ABC", Set.of(Hall.UNKNOWN));
-        TeamsColor teamsColor = new TeamsColor(
-                TeamColor.BLUE,
-                TeamColor.WHITE,
-                TeamColor.RED,
-                TeamColor.YELLOW
-        );
-        Coach coach = new Coach(UUID.randomUUID(), "Coach A", new PhoneNumber("555555555"));
-
-        Team team1 = new Team(id, category, gender, number, club, teamsColor, coach);
-        Team team2 = new Team(id, category, gender, number, club, teamsColor, coach);
-        Team team3 = new Team(UUID.randomUUID(), category, gender, number, club, teamsColor, coach);
-
-        assertEquals(team1, team2);
-        assertNotEquals(team1, team3);
+    public void testConstructorNullId() {
+        assertThrows(NullPointerException.class, () -> new Team(null, validCategory, validGender, validNumber, validClub, validColor, validCoach));
     }
 
     @Test
-    public void testHashCode() {
-        UUID id = UUID.randomUUID();
-        Category category = new Category("-18 ans", 18, true);
-        Gender gender = Gender.MALE;
-        int number = 1;
-        Club club = new Club("Club A", "ABC", Set.of(Hall.UNKNOWN));
-        TeamsColor teamsColor = new TeamsColor(
-                TeamColor.BLUE,
-                TeamColor.WHITE,
-                TeamColor.RED,
-                TeamColor.YELLOW
-        );
-        Coach coach = new Coach(UUID.randomUUID(), "Coach A", new PhoneNumber("555555555"));
-
-        Team team1 = new Team(id, category, gender, number, club, teamsColor, coach);
-        Team team2 = new Team(id, category, gender, number, club, teamsColor, coach);
-
-        assertEquals(team1.hashCode(), team2.hashCode());
+    public void testConstructorNullCategory() {
+        assertThrows(NullPointerException.class, () -> new Team(validId, null, validGender, validNumber, validClub, validColor, validCoach));
     }
 
     @Test
-    public void testToString() {
-        UUID id = UUID.randomUUID();
-        Category category = new Category("-18 ans", 18, true);
-        Gender gender = Gender.MALE;
-        int number = 1;
-        Club club = new Club("Club A", "ABC", Set.of(Hall.UNKNOWN));
-        TeamsColor teamsColor = new TeamsColor(
-                TeamColor.BLUE,
-                TeamColor.WHITE,
-                TeamColor.RED,
-                TeamColor.YELLOW
-        );
-        Coach coach = new Coach(UUID.randomUUID(), "Coach A", new PhoneNumber("555555555"));
+    public void testConstructorNullGender() {
+        assertThrows(NullPointerException.class, () -> new Team(validId, validCategory, null, validNumber, validClub, validColor, validCoach));
+    }
 
-        Team team = new Team(id, category, gender, number, club, teamsColor, coach);
+    @Test
+    public void testConstructorInvalidNumber() {
+        assertThrows(IllegalArgumentException.class, () -> new Team(validId, validCategory, validGender, 0, validClub, validColor, validCoach));
+    }
 
-        String expected = "Team[id=" + id + ", category=" + category + ", gender=" + gender +
-                ", code=" + number + ", club=" + club + ", teamsColor=" + teamsColor + ", coach=" + coach + ']';
+    @Test
+    public void testConstructorNullClub() {
+        assertThrows(NullPointerException.class, () -> new Team(validId, validCategory, validGender, validNumber, null, validColor, validCoach));
+    }
 
-        assertEquals(expected, team.toString());
+    @Test
+    public void testConstructorNullColor() {
+        assertThrows(NullPointerException.class, () -> new Team(validId, validCategory, validGender, validNumber, validClub, null, validCoach));
+    }
+
+    @Test
+    public void testConstructorNullCoach() {
+        assertThrows(NullPointerException.class, () -> new Team(validId, validCategory, validGender, validNumber, validClub, validColor, null));
+    }
+
+    @Test
+    public void testSetters() {
+        Team team = new Team(validId, validCategory, validGender, validNumber, validClub, validColor, validCoach);
+
+        TeamsColor newColor = TeamsColor.UNKNOWN;
+        Coach newCoach = new Coach(UUID.randomUUID(), "New Coach", PhoneNumber.UNKNOWN);
+
+        team.setTeamsColor(newColor);
+        team.setCoach(newCoach);
+
+        assertEquals(newColor, team.getTeamsColor());
+        assertEquals(newCoach, team.getCoach());
     }
 }

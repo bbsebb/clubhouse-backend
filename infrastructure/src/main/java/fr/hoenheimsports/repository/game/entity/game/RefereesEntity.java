@@ -1,5 +1,6 @@
 package fr.hoenheimsports.repository.game.entity.game;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 
@@ -8,13 +9,13 @@ import java.util.Objects;
 @Embeddable
 public class RefereesEntity {
     public static final RefereesEntity UNKNOWN = new RefereesEntity(RefereeEntity.UNKNOWN, RefereeEntity.UNKNOWN, RefereeEntity.UNKNOWN, RefereeEntity.UNKNOWN);
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private RefereeEntity designatedReferee1;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private RefereeEntity designatedReferee2;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private RefereeEntity officiatingReferee1;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private RefereeEntity officiatingReferee2;
 
     public RefereesEntity() {

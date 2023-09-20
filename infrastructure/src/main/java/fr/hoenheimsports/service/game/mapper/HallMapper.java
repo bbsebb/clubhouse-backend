@@ -12,7 +12,8 @@ public interface HallMapper {
 
 
 
-    public HallDTO hallToHalleDTO(Hall halle);
+    public HallDTO hallToHalleDTO(Hall hall);
 
 
+    HallEntity hallToHallEntity(Hall hall);
 }

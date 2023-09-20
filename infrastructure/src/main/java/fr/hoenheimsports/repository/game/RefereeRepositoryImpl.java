@@ -8,6 +8,8 @@ import fr.hoenheimsports.service.game.mapper.RefereeMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
+
 @Repository
 public class RefereeRepositoryImpl implements RefereeRepository {
     private final RefereeEntityRepository refereeEntityRepository;
@@ -19,9 +21,19 @@ public class RefereeRepositoryImpl implements RefereeRepository {
     }
 
     @Override
-    public Optional<Referee> findRefereeByKeys(String name) {
+    public Optional<Referee> findByKeys(String name) {
         Optional<RefereeEntity> optionalRefereeEntity = this.refereeEntityRepository.findByName(name);
         return  optionalRefereeEntity.map(this.refereeMapper::refereeEntityToReferee);
+    }
+
+    @Override
+    public Optional<Referee> findById(UUID id) {
+        return this.refereeEntityRepository.findById(id).map(refereeMapper::refereeEntityToReferee);
+    }
+
+    @Override
+    public Referee save(Referee referee) {
+        return this.refereeMapper.refereeEntityToReferee(this.refereeEntityRepository.save(this.refereeMapper.refereeToRefereeEntity(referee)));
     }
 
 }

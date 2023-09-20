@@ -18,7 +18,7 @@ public class TeamDisplayImpl implements TeamDisplay {
 
     @Override
     public List<Team> findAll() {
-        return this.teamRepository.findAllTeam();
+        return this.teamRepository.findAll();
     }
 
     @Override

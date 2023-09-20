@@ -1,34 +1,44 @@
 package fr.hoenheimsports.gamedomain.model;
 
-import fr.hoenheimsports.gamedomain.model.Season;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SeasonTest {
     @Test
-    public void testConstructor_WithNullArguments_ThrowsNullPointerException() {
-        String name = null;
-        LocalDate startDate = null;
-        LocalDate endDate = null;
+    public void testConstructorValidInput() {
+        Season season = new Season("SEASON_2024_2025", LocalDate.of(2024, 8, 1), LocalDate.of(2025, 7, 31));
 
-        assertThrows(NullPointerException.class, () -> {
-            new Season(name, startDate, endDate);
-        });
+        assertEquals("SEASON_2024_2025", season.name());
+        assertEquals(LocalDate.of(2024, 8, 1), season.startDate());
+        assertEquals(LocalDate.of(2025, 7, 31), season.endDate());
     }
 
     @Test
-    public void testConstructor_ValidArguments_Successful() {
-        String name = "SEASON_2022_2023";
-        LocalDate startDate = LocalDate.of(2022, 8, 1);
-        LocalDate endDate = LocalDate.of(2023, 7, 31);
-
-        Season season = new Season(name, startDate, endDate);
-
-        assertEquals(name, season.name());
-        assertEquals(startDate, season.startDate());
-        assertEquals(endDate, season.endDate());
+    public void testConstructorNullName() {
+        assertThrows(NullPointerException.class, () -> new Season(null, LocalDate.of(2024, 8, 1), LocalDate.of(2025, 7, 31)));
     }
+
+    @Test
+    public void testConstructorNullStartDate() {
+        assertThrows(NullPointerException.class, () -> new Season("SEASON_2024_2025", null, LocalDate.of(2025, 7, 31)));
+    }
+
+    @Test
+    public void testConstructorNullEndDate() {
+        assertThrows(NullPointerException.class, () -> new Season("SEASON_2024_2025", LocalDate.of(2024, 8, 1), null));
+    }
+
+    @Test
+    public void testSeason2022_2023Constant() {
+        Season season2022_2023 = Season.SEASON_2022_2023;
+
+        assertEquals("SEASON_2022_2023", season2022_2023.name());
+        assertEquals(LocalDate.of(2022, 8, 1), season2022_2023.startDate());
+        assertEquals(LocalDate.of(2023, 7, 31), season2022_2023.endDate());
+    }
+
 }

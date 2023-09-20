@@ -27,4 +27,15 @@ public class SeasonRepositoryImpl implements SeasonRepository {
                 .map(this.seasonMapper::seasonEntityToSeason)
                 .findFirst();
     }
+
+    @Override
+    public Optional<Season> findById(String name) {
+        return this.seasonEntityRepository.findById(name)
+                .map(this.seasonMapper::seasonEntityToSeason);
+    }
+
+    @Override
+    public Season save(Season season) {
+        return this.seasonMapper.seasonEntityToSeason(this.seasonEntityRepository.save(this.seasonMapper.seasonToSeasonEntity(season)));
+    }
 }

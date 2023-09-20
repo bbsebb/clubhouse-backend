@@ -17,11 +17,11 @@ public class HalleDisplayImpl implements HallDisplay {
 
     @Override
     public Set<Hall> findAll() {
-        return this.halleRepository.findAllHalls();
+        return this.halleRepository.findAll();
     }
 
     @Override
     public Set<Hall> findByClubCode(String clubCode) {
-        return this.halleRepository.findByClubCode(clubCode);
+        return this.halleRepository.findByClubId(clubCode);
     }
 }

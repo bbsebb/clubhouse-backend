@@ -1,8 +1,8 @@
 package fr.hoenheimsports;
 
 
-import fr.hoenheimsports.repository.booking.entity.HallEntityRepository;
-import fr.hoenheimsports.userdomain.UserCreateImpl;
+import fr.hoenheimsports.repository.game.entity.*;
+import fr.hoenheimsports.repository.game.entity.game.*;
 import fr.hoenheimsports.userdomain.api.RoleCreate;
 import fr.hoenheimsports.userdomain.api.UserCreate;
 import fr.hoenheimsports.userdomain.api.UserUpdate;
@@ -15,8 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.UUID;
+
 @EnableAsync
-@SpringBootApplication(scanBasePackages = {"fr.hoenheimsports.gamedomain", "fr.hoenheimsports.bookdomain", "fr.hoenheimsports.userdomain","fr.hoenheimsports"})
+@SpringBootApplication
 public class ClubHouseApplication {
 
     public static void main(String[] args) {
@@ -24,29 +26,68 @@ public class ClubHouseApplication {
     }
 
     @Bean
-    CommandLineRunner start(UserCreate userCreate, RoleCreate roleCreate, UserUpdate userUpdate, HallEntityRepository hallEntityRepository){
+    CommandLineRunner start(UserCreate userCreate, fr.hoenheimsports.repository.booking.entity.HallEntityRepository hallBookEntityRepository, RoleCreate roleCreate, UserUpdate userUpdate
+            , HallEntityRepository hallEntityRepository,
+                            CoachEntityRepository coachEntityRepository,
+                            RefereeEntityRepository refereeEntityRepository,
+                            CompetitionEntityRepository competitionEntityRepository,
+                            PoolEntityRepository poolEntityRepository){
         return args -> {
+/*            // User init
+            Role roleUser = roleCreate.create("USER");
+            Role roleAdmin = roleCreate.create("ADMIN");
+            User user = userCreate.create("admin",new BCryptPasswordEncoder().encode("1234"),"seb@seb.seb");
+            userUpdate.addRole(user.getId(),roleUser.getId(),roleAdmin.getId());
 
-            //Role roleUser = roleCreate.create("USER");
-            //Role roleAdmin = roleCreate.create("ADMIN");
-            //User user = userCreate.create("admin",new BCryptPasswordEncoder().encode("1234"),"seb@seb.seb");
+            // unknown hall game  init
+            HallEntity hallEntity = new HallEntity();
+            AddressEntity addressEntity = new AddressEntity();
+            addressEntity.setStreet("unknown");
+            addressEntity.setCity("unknown");
+            addressEntity.setPostalCode(0);
+            hallEntity.setGlueAuthorization(GlueAuthorizationEntity.UNKNOWN);
+            hallEntity.setAddress(addressEntity);
+            hallEntity.setName("unknown");
+            hallEntity.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+            hallEntityRepository.save(hallEntity);
 
-            //HallEntity hallEntity = new HallEntity();
-            //hallEntity.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-            //hallEntity.setName("Club house");
-            //hallEntity.setCapacity(100);
-            //AddressEntity addressEntity = new AddressEntity();
-            //addressEntity.setCity("Hoenheim");
-            //addressEntity.setCp(67800);
-            //addressEntity.setStreet("rue des Vosges");
-            //hallEntity.setAddress(addressEntity);
-            //hallEntityRepository.save(hallEntity);
-            //User user1 = userCreate.create("user1","1234","sebastien.burckhardt@gmail.com");
-            //User user2 = userCreate.create("admin","1234","sebastien.burckhardt@hoenheimsports.fr");
 
-            //userUpdate.addRole(user1.getId(),roleUser.getId());
-            //userUpdate.addRole(user.getId(),roleUser.getId(),roleAdmin.getId());
+            // unknown coach init
+            CoachEntity coachEntity = new CoachEntity();
+            coachEntity.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+            coachEntity.setName("unknown");
+            coachEntity.setPhoneNumber(new PhoneNumberEntity("unknown"));
+            coachEntityRepository.save(coachEntity);
 
+            //unknown referee init
+            RefereeEntity refereeEntity = new RefereeEntity();
+            refereeEntity.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+            refereeEntity.setName("unknown");
+            refereeEntityRepository.save(refereeEntity);
+
+            //unknown competition init
+            CompetitionEntity competitionEntity = new CompetitionEntity();
+            competitionEntity.setName("unknown");
+            competitionEntity = competitionEntityRepository.save(competitionEntity);
+
+            //unknown pool init
+            PoolEntity poolEntity = new PoolEntity();
+            poolEntity.setCode("unknown");
+            poolEntity.setName("unknown");
+            poolEntity.setCompetition(competitionEntity);
+            poolEntityRepository.save(poolEntity);
+
+            // hall book  init
+            fr.hoenheimsports.repository.booking.entity.booking.HallEntity hall = new fr.hoenheimsports.repository.booking.entity.booking.HallEntity();
+            hall.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+            hall.setCapacity(120);
+            hall.setName("Club house");
+            fr.hoenheimsports.repository.booking.entity.booking.AddressEntity address = new fr.hoenheimsports.repository.booking.entity.booking.AddressEntity();
+            address.setStreet("rue des Vosges");
+            address.setCp(67800);
+            address.setCity("HOENHEIM");
+            hall.setAddress(address);
+            hallBookEntityRepository.save(hall);*/
         };
     }
 

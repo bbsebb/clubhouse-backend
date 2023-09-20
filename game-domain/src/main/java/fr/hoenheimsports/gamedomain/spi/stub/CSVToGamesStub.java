@@ -8,17 +8,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 @Stub
-public class CSVToGamesStub implements FileToGames {
-    List<Game> games = new ArrayList<>();
-    @Override
-    public List<Game> fileToGames(InputStream fileStream) {
+public class CSVToGamesStub  {
 
-        return this.games;
-    }
-
-    public void populate(List<Game> games) {
-        this.games = games;
-    }
 
 
 }

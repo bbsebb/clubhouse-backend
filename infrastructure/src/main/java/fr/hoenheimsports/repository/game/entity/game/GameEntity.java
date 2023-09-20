@@ -10,21 +10,21 @@ import java.util.Objects;
 public class GameEntity {
     @Id
     private String code;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private CompetitionEntity competition;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private PoolEntity pool;
     @Embedded
     private DayEntity day;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private SeasonEntity season;
     @Embedded
     private WeekEntity week;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private HallEntity halle;
     @Embedded
     private RefereesEntity referees;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private TeamEntity homeTeam;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private TeamEntity visitingTeam;
     @Embedded
     private ScoreEntity score;
@@ -48,12 +48,12 @@ public class GameEntity {
         this.code = code;
     }
 
-    public CompetitionEntity getCompetition() {
-        return competition;
+    public PoolEntity getPool() {
+        return pool;
     }
 
-    public void setCompetition(CompetitionEntity competition) {
-        this.competition = competition;
+    public void setPool(PoolEntity pool) {
+        this.pool = pool;
     }
 
     public DayEntity getDay() {
@@ -148,11 +148,11 @@ public class GameEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof GameEntity that)) return false;
-        return Objects.equals(code, that.code) && Objects.equals(competition, that.competition) && Objects.equals(day, that.day) && Objects.equals(halle, that.halle) && Objects.equals(referees, that.referees) && Objects.equals(homeTeam, that.homeTeam) && Objects.equals(visitingTeam, that.visitingTeam) && Objects.equals(score, that.score) && Objects.equals(fdme, that.fdme) && Objects.equals(date, that.date) && Objects.equals(time, that.time);
+        return Objects.equals(code, that.code) && Objects.equals(pool, that.pool) && Objects.equals(day, that.day) && Objects.equals(season, that.season) && Objects.equals(week, that.week) && Objects.equals(halle, that.halle) && Objects.equals(referees, that.referees) && Objects.equals(homeTeam, that.homeTeam) && Objects.equals(visitingTeam, that.visitingTeam) && Objects.equals(score, that.score) && Objects.equals(fdme, that.fdme) && Objects.equals(date, that.date) && Objects.equals(time, that.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(code, competition, day, halle, referees, homeTeam, visitingTeam, score, fdme, date, time);
+        return Objects.hash(code, pool, day, season, week, halle, referees, homeTeam, visitingTeam, score, fdme, date, time);
     }
 }
